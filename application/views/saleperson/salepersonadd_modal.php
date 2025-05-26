@@ -59,7 +59,8 @@
                 </div>
                 <div class="form-group">
                     <label for="mobile">Mobile No</label>
-                    <input type="text"  class="form-control" name="mobile" id="mobile" >
+                    <input type="text"  class="form-control" name="mobile" id="mobile"  maxlength="12" 
+                    value="+94" required pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
                 </div>
                <!--  <div class="form-group">
                     <label for="office">Office No</label>

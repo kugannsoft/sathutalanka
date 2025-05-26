@@ -28,23 +28,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label for="payType" class=" control-label">Account Type<span class="required">*</span></label>
-                                    <!--<div class="col-sm-6">-->
                                     <select class="form-control" id="accType">
                                         <option value="0">-Select a category-</option>
                                         <?php foreach ($getCusAccountTypes as $getCusAccountType) { ?>
                                             <option value="<?php echo $getCusAccountType->DepNo; ?>"><?php echo $getCusAccountType->Description; ?></option>
                                         <?php } ?>
                                     </select>
-                                    <!--</div>-->
                                 </div>
-<!--                                <div class="form-group">-->
-<!--                                    <label for="itemType" class="col-sm-5 control-label">Payment Type<span class="required">*</span></label>-->
-                                    <!--<div class="col-sm-6">-->
-<!--                                    <select class="form-control" id="itemCategory" required="required">-->
-<!--                                        <option value="0">-Select a Payment Type-</option>-->
-<!--                                    </select>-->
-                                    <!--</div>-->
-<!--                                </div>-->
+
                                 <div class="form-group" id="load_return">
                                     <label for="returnInvoice" class=" control-label">Account No<span class="required">*</span></label>
                                     <div class=" input-group">
@@ -56,27 +47,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                                 <div class="form-group">
                                     <label for="invDate" class="col-sm-5 control-label">Date & time <span class="required">*</span></label>
-                                    <!--<div class="col-sm-6">-->
                                     <input type="date" class="form-control" required="required"  name="invDate" id="invDate" placeholder="">
                                     <input type="hidden" class="form-control" required="required"  name="invUser" id="invUser" value="<?php echo $_SESSION['user_id'] ?>">
 
-                                    <!--</div>-->
                                 </div>
 
                                 <div class="form-group">
                                     <label for="payAmount" class="col-sm-5 control-label">Remark<span class="required">*</span></label>
-                                    <!--<div class="col-sm-6">-->
                                     <textarea class="form-control" required="required"  name="remark" id="remark"></textarea>
-                                    <!--</div>-->
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <table></table>
                                 <div class="form-group">
                                     <label for="refNo" class="control-label">Referral No </label>
-                                    <!--<div class="col-sm-6">-->
                                     <input type="text" class="form-control"  name="refNo" id="refNo" placeholder="Enter Refer No">
-                                    <!--</div>-->
                                 </div>
                                 <div class="form-group">
                                     <label for="customer_type" class="control-label">Customer Type<span class="required">*</span></label>
@@ -93,9 +78,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                                 <div class="form-group">
                                     <label for="customer" class="control-label">Customer <span class="required">*</span></label>
-                                    <!--<div class="col-sm-6">-->
                                     <input type="text" class="form-control" required="required"  name="customer" id="customer" placeholder="Enter Customer Name">
-                                    <!--</div>-->
                                 </div>
                                 <div class="form-group">
                                     <label for="expenses_amount" class="control-label">Guarantee Name <span class="required">*</span></label>

@@ -90,6 +90,7 @@ class Sales extends Admin_Controller {
         $data['IsTec'] = isset($_POST['istec']) ? $_POST['istec'] : 0;
         $data['IsAccount'] = isset($_POST['isacc']) ? $_POST['isacc'] : 0;
         $data['IsActive'] = isset($_POST['isactive']) ? $_POST['isactive'] : 0;
+        $data['RepType'] = $_POST['emp_type'];
         $result = $this->Customer_model->update_saleperson($data,$supplier);
         echo $result;
         die;
@@ -146,35 +147,28 @@ class Sales extends Admin_Controller {
         }
         redirect('admin/sales/');
     }
-    
+
     public function findroutecustomer() {
         $routeID = $this->input->post('routeID');
-    
-        $this->load->database();
-    
-        $this->db->select('c.CusCode, c.CusName');
-        $this->db->from('customer c'); 
-        $this->db->where('c.RouteId', $routeID);  
+        $salespersonID = $this->input->post('salespersonID'); // Optionally pass this from JS
+
+        $this->db->select('CusCode, CusName');
+        $this->db->from('customer');
+        $this->db->where('RouteId', $routeID);
+
+        if (!empty($salespersonID)) {
+            $this->db->where('HandelBy', $salespersonID);
+        }
+
+        $this->db->where('IsActive', 1);
         $query = $this->db->get();
-    
-        $customers = [];
-    
+
         if ($query->num_rows() > 0) {
-            foreach ($query->result() as $row) {
-                $customers[] = [
-                    'CusCode' => $row->CusCode,
-                    'CusName' => $row->CusName
-                ];
-            }
-    
-            echo json_encode($customers);
+            echo json_encode($query->result());
         } else {
             echo json_encode([]);
         }
-    
-        exit();
     }
-    
-   
+
 
 }

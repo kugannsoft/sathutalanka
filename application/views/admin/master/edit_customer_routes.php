@@ -19,7 +19,7 @@
     </div>
     <div class="modal-footer">
         <span id="errProduct1" class="pull-left"></span>
-        <button class="btn btn-success btn-flat" id="savepro" type="submit">Save</button>
+        <button class="btn btn-success btn-flat" id="savepro" type="submit">Update</button>
     </div>
 </form>
 <script>

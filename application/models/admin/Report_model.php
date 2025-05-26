@@ -1603,7 +1603,8 @@ class Report_model extends CI_Model {
     }
 
 
-    public function productdetail($route, $isall, $product = NULL,$dep,$subdep,$sup,$subcat) {
+    public function productdetail($route, $isall, $product,$dep,$subdep,$sup,$subcat) {
+        // echo var_dump();die;
         $this->db->select('product.ProductCode,
                            product.Prd_Description,
                            product.Prd_CostPrice,
@@ -1613,6 +1614,9 @@ class Report_model extends CI_Model {
                            subdepartment.Description,
                            location.location,
                            productstock.Stock,
+                            productstock.Expired,
+                            productstock.Damage,
+                            productstock.NormalReturn,
                            productprice.ProductPrice,
                            supplier.SupName');
         $this->db->from('product');

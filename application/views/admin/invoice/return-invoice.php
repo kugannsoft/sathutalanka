@@ -38,7 +38,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <textarea name="grnremark"  tabindex="2" id="grnremark" class="form-control"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="additional" class="col-sm-4 control-label">Sales Person</label>
                                     <div class="col-sm-7">
                                         <select class="form-control" required="required"  name="newsalesperson" id="newsalesperson" placeholder="sales person">
@@ -59,7 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <option value="0">-Select-</option>
                                         </select>                                    
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                         <div  class="col-md-5">
@@ -67,10 +67,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <div class="form-group">
                                     <label for="supplier" class="col-sm-4 control-label">Customer<span class="required">*</span></label>
                                     <div class="col-sm-7">
-                                        <!-- <input type="text" class="form-control" tabindex="4" required="required"  name="customer" id="customer" placeholder="Customer name/Code/ Phone"> -->
-                                        <select class="form-control" required="required" name="customer" id="customer" placeholder="customer name">
+                                        <input type="text" class="form-control" tabindex="4" required="required"  name="customer" id="customer" placeholder="Customer name/Code/ Phone">
+                                        <!-- <select class="form-control" required="required" name="customer" id="customer" placeholder="customer name">
                                                     <option value="0">-Select a customer-</option>
-                                        </select>
+                                        </select> -->
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                   
+                                    <div class="col-sm-4">
+                                       
+                                    </div>
+                                    <div class="col-sm-4">
+                                        Salesperson : <span id="newsalesperson"></span><br> 
+                                        Route : <span id="route"></span> <br>
+                                        
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -83,12 +95,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="invoicenumber" class="col-sm-4 control-label">Invoice Number</label>
                                     <div class="col-sm-7">
                                         <input type="text" tabindex="5" name="invoice" id="invoice" class="form-control" />
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                     <label for="additional" class="col-sm-4 control-label">
                                     <!-- Non Return Invoice -->
@@ -191,6 +203,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                 <input type="hidden" tabindex="14" class="form-control" required="required"  name="serialQty" id="serialQty"  value="0">
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="product" class="col-sm-4 control-label">Return Type <span class="required">*</span></label>
+                                            <div class="col-sm-6">
+                                                <select name="invoice_type" id="invoice_type" class="form-control">
+                                                <option value="">Select a Type</option>
+                                                <?php foreach($returnTypes as $returnType){?>
+                                                <option value="<?php echo $returnType->id; ?>"><?php echo $returnType->type; ?></option>
+                                                <?php } ?>
+                                                </select>
+                                             </div>
+                                        </div>
                                         
                                     </div>
                                     <div class="form-group">
@@ -207,6 +231,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <th class="text-right">Credit Amount</th>
                                         <th class="text-right">Return Amount</th>
                                         <th class="text-right">Available Amount</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -229,6 +254,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <th>Unit Price</th>
                                             <th>Total Net Amount</th>
                                             <th>Serial</th>
+                                            <th>Return Type</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -261,10 +287,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         increaseArea: '50%'
     });
 
-    $('#customer').select2({
-    placeholder: "Select a customer",
-    allowClear: true,
-    minimumInputLength:1,
-    width: '100%'
-});
+//     $('#customer').select2({
+//     placeholder: "Select a customer",
+//     allowClear: true,
+//     minimumInputLength:1,
+//     width: '100%'
+// });
 </script>

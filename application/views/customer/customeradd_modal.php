@@ -72,7 +72,7 @@
                     <input type="text" required="required" class="form-control" name="nic" id="nic" placeholder="NIC No Or Passport No">
                 </div>
                 <div class="form-group">
-                    <label for="respectSign" >Handle By</label>
+                    <label for="respectSign" >Salesperson</label>
                     <select class="form-control" name="salesperson" id="salesperson">
                         <option value="0">-Select-</option>
                         <?php foreach ($emp AS $t) { ?>
@@ -101,6 +101,11 @@
                         <label for="cusName">Routes</label>
                         <select class="form-control" name="route" id="route">
                             <option value="0">-Select-</option>
+                            <?php foreach ($routes as $route) { ?>
+                                <option value="<?php echo $route->id ?>">
+                                    <?php echo ($route->name); ?>
+                                </option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
@@ -123,14 +128,18 @@
                         <div class="form-group">
                             <label for="mobileNo">Customer Mobile </label>
                             <div class="input-group">
-                                <input type="text"  class="form-control" name="mobileNo" id="mobileNo" placeholder="Enter customer mobile " maxlength="12" value="+94">
+                                <input type="text" class="form-control" name="mobileNo" id="mobileNo" placeholder="Enter customer mobile" maxlength="12" 
+                                value="+94" required pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
+
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="phoneNo">Customer Phone </label>
-                            <input type="text"  class="form-control" name="phoneNo" id="phoneNo" placeholder="Enter customer phone" maxlength="12" value="+94">
+                            <input type="number"  class="form-control" name="phoneNo" id="phoneNo" placeholder="Enter customer phone" maxlength="12" 
+                           
+                                value="+94" pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
                         </div>
                     </div>
                 </div>
@@ -139,7 +148,8 @@
                         <div class="form-group">
                             <label for="mobileNo">Work Phone</label>
                             <div class="input-group">
-                                <input type="text"  class="form-control" name="workPhone" id="workPhone" placeholder="Enter Work Phone " maxlength="12" value="+94">
+                                <input type="number"  class="form-control" name="workPhone" id="workPhone" placeholder="Enter Work Phone " maxlength="12" 
+                                value="+94"  pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
                             </div>
                         </div>
                     </div>
@@ -167,7 +177,8 @@
                         <div class="form-group">
                             <label for="mobileNo">Contact Phone</label>
                             <div class="input-group">
-                                <input type="text"  class="form-control" name="contactPhone" id="contactPhone" placeholder="Enter Work Phone " maxlength="12" value="+94">
+                                <input type="number"  class="form-control" name="contactPhone" id="contactPhone" placeholder="Enter Work Phone "maxlength="12" 
+                                value="+94" required pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
                             </div>
                         </div>
                     </div>
@@ -191,13 +202,13 @@
                     </div>  
                 </div>
                 <div class="row" id="creditDiv">
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="display:none;">
                         <div class="form-group">
                             <label for="creditLimit">Balance Date</label>
                             <input type="text"  class="form-control" name="balanceDate" id="balanceDate" placeholder="Enter Balance Date" />
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="display:none;">
                         <div class="form-group">
                             <label for="balanaceAmount">Balance Amount</label>
                             <input type="text"  class="form-control" name="balanaceAmount" id="balanaceAmount" placeholder="Enter Balanace Amount" />

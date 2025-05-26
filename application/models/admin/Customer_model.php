@@ -121,6 +121,15 @@ class Customer_model extends CI_Model {
         $q = $this->db->select('model_id,model')->from('model')->where('makeid',$make)->get()->result();
         return json_encode($q);
     }
+    public function getCustomersByRouteAndSalesperson($routeID, $salespersonID) {
+        return $this->db->select('CusCode, CusName')
+            ->from('customer')
+            ->where('IsActive', 1)
+            ->where('RouteId', $routeID)
+            ->where('HandelBy', $salespersonID)
+            ->get()
+            ->result();
+    }
 
     public function loadpaytype($paytypeid = NULL) {
         if(isset($paytypeid)){
@@ -268,10 +277,10 @@ class Customer_model extends CI_Model {
         // $this->db->join('employeeroutes e', 'e.emp_id = c.HandelBy'); 
         // $this->db->where('c.CusCode', $cusCode);
         
-        $this->db->select('e.route_id, cr.name AS route_name');
+        $this->db->select('c.RouteID, cr.name AS route_name');
         $this->db->from('customer c');
-        $this->db->join('employeeroutes e', 'e.emp_id = c.HandelBy');
-        $this->db->join('customer_routes cr', 'cr.id = e.route_id');
+        
+        $this->db->join('customer_routes cr', 'cr.id = c.RouteID');
         $this->db->where('c.CusCode', $cusCode);
         $query = $this->db->get(); 
         return $query->result();

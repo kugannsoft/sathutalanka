@@ -94,7 +94,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     {"data": "EmpNo"},
                     {"data": "skill_level"},
                     {"data": "EmpType"},
-                    {"data": "IsActive"},
+                    {
+                        "data": null, orderable: false, searchable: false,
+                        mRender: function (data, type, row) {
+                            if (row.IsActive == 1) {
+                                return '<span class="label label-xs label-success" >Active</span>';
+                            } else if (row.IsActive == 0) {
+                                return '<span class="label label-xs label-danger" >Inactive</span>';
+                            }
+
+                        }
+                    },
                     {"data": null, orderable: false, searchable: false,
                         mRender: function (data, type, row) {
                             return '<button class="btn btn-xs btn-default" onclick="editm(\'' + row.RepID + '\')">Edit</button>';

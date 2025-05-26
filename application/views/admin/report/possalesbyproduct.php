@@ -41,7 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <div class="col-md-2">
                                     <select class="form-control" name="salesperson" id="salesperson">
                                         <option value="">--select sales person--</option>
-                                        <?php foreach ($staff AS $loc) { ?>
+                                        <?php foreach ($salesperson AS $loc) { ?>
                                             <option value="<?php echo $loc->RepID ?>"><?php echo $loc->RepName ?></option>
                                         <?php } ?>
                                     </select>

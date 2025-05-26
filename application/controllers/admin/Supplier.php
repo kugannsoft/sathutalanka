@@ -15,7 +15,7 @@ class Supplier extends Admin_Controller {
 
     public function index() {
         $this->breadcrumbs->unshift(1, lang('menu_addcustomer'), 'admin/customer');
-         $this->page_title->push('Client Data');
+         $this->page_title->push('Supplier');
         $this->data['pagetitle'] = $this->page_title->show();
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
         $this->template->admin_render('supplier/view_supplier', $this->data);

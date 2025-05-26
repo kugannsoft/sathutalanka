@@ -103,7 +103,15 @@ $('.prd_icheck').iCheck({
                         var dueAmount = 0;
                         total_due_amount += (creditAmount - settleAmount);
 
-                        $("#tbl_payment tbody").append("<tr id='" + (key + 1) + "'><td>" + (key + 1) + "</td><td  class='invoiceNo'>" + paymentNo + "</td><td>" + invDate + "</td><td class='text-right'>" + accounting.formatMoney(totalNetAmount) + "</td><td class='text-right creditAmount'>" + accounting.formatMoney(creditAmount) + "</td><td class='text-right settleAmount' invPay='0'>" + accounting.formatMoney(settleAmount) + "</td><td class='text-right dueAmount' isColse='0'>" + accounting.formatMoney(creditAmount - settleAmount) + "</td><td></td></tr>");
+                        $("#tbl_payment tbody").append("<tr id='" + (key + 1) +
+                            "'><td>" + (key + 1) + "&nbsp;&nbsp;<input rowid='"+(key + 1)+"' type='checkbox' name='rownum' class='prd_icheck rowcheck '></td>" +
+                            "</td><td  class='invoiceNo'>" + paymentNo +
+                            "</td><td>" + invDate +
+                            "</td><td class='text-right'>" + accounting.formatMoney(totalNetAmount) +
+                            "</td><td class='text-right creditAmount'>" + accounting.formatMoney(creditAmount) +
+                            "</td><td class='text-right settleAmount' invPay='0'>" + accounting.formatMoney(settleAmount) +
+                            "</td><td class='text-right dueAmount' isColse='0'>" + accounting.formatMoney(creditAmount - settleAmount) +
+                            "</td><td></td></tr>");
 
                     });
                     $("#tbl_payment").dataTable().fnDestroy();

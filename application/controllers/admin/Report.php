@@ -118,6 +118,7 @@ class Report extends Admin_Controller {
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
         $this->data['locations'] = $this->Report_model->loadroot();
         $this->data['products'] = $this->Report_model->loadproduct();
+        $this->data['salesperson'] = $this->db->select()->from('salespersons')->where('IsActive',1)->get()->result();
         $people = array("0", "10", "13");
 
         if (in_array($_SESSION['user_id'], $people)) {
@@ -2191,6 +2192,43 @@ class Report extends Admin_Controller {
         ];
         echo json_encode($response);
         die; 
+    }
+
+
+    public function receivedproductreport() {
+        $this->breadcrumbs->unshift(1, 'Reports', 'admin/report');
+        $this->breadcrumbs->unshift(1, 'Stock', 'admin/report/receivedproductreport');
+        $this->page_title->push(('Received Product Report'));
+        $this->data['pagetitle'] = $this->page_title->show();
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        $this->data['locations'] = $this->Report_model->loadroot();
+        $this->data['products'] = $this->Report_model->loadproduct();
+
+        $this->template->admin_render('admin/report/receivedproductreport', $this->data);
+    }
+
+    public function recivedreturnreport1() { 
+        $startdate = $this->input->post('startdate'); 
+        $enddate = $this->input->post('enddate');
+
+        $this->db->select('
+            salesinvoicedtl.SalesProductCode, 
+            salesinvoicedtl.SalesProductName, 
+            SUM(salesinvoicedtl.SalesQty) as TotalSalesQty,
+            SUM(received_invoices_items.Quantity)   as TotalReceivedQty,
+            received_invoices_items.created_at
+        ');
+        $this->db->from('salesinvoicedtl');
+        $this->db->join('received_invoices_items', 'salesinvoicedtl.SalesProductCode = received_invoices_items.ProductCode', 'inner');
+        $this->db->group_by(['salesinvoicedtl.SalesProductCode', 'salesinvoicedtl.SalesProductName']);
+        $this->db->where('received_invoices_items.created_at >=', $startdate);
+        $this->db->where('received_invoices_items.created_at <=', $enddate);
+        $result = $this->db->get()->result();
+
+        echo json_encode($result);
+        die;
+        
+
     }
         
 }

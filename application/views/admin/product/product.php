@@ -35,7 +35,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <?php if (in_array("SM135", $blockView) || $blockView == null) { ?>
                                     <td>Cost Price</td>
                                     <?php } ?>
-                                    <td>Set Price</td>
+                                    <td>Set Prices</td>
+                                    <td>###</td>
                                     <td>###</td>
                                 </tr>
                             </thead>
@@ -92,6 +93,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 return '<button onclick="editp(\'' + row.ProductCode + '\')" class="btn btn-xs btn-default" disabled>Edit</button>';
                             }
                             <?php }?>
+                        },
+                        {
+                            "data": null, orderable: false, searchable: false,
+                            mRender: function (data, type, row) {
+                                if (row.Prd_IsActive == 1) {
+                                    return '<span class="label label-xs label-success" >Active</span>';
+                                } else if (row.Prd_IsActive == 0) {
+                                    return '<span class="label label-xs label-danger" >Inactive</span>';
+                                }
+
+                            }
                         }
                     ]
         });
@@ -108,3 +120,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         });
     }
 </script>
+
+

@@ -32,7 +32,7 @@
                     <label for="remark" class="control-label">Appear name</label>
                     <input class="form-control" name="appearname"  id="appearname" value="<?php echo $product->Prd_AppearName ?>" placeholder="Enter appear name"/>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="productCode" class="control-label">Product Brand <span class="required">*</span></label>
@@ -55,7 +55,7 @@
                             </select>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="productmaparea">
                     <h5 class="pull-right">Product mapping</h5><br/>
                     <div class="form-group">
@@ -198,12 +198,12 @@
                                 Is Open Price
                             </label>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="ispromotion" class="control-label">
                                 <input class="prd_icheck" type="checkbox" name="ispromotion" value="1" <?php echo ($product->IsPromotions == 1) ? 'checked' : '' ?>> 
                                 Is Promotion
                             </label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
@@ -212,41 +212,41 @@
                                 Is Multi Price
                             </label>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="isserialno" class="control-label">
                                 <input class="prd_icheck" type="checkbox" name="isserialno" value="1" <?php echo ($product->IsSerial == 1) ? 'checked' : '' ?>> 
                                 Is Serial No
                             </label>
-                        </div>
-                        <div class="form-group">
+                        </div> -->
+                        <!-- <div class="form-group">
                             <label for="israwmaterial" class="control-label">
                                 <input class="prd_icheck" type="checkbox" name="israwmaterial" value="1" <?php echo ($product->IsRawMaterial == 1) ? 'checked' : '' ?>> 
                                 Is Raw Mtr
                             </label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="isfraction" class="control-label">
                                 <input class="prd_icheck" type="checkbox" name="isfraction" value="1" <?php echo ($product->IsFraction == 1) ? 'checked' : '' ?>> 
                                 Is Fraction
                             </label>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="isfreeissue" class="control-label">
                                 <input class="prd_icheck" type="checkbox" name="isfreeissue" value="1" <?php echo ($product->IsFreeIssue == 1) ? 'checked' : '' ?>> 
                                 Is Free Issue
                             </label>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="isfreeissue" class="control-label">
                                 <input class="prd_icheck" type="checkbox" name="isvat" value="1" <?php echo ($product->IsTax == 1) ? 'checked' : '' ?>> 
                                 Is VAT
                             </label>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="isfraction" class="control-label">
@@ -264,7 +264,7 @@
                         </div>
                     </div>
                     <div class="col-md-4"> </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

@@ -23,44 +23,44 @@ $(document).ready(function() {
 
     
     //customer load according salesperson and route
-    $('#route').on('change', function() {
-        var routeID = $(this).val();
-        var newsalesperson = $('#newsalesperson').val();
-        console.log("Route ID changed to:", routeID);
-        console.log("Customer newsalesperson selected:", newsalesperson);
+    // $('#route').on('change', function() {
+    //     var routeID = $(this).val();
+    //     var newsalesperson = $('#newsalesperson').val();
+    //     console.log("Route ID changed to:", routeID);
+    //     console.log("Customer newsalesperson selected:", newsalesperson);
 
-        $.ajax({
-            url: baseUrl + '/job/loadcustomersroutewise',
-            type: 'POST',
-            dataType: "json",
-            data: {
-                routeID: routeID,
-                newsalesperson:newsalesperson
-            },
-            success: function(data) {
-                console.log("Customer Data:", data); 
-                $("#customer").html('<option value="">Select Customer</option>');
+    //     $.ajax({
+    //         url: baseUrl + '/job/loadcustomersroutewise',
+    //         type: 'POST',
+    //         dataType: "json",
+    //         data: {
+    //             routeID: routeID,
+    //             newsalesperson:newsalesperson
+    //         },
+    //         success: function(data) {
+    //             console.log("Customer Data:", data); 
+    //             $("#customer").html('<option value="">Select Customer</option>');
                 
-                // Populate the dropdown with customers
-                if (data.length > 0) {
-                    $.each(data, function(index, customer) {
-                        $("#customer").append(
-                            `<option value="${customer.CusCode}">${customer.DisplayName}</option>`
-                        );
-                    });
-                }
+    //             // Populate the dropdown with customers
+    //             if (data.length > 0) {
+    //                 $.each(data, function(index, customer) {
+    //                     $("#customer").append(
+    //                         `<option value="${customer.CusCode}">${customer.DisplayName}</option>`
+    //                     );
+    //                 });
+    //             }
 
-                $('#customer').select2({
-                    placeholder: "Select a customer",
-                    allowClear: true,
-                    width: '100%'
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", error); // Log any AJAX errors
-            }
-        });
-    });
+    //             $('#customer').select2({
+    //                 placeholder: "Select a customer",
+    //                 allowClear: true,
+    //                 width: '100%'
+    //             });
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error("AJAX Error:", error); // Log any AJAX errors
+    //         }
+    //     });
+    // });
     
     
     $('#customer').on('change', function() {
@@ -718,6 +718,7 @@ $(document).ready(function() {
 
                          if(resultData.product){
                         autoSerial = resultData.product.IsRawMaterial;
+                        $("#discountLimit").val(resultData.product.DiscountLimit);
                         // loadVATNBT(isJobVat,isJobNbt,isJobNbtRatio);
                          $("#productStock").html('/ Available Stock = ' + resultData.productstock.Stock);
                          stockavalibal = resultData.productstock.Stock;
@@ -1200,6 +1201,10 @@ var vatSellingPrice = 0;
         var warrantytype = $("#warrantytype option:selected").html();
         // vatSellingPrice = parseFloat($("#proVatPrice").val());
         var serialNoCheck = $("#serialNoCheck").val();
+      
+
+        var discountLimit = $("#discountLimit").val().replace(/,/g, ''); 
+        discountLimit = parseFloat(discountLimit) || 0;
         vatSellingPrice = sellingPrice;
 
         if(salesperson==''){
@@ -1306,7 +1311,7 @@ var vatSellingPrice = 0;
                     totalCost += (costPrice * qty);
 
                     $("#totalWithOutDiscount").val(total_amount2);
-                    calculateProductWiseDiscount(totalNet2, discount, discount_type, discount_precent, discount_amount, total_amount2, sellingPrice);
+                    calculateProductWiseDiscount(totalNet2, discount, discount_type, discount_precent, discount_amount, total_amount2, sellingPrice,discountLimit);
 
                     proVat=addProductVat((totalNet),isNewVat,isNewNbt,newNbtRatio);
                     proNbt=addProductNbt((totalNet),isNewVat,isNewNbt,newNbtRatio) ;
@@ -1388,7 +1393,7 @@ console.log('Serial',serialNo,stockSerialnoArr);
 
                         $("#totalWithOutDiscount").val(total_amount2);
 
-                        calculateProductWiseDiscount(totalNet2, discount, discount_type, discount_precent, discount_amount, total_amount2, sellingPrice);
+                        calculateProductWiseDiscount(totalNet2, discount, discount_type, discount_precent, discount_amount, total_amount2, sellingPrice,discountLimit);
 
                         proVat=addProductVat((totalNet),isNewVat,isNewNbt,newNbtRatio);
                         proNbt=addProductNbt((totalNet),isNewVat,isNewNbt,newNbtRatio) ;
@@ -1599,6 +1604,7 @@ var action=0;
 
 //===============save products ==============================
     $("#saveItems").click(function() {
+        
         setProductTable();
         var rowCount = $('#tbl_item tr').length;
         var product_code = new Array();
@@ -1662,8 +1668,9 @@ var action=0;
         var po_number  = $("#po_number").val();
         var bankacc    = $("#bank_acc").val();
         var shippingLabel  = $("#shippingLabel").val();
-        var newsalesperson = $("#newsalesperson").val();
-        var route = $("#route").val();
+        var newsalesperson = $("#newsalesperson").html();
+      
+        var route = $("#route").html();
 
         var com_amount = $('#com_amount').val();
         var compayto = $('#compayto').val();
@@ -1675,7 +1682,16 @@ var action=0;
          var remark = $("#remark").val();
         action = $("#action").val();
         var nbtRatioRate=$("#nbtRatioRate").val();
-
+        var cusCode =$('#customer').val();
+      
+        // var availableCreditLimit = $("#vididateCreditLimit").val().replace(/,/g, '');
+        // availableCreditLimit = parseFloat(availableCreditLimit) || 0
+       
+        // if (totalNetAmount > availableCreditLimit) {
+        //     $.notify("Total amount cannot exceed Credit Limit.");
+            
+        //     return;
+        // }
         $('#tbl_item tbody tr').each(function(rowIndex, element) {
             product_code.push($(this).attr('proCode'));
             serial_no.push($(this).attr('serial'));
@@ -1728,7 +1744,8 @@ var action=0;
         var salePersonArr = JSON.stringify(salePerson);
         var warrantytypeArr = JSON.stringify(warrantytype);
 
-        var r = confirm("Do you want to save this invoice.?");
+       
+         var r = confirm("Do you want to save this invoice.?");
         if (r == true) {
             if (cusCode == '' || cusCode == '0') {
                 $.notify("Please select a customer.", "warning");
@@ -1899,17 +1916,25 @@ var finalNbt=0;
 
     //===============calculate product wise discount================================
 
-    function calculateProductWiseDiscount(totalNet3, discount, discount_type, disPercent, disAmount, total_amount4, sellingPrice) {
-
+    function calculateProductWiseDiscount(totalNet3, discount, discount_type, disPercent, disAmount, total_amount4, sellingPrice,discountLimit) {
+           
         //product wise discount 
         if (discount_type == 1) {
             if (discount == 1) {
                 //discount by percent
                 product_discount = totalNet3 * (disPercent / 100);
+                if(product_discount > discountLimit){
+                    $.notify("Product Discount Over the Discount Limit", "warning");
+                    return false;
+                }
                 disAmount = 0;
             } else if (discount == 2) {
                 //discount by amount
                 product_discount = disAmount * totalNet3 / sellingPrice;
+                if(product_discount > discountLimit){
+                    $.notify("Product Discount Over the Discount Limit", "warning");
+                    return false;
+                }
                 disPercent = product_discount * 100 / totalNet3;
             }
 
@@ -1986,6 +2011,8 @@ var finalNbt=0;
         $('#table_expenses tbody').html("");
         $("#cusCode").html("");
         $("#customer").val("");
+        $("#route").html("");
+        $("#newsalesperson").html("");
         $("#creditLimit").html('0.00');
         $("#creditPeriod").html('0');
         $("#cusOutstand").html('0.00');
@@ -2155,24 +2182,25 @@ function strPad(input, length, string, code) {
 
             for (var i = 0; i < resultData.si_dtl.length; i++) {
 
-                if(resultData.si_dtl[i].ProductCode!=customProCode){
-                    itemcode.push(resultData.si_dtl[i].ProductCode);
+                if(resultData.si_dtl[i].SalesProductCode!=customProCode){
+                    itemcode.push(resultData.si_dtl[i].SalesProductCode);
                 }
                 
-                serialnoarr.push(resultData.si_dtl[i].ProductCode);
+                serialnoarr.push(resultData.si_dtl[i].SalesProductCode);
 
-                $("#tbl_item tbody").append("<tr ri=" + i + " id=" + i + " proCode='" + resultData.si_dtl[i].ProductCode + "' uc='" + resultData.si_dtl[i].SalesCaseOrUnit + "' qty='" + resultData.si_dtl[i].SalesQty + "' vatunit_price='" + resultData.si_dtl[i].SalesUnitPrice + "'  org_unit_price='" + resultData.si_dtl[i].SalesUnitPrice + "' unit_price='" + resultData.si_dtl[i].SalesUnitPrice + "' upc='" + resultData.si_dtl[i].SalesUnitPerCase + "' caseCost='" + (resultData.si_dtl[i].SalesCostPrice*resultData.si_dtl[i].SalesQty) + "' isSerial='" + resultData.si_dtl[i].SalesSerialNo + "' serial='" + resultData.si_dtl[i].SalesSerialNo + "' discount_percent='" + resultData.si_dtl[i].SalesDisPercentage + "' cPrice='" + resultData.si_dtl[i].SalesCostPrice + "' pL='" + resultData.si_dtl[i].SalesPriceLevel + "' fQ='" + resultData.si_dtl[i].SalesFreeQty + "' nonDisTotalNet='" + resultData.si_dtl[i].SalesTotalAmount + "' netAmount='" + resultData.si_dtl[i].SalesInvNetAmount + "' proDiscount='" + resultData.si_dtl[i].SalesDisValue + "' proName='" + resultData.si_dtl[i].SalesProductName  + "'   isvat='"+resultData.si_dtl[i].SalesIsVat+"' isnbt='"+resultData.si_dtl[i].SalesIsNbt+"' nbtRatio='"+resultData.si_dtl[i].SalesNbtRatio+"' proVat='"+resultData.si_dtl[i].SalesVatAmount+"' proNbt='"+resultData.si_dtl[i].SalesNbtAmount+"'  salesPerson='"+resultData.si_dtl[i].SalesPerson+"' warranty='"+resultData.si_dtl[i].WarrantyMonthNew+"'>" +
+                $("#tbl_item tbody").append("<tr ri=" + i + " id=" + i + " proCode='" + resultData.si_dtl[i].SalesProductCode + "' uc='" + resultData.si_dtl[i].SalesCaseOrUnit + "' qty='" + resultData.si_dtl[i].SalesQty + "' vatunit_price='" + resultData.si_dtl[i].SalesUnitPrice + "'  org_unit_price='" + resultData.si_dtl[i].SalesUnitPrice + "' unit_price='" + resultData.si_dtl[i].SalesUnitPrice + "' upc='" + resultData.si_dtl[i].SalesUnitPerCase + "' caseCost='" + (resultData.si_dtl[i].SalesCostPrice*resultData.si_dtl[i].SalesQty) + "' isSerial='" + resultData.si_dtl[i].SalesSerialNo + "' serial='" + resultData.si_dtl[i].SalesSerialNo + "' discount_percent='" + resultData.si_dtl[i].SalesDisPercentage + "' cPrice='" + resultData.si_dtl[i].SalesCostPrice + "' pL='" + resultData.si_dtl[i].SalesPriceLevel + "' fQ='" + resultData.si_dtl[i].SalesFreeQty + "' nonDisTotalNet='" + resultData.si_dtl[i].SalesTotalAmount + "' netAmount='" + resultData.si_dtl[i].SalesInvNetAmount + "' proDiscount='" + resultData.si_dtl[i].SalesDisValue + "' proName='" + resultData.si_dtl[i].SalesProductName  + "'   isvat='"+resultData.si_dtl[i].SalesIsVat+"' isnbt='"+resultData.si_dtl[i].SalesIsNbt+"' nbtRatio='"+resultData.si_dtl[i].SalesNbtRatio+"' proVat='"+resultData.si_dtl[i].SalesVatAmount+"' proNbt='"+resultData.si_dtl[i].SalesNbtAmount+"'  salesPerson='"+resultData.si_dtl[i].SalesPerson+"' warranty='"+resultData.si_dtl[i].WarrantyMonthNew+"'>" +
                     "<td class='text-center'>" + (i+1) + "</td>" +
-                    "<td class='text-left'>" + resultData.si_dtl[i].ProductCode + "</td>" +
+                    "<td class='text-left'>" + resultData.si_dtl[i].SalesProductCode + "</td>" +
                     "<td>" + resultData.si_dtl[i].SalesProductName + "</td>" +
                     "<td>" + resultData.si_dtl[i].SalesCaseOrUnit + "</td>" +
                     "<td class='qty" + i + "'>" + accounting.formatNumber(resultData.si_dtl[i].SalesQty) + "</td>" +
+                    "<td></td>" +
                     "<td class='text-right'>" + accounting.formatNumber(resultData.si_dtl[i].SalesUnitPrice) + "</td>" +
                     "<td class='text-center'>" + resultData.si_dtl[i].SalesDisPercentage + "</td>" +
                     "<td class='text-right' >" + accounting.formatMoney(resultData.si_dtl[i].SalesInvNetAmount) + "</td>" +
                     "<td class='text-right' >" + (resultData.si_dtl[i].SalesSerialNo) + "</td>" +
                     // "<td></td>" +
-                    "<td>" + resultData.si_dtl[i].WarrantyMonthNew + "</td>" +
+                    // "<td>" + resultData.si_dtl[i].WarrantyMonthNew + "</td>" +
                     "<td><i class='glyphicon glyphicon-edit edit btn btn-info btn-xs'></i></td><td class='rem" + i + "'><a href='#' class='remove btn btn-xs btn-danger'><i class='fa fa-remove'></i></a></td></tr>");
                 totalProWiseDiscount += parseFloat(resultData.si_dtl[i].SalesDisValue);
             }
@@ -2417,37 +2445,37 @@ if(cusCode!=''){
 }
 
 //customer autoload
-    // $("#customer").autocomplete({
-    //     source: function(request, response) {
+    $("#customer").autocomplete({
+        source: function(request, response) {
            
-    //         $.ajax({
-    //             url: baseUrl+'/job/loadcustomersjson',
-    //             dataType: "json",
-    //             data: {
-    //                 q: request.term,
-    //                 routeID: routeID
-    //             },
-    //             success: function(data) {
-    //                 response($.map(data, function(item) {
-    //                     return {
-    //                         label: item.text,
-    //                         value: item.id,
-    //                         data: item
-    //                     }
-    //                 }));
-    //             }
-    //         });
-    //     },
-    //     autoFocus: true,
-    //     minLength: 0,
-    //     select: function(event, ui) {
-    //         cusCode = ui.item.value;
-    //         clearCustomerData();
-    //         $("#tbl_payment tbody").html("");
-    //         loadCustomerDatabyId(cusCode);
-    //         getVehiclesByCustomer(cusCode);
-    //     }
-    // });
+            $.ajax({
+                url: baseUrl+'/job/loadcustomersjson',
+                dataType: "json",
+                data: {
+                    q: request.term
+                },
+                success: function(data) {
+                   
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.text,
+                            value: item.id,
+                            data: item
+                        }
+                    }));
+                }
+            });
+        },
+        autoFocus: true,
+        minLength: 0,
+        select: function(event, ui) {
+            cusCode = ui.item.value;
+            clearCustomerData();
+            $("#tbl_payment tbody").html("");
+            loadCustomerDatabyId(cusCode);
+            getVehiclesByCustomer(cusCode);
+        }
+    });
 
     function getVehiclesByCustomer(cus){
         if(cus!=''){
@@ -2621,9 +2649,17 @@ $("#compayto").autocomplete({
                 $("#creditPeriod").html(resultData.cus_data.CreditPeriod);
                 $("#cusOutstand").html(accounting.formatMoney(outstanding));
                 $("#availableCreditLimit").html(accounting.formatMoney(available_balance));
+                $("#vididateCreditLimit").val(accounting.formatMoney(available_balance));
                 $("#cusAddress").html(resultData.cus_data.Address01 + ", " + resultData.cus_data.Address02);
                 $("#cusAddress2").html(resultData.cus_data.Address03);
                 $("#cusPhone").html(resultData.cus_data.MobileNo);
+                $("#newsalesperson").html(resultData.cus_data.HandelBy);
+                $("#route").html(resultData.cus_data.name);
+                if (resultData.cus_data.payMethod == 1) {
+                    $("#creditSection").hide();
+                } else {
+                    $("#creditSection").show();
+                }
             }
         });
     }
@@ -2633,6 +2669,8 @@ $("#compayto").autocomplete({
         $("#cusAddress").html('');
         $("#cusAddress2").html('');
         $("#cusPhone").html('');
+        $("#newsalesperson").html('');
+        $("#route").html('');
     }
 
     $("#serialNo").autocomplete({
@@ -2960,7 +2998,7 @@ var ccard = [];
         $("#totalNbt").html(accounting.formatNumber(0));
 
          loadCustomerDatabyId(resultData.so_hed.SalesCustomer);
-return false;
+        return false;
         // if(resultData.so_hed.IsCusNet==1){
         //         $("#isCustomTotal").iCheck('check');
         //     }else{
@@ -3052,6 +3090,68 @@ return false;
         }   
     }
 
+
+    customerOderNo = $('#po_number').val();
+    if(customerOderNo != ''){
+        $.ajax({
+            type:"POST",
+            url: baseUrl+"/Salesinvoice/getPreOrdersTempNo",
+            data:{
+                customerOderNo:customerOderNo
+            },
+            success:function(data){
+                
+      
+                var customerCode = data.orderHed.CusCode;
+                if (customerCode) {
+                    loadCustomerDatabyId(customerCode);
+                    // setGridandLabelData(data);
+                    setGridTableData(data);
+                    
+                }
+                
+            }
+        });
+    }
+
+    function setGridTableData(resultData) {
+        console.log('resultdata',resultData)
+        var orderDetails = resultData.orderDetls;
+        // total_amount2 = resultData.orderHed.grossAmount;
+        total_discount= resultData.orderHed.discountAmount;
+        var tbody = $("#tbl_item tbody"); // Select table body
+        tbody.empty(); // Clear existing rows before adding new ones
+        var total_amount2 = 0;
+        if (orderDetails.length === 0) {
+            tbody.append("<tr><td colspan='12' class='text-center'>No records found</td></tr>");
+            return;
+        }
+
+        //cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
+    
+        $.each(orderDetails, function(index, item) {
+            total_amount2 += parseFloat(item.totalAmount);
+            var row = `<tr serial_batch='0' ri="${index + 1}" id="${index + 1}" proCode="${item.productCode}" uc="${item.unitOrCase}" proname = "${item.productName}"
+                            qty="${item.saleQuantity}" unit_price="${item.unitPrice}" netamount="${item.totalAmount}" netAmount="${item.totalNetAmount}" 
+                            discount_precent ="${item.disPresantage}" pro_discount="${item.disAmount}"  cprice="${item.salesCostPrice}" org_unit_price ="${item.unitPrice}">
+                    <td class='text-center'>${index + 1}</td>
+                    <td class='text-left'>${item.productCode}</td>
+                    <td>${item.productName}</td>
+                    <td>${item.unitOrCase}</td>
+                    <td class='qty${index + 1} text-center'>${item.saleQuantity}</td>
+                    <td class='text-center'>0</td> 
+                    <td class='text-right'>${item.unitPrice}</td>
+                    <td class='text-center'>${item.disPresantage}</td>
+                    <td class='text-right'>${item.totalAmount}</td>
+                    <td>0</td> 
+                    <td><i class='glyphicon glyphicon-edit edit btn btn-info btn-xs'></i></td>
+                    <td class='rem${index + 1}'><a href='#' class='remove btn btn-xs btn-danger'><i class='fa fa-remove'></i></a></td>
+                </tr>`;
+            tbody.append(row);
+        });
+        cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
+
+    }
     function nl2br (str, is_xhtml) {
         var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
         return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
@@ -3186,3 +3286,5 @@ return false;
 
             };
 });
+
+

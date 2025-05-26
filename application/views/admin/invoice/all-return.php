@@ -26,8 +26,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	                    <tr>
 	                        <td>Return No</td>
                             <td>Return No</td>
-	                        <td>Invoice No</td>
-                            <td>Invoice No</td>
+	                        
+                       
 	                        <td>Customer No</td>
 	                        <td>Remark</td>
                             <td>Return Date</td>
@@ -65,12 +65,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     }
                 },
 	            {"data": "ReturnNo","visible": false,"searchable": true},
-                {"data": null, orderable: false, searchable: false,
-                    mRender: function (data, type, row) {
-                        return '<a href="../Salesinvoice/view_sales_invoice/' + Base64.encode(row.InvoiceNo) +'" >'+row.InvoiceNo+'</a>';
-                    }
-                },
-	            {"data": "InvoiceNo","visible": false,"searchable": true},
+               
+	            
 	            {"data": "CustomerNo"},
 	            {"data": "Remark"},
 	            {"data": "ReturnDate", searchable: false},

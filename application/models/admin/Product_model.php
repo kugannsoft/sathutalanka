@@ -86,7 +86,6 @@ class Product_model extends CI_Model {
     public function loadproductbyid($product) {
         return $this->db->select('product.*,productcondition.*')->from('product')
                         ->where('product.ProductCode', $product)
-                        ->where('product.Prd_IsActive', 1)
                         ->join('productcondition', 'productcondition.ProductCode = product.ProductCode')
                         ->get()->row();
     }
@@ -340,7 +339,7 @@ class Product_model extends CI_Model {
     }
 
     public function loadsuppliers() {
-        return $this->db->select('SupCode,SupName')->from('supplier')->get()->result();
+        return $this->db->select('SupCode,SupName')->from('supplier')->where('IsActive',1)->get()->result();
     }
 
     public function loadpricelevel() {
@@ -380,4 +379,6 @@ class Product_model extends CI_Model {
      public function loadSystemOptionById($id){
        return $this->db->select('Value')->from('systemoptions')->where('ID', $id)->get()->row()->Value;
     }
+
+    
 }

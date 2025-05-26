@@ -21,6 +21,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </div>
         </div>
+        <!-- <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <select name="salesperson" id="salesperson" class="form-control">
+                        <option value="">Select a Salesperson</option>
+                        <?php foreach ($salespersons as $trns) { ?>
+                        <option value="<?php echo $trns->RepID; ?>" ><?php echo $trns->RepName; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <select name="route" id="route" class="form-control">
+                    <option value="">Select a Route</option>
+                        <?php foreach ($routes as $route) { ?>
+                        <option value="<?php echo $route->id; ?>" ><?php echo $route->name; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-flat btn-success">Show</button>
+            </div>
+        </div> -->
+        
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
@@ -32,12 +58,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <td>ID</td>
                                 <td>Name</td>
                                 <td>Name</td>
-                                <td>NIC</td>
+                                <td>Salesperson</td>
+                                <td>Route</td>
                                 <td>No</td>
                                 <td>Phone</td>
-                                <td>Credit Limit</td>
+                                <!-- <td>Credit Limit</td> -->
                                 <td>###</td>
-                                <td>###</td>
+                                <!-- <td>###</td> -->
                                 <td>###</td>
                                 <td>###</td>
                                 <td>###</td>
@@ -62,129 +89,130 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </div>
 
 <script>
-    var customertbl = $('#customertbl').dataTable({
-        "processing": true,
-        "serverSide": true,
-        "order": [[1, "desc"]],
-        "language": {
-            "processing": "<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>"
-        },
-        "ajax": {
-            "url": "allCustomers",
-            "type": "POST"
-        },
-        "columns": [
+  
 
-            {
-                <?php if (in_array("SM21", $blockView) || $blockView == null) { ?>
-
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '" >' + row.CusCode + '</a>';
-                }
-                <?PHP  } else {?>
-
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return row.CusCode;
-                }
-                <?php }?>
+    $(document).ready(function () {
+        var customertbl = $('#customertbl').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "order": [[1, "desc"]],
+            "language": {
+                "processing": "<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>"
             },
-            {"data": "CusCode", "visible": false, "searchable": true},
-
-            {
-                <?php if (in_array("SM21", $blockView) || $blockView == null) { ?>
-
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '" >' + row.CusName + '</a>';
+            "ajax": {
+                "url": "allCustomers",
+                "type": "POST",
+                "data": function (d) {
+                    d.salesperson = $('#salesperson').val();
+                    d.route = $('#route').val();
                 }
-                <?PHP  } else {?>
-
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return row.CusName;
-                }
-                <?php }?>
             },
-            {"data": "CusName", "visible": false, "searchable": true},
-            {"data": "Nic", searchable: true},
-            {"data": "CusBookNo"},
-            {"data": "MobileNo"},
-            {"data": "CreditLimit", searchable: false},
-            {
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    if (row.IsActive == 1) {
-                        return '<span class="label label-xs label-success" >Active</span>';
-                    } else if (row.IsActive == 0) {
-                        return '<span class="label label-xs label-danger" >Inactive</span>';
+           "columns": [
+
+                {
+                    <?php if (in_array("SM21", $blockView) || $blockView == null) { ?>
+
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '" >' + row.CusCode + '</a>';
                     }
+                    <?PHP  } else {?>
 
-                }
-            },
-            {
-                <?php if (in_array("SM22", $blockAdd) || $blockAdd == null) { ?>
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return row.CusCode;
+                    }
+                    <?php }?>
+                },
+                {"data": "CusCode", "visible": false, "searchable": true},
 
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<a href="<?php echo base_url() ?>admin/job/?ccode=' + Base64.encode(row.CusCode) + '"  class="btn btn-xs btn-info" >Job</a>';
-                }
-                <?PHP  } else {?>
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<a href="<?php echo base_url() ?>admin/job/?ccode=' + Base64.encode(row.CusCode) + '"  class="btn btn-xs btn-info" disabled>Job</a>';
-                }
-                <?php }?>
-            },
-            {
-                <?php if (in_array("SM21", $blockEdit) || $blockEdit == null) { ?>
+                {
+                    <?php if (in_array("SM21", $blockView) || $blockView == null) { ?>
 
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<button onclick="editm(\'' + row.CusCode + '\')" class="btn btn-xs btn-default" >Edit</button>';
-                }
-                <?PHP  } else {?>
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<button onclick="editm(\'' + row.CusCode + '\')" class="btn btn-xs btn-default" disabled>Edit</button>';
-                }
-                <?php }?>
-            },
-            {
-                <?php if (in_array("SM21", $blockView) || $blockView == null) { ?>
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '" >' + row.CusName + '</a>';
+                    }
+                    <?PHP  } else {?>
 
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '"  class="btn btn-xs btn-default" >View</a>';
-                }
-                <?PHP  } else {?>
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '"  class="btn btn-xs btn-default" disabled>View</a>';
-                }
-                <?php }?>
-            },
-            {
-                <?php if (in_array("SM21", $blockView) || $blockView == null) { ?>
-
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                   if (row.IsActive == 0) {
-                    return '<button value="' + row.CusCode + '" id="' + row.CusCode + '"  Class="delete btn btn-xs btn-danger">Delete</button> &nbsp;';
-                } else {
-                    return '<button value="' + row.CusCode + '" id="' + row.CusCode + '" Class="delete btn btn-xs btn-danger" disabled>Delete</button> &nbsp;';
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return row.CusName;
+                    }
+                    <?php }?>
+                },
+                {"data": "CusName", "visible": false, "searchable": true},
+                {"data": "RepName", searchable: true},
+                {"data": "name", searchable: true},
+                {"data": "CusBookNo"},
+                {"data": "MobileNo"},
+             
+                {
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        if (row.IsActive == 1) {
+                            return '<span class="label label-xs label-success" >Active</span>';
+                        } else if (row.IsActive == 0) {
+                            return '<span class="label label-xs label-danger" >Inactive</span>';
                         }
+
+                    }
+                },
+           
+                {
+                    <?php if (in_array("SM21", $blockEdit) || $blockEdit == null) { ?>
+
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return '<button onclick="editm(\'' + row.CusCode + '\')" class="btn btn-xs btn-default" >Edit</button>';
+                    }
+                    <?PHP  } else {?>
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return '<button onclick="editm(\'' + row.CusCode + '\')" class="btn btn-xs btn-default" disabled>Edit</button>';
+                    }
+                    <?php }?>
+                },
+                {
+                    <?php if (in_array("SM21", $blockView) || $blockView == null) { ?>
+
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '"  class="btn btn-xs btn-default" >View</a>';
+                    }
+                    <?PHP  } else {?>
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '"  class="btn btn-xs btn-default" disabled>View</a>';
+                    }
+                    <?php }?>
+                },
+                {
+                    <?php if (in_array("SM21", $blockView) || $blockView == null) { ?>
+
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                    if (row.IsActive == 0) {
+                        return '<button value="' + row.CusCode + '" id="' + row.CusCode + '"  Class="delete btn btn-xs btn-danger">Delete</button> &nbsp;';
+                    } else {
+                        return '<button value="' + row.CusCode + '" id="' + row.CusCode + '" Class="delete btn btn-xs btn-danger" disabled>Delete</button> &nbsp;';
+                            }
+                    }
+                    <?PHP  } else {?>
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '"  class="btn btn-xs btn-default" disabled>View</a>';
+                    }
+                    <?php }?>
                 }
-                <?PHP  } else {?>
-                "data": null, orderable: false, searchable: false,
-                mRender: function (data, type, row) {
-                    return '<a href="<?php echo base_url() ?>admin/payment/view_customer/' + (row.CusCode) + '"  class="btn btn-xs btn-default" disabled>View</a>';
-                }
-                <?php }?>
-            }
-        ]
+            ]
+        });
+
+        $('.btn-success').on('click', function () {
+            customertbl.ajax.reload();
+        });
     });
+
 
     $(document).on('click', '.delete', function () {
         var id = $(this).attr("id");
@@ -346,4 +374,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
 
     };
+
+    
+
 </script>
