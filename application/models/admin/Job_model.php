@@ -126,14 +126,14 @@ class Job_model extends CI_Model {
         return $query;
     }
 
-    public function loadcustomersjson($query){
+    public function loadcustomersjson($query,$routes,$salesperson){
 
         $q=$this->db->select('CusCode AS id,CONCAT(CusName) AS text')
         ->from('customer')
         ->join('customer_routes', 'customer_routes.id = customer.RouteId')
         ->like('CONCAT(" ",customer.CusCode,customer.CusName," ",customer.MobileNo)', $query)
-            ->where('RouteId', '2')
-            ->where('HandelBy', 'Emp0001')
+        ->where('RouteId',$routes )
+        ->where('HandelBy',$salesperson )
         ->where('IsActive',1)->get()->result();
         return json_encode($q);
     }
