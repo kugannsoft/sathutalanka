@@ -2113,6 +2113,14 @@ public function editBankAccount() {
        echo json_encode($data);
        die();
    }
+
+   public function checkDep() {
+    $department = $this->input->post('department');
+    $exists =$this->db->select('Description')->from('department')->where('Description',$department)->get()->row();
+
+    echo json_encode(['exists' => $exists !== null]);
+    die();
+    }
 }
 
 

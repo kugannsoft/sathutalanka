@@ -23,6 +23,7 @@ class Grn_model extends CI_Model {
                     ->from('product')
                     ->join('productprice', 'productprice.ProductCode = product.ProductCode', 'INNER')
                     ->where('product.Prd_Supplier', $supCode)
+                    ->where('product.Prd_IsActive',1)
                     ->like("CONCAT(' ',product.ProductCode,product.Prd_Description,product.BarCode)", $query ,'left')
                     ->limit(50)->get();
      
@@ -30,6 +31,7 @@ class Grn_model extends CI_Model {
             $query1 =$this->db->select('product.ProductCode,product.Prd_Description,productprice.ProductPrice')
                     ->from('product')
                     ->join('productprice', 'productprice.ProductCode = product.ProductCode', 'INNER')
+                    ->where('product.Prd_IsActive',1)
                     ->like("CONCAT(' ',product.ProductCode,product.Prd_Description,product.BarCode)", $query ,'left')
                     ->limit(50)->get();
         }

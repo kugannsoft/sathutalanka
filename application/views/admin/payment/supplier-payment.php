@@ -115,7 +115,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!--                                             <b> Cash Payment : <span id="cashPayment"></span> </b><br>
                                   <b> Cheque Payment : <span id="chequePayment"></span> </b>-->
 
-                                <span class="thumbnail"> &nbsp; &nbsp; Automatically &nbsp;<input type="radio"  class="prd_icheck" checked="checked" name="payAuto" id="payAuto" value="1">  &nbsp; &nbsp; Manual &nbsp; <input type="radio" class="prd_icheck" name="payAuto" id="payAuto2" value="2"> </span>
+                                <span class="thumbnail" style="width:15%;"> 
+                                    <!-- &nbsp; &nbsp; Automatically &nbsp;
+                                    <input type="radio"  class="prd_icheck" checked="checked" name="payAuto" id="payAuto" value="1">   -->
+                                    &nbsp; &nbsp; Manual &nbsp; 
+                                    <input type="radio" class="prd_icheck" name="payAuto" id="payAuto2" value="2"> 
+                                </span>
                             </div>
                             
                         </div>

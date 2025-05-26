@@ -110,6 +110,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <td>Cost Value</td>
                                     <td>Estimate Profit</td>
                                     <td>Supplier</td>
+                                    <td>Damage Qty</td>
+                                    <td>Expired Qty</td>
+                                    <td>Normal Return Qty</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -128,7 +131,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <td id="totalcost"></td>
                                     <td id="totalprofit"></td>
                                     <td></td>
-
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -355,6 +360,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     var totalValue = 0;
     var totalProfit = 0;
     function drawTable(data) {
+        console.log(data);
         totalCostValue = 0;
         totalValue = 0;
         totalProfit = 0;
@@ -382,7 +388,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
     function drawRow(rowData, index) {
-
         if (parseFloat(rowData[index].Stock) < rowData[index].Prd_ROL) {
             var row = $("<tr class='stockout'>");
         } else {
@@ -403,6 +408,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         row.append($("<td>" + accounting.formatMoney(rowData[index].Prd_CostPrice * rowData[index].Stock) + "</td>"));
         row.append($("<td>" + accounting.formatMoney((rowData[index].ProductPrice * rowData[index].Stock) - (rowData[index].Prd_CostPrice * rowData[index].Stock)) + "</td>"));
         row.append($("<td>" + rowData[index].SupName + "</td>"));
+        row.append($("<td>" + rowData[index].Damage + "</td>"));
+        row.append($("<td>" + rowData[index].Expired + "</td>"));
+        row.append($("<td>" + rowData[index].Expired + "</td>"));
     }
     function printdiv() {
         $("#saletable").print({

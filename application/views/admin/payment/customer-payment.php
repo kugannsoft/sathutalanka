@@ -24,72 +24,50 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="box-header">
                         <!--<form class="form-horizontal">-->
                         <div class="row">
+
                             <div class="col-md-6">
-                                <label for="salesperson" class="col-sm-5 control-label">Salesperson <span class="required">*</span></label>
-                                <div class="col-sm-6">
-                                    <select class="form-control" required="required"  name="newsalesperson" id="newsalesperson" placeholder="sales person">
-                                        <option value="">-Select a sales person-</option>
-                                        <?php foreach ($salesperson as $trns) { ?>
-                                            <option value="<?php echo $trns->RepID; ?>" 
-                                                    <?php echo ($trns->RepID == $selectedSalesperson) ? 'selected' : ''; ?>>
-                                                <?php echo $trns->RepName; ?>
-                                            </option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-     
-                                <?php if ($is_edit): ?>
-                                    <div class="form-group">
-                                            <label for="route" class="col-sm-5 control-label">Route <span class="required">*</span></label>
-                                            <div class="col-sm-6">
-                                                <select class="form-control" required="required"  name="route" id="route" placeholder="route">
-                                                    <option value="">-Select a Route-</option>
-                                                    <?php foreach ($allsalespersonroute as $trns) { ?>
-                                                        <option value="<?php echo $trns->id; ?>" 
-                                                            <?php echo ($trns->route_id == $selected_route) ? 'selected' : ''; ?>>
-                                                            <?php echo $trns->name; ?>
-                                                        </option>
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                <?php else: ?>
-                                        <div class="form-group">
-                                            <label for="route" class="col-sm-5 control-label">Route <span class="required">*</span></label>
-                                            <div class="col-sm-6">
-                                                <select class="form-control" required="required"  name="route" id="route" placeholder="route">
-                                                    <option value="">-Select a Route-</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                <?php endif; ?>
-                                <?php if ($is_edit): ?>
+
                                 <div class="form-group">
-                                    <label for="customer" class="col-sm-5 control-label">Customer <span class="required">*</span></label>
+                                    <label for="additional" class="col-sm-5 control-label">Sales Person</label>
                                     <div class="col-sm-6">
-                                        <!-- <input type="text" class="form-control" autofocus required="required"  name="customer" id="customer" placeholder="Enter Customer" value="<?php echo $customer; ?>"> -->
-                                        <select class="form-control" required="required" name="customer" id="customer" placeholder="customer name">
-                                                <option value="0">-Select a customer-</option>
-                                                <?php foreach ($allroutecustomer as $trns) { ?>
-                                                        <option value="<?php echo $trns->CusCode; ?>" 
-                                                        <?php echo ($trns->CusCode == $selectedcus) ? 'selected' : ''; ?>>
-                                                            <?php echo $trns->DisplayName; ?>
-                                                        </option>
-                                                <?php } ?>
+                                        <select class="form-control" required="required"  name="newsalesperson" id="newsalesperson" placeholder="sales person">
+                                            <option value="">-Select a sales person-</option>
+                                            <?php foreach ($salesperson as $trns) { ?>
+                                                <option value="<?php echo $trns->RepID; ?>"
+                                                    <?php echo ($trns->RepID == $selectedSalespersonID) ? 'selected' : ''; ?>>
+                                                    <?php echo $trns->RepName; ?>
+                                                </option>
+                                            <?php } ?>
                                         </select>
                                     </div>
                                 </div>
-                                <?php else: ?>
+
+                                <div class="form-group">
+                                    <label for="route" class="col-sm-5 control-label">Routes</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" name="route" id="route" required>
+                                            <option value="">-Select a Route-</option>
+                                            <?php if (!empty($routes)) {
+                                                foreach ($routes as $route) { ?>
+                                                    <option value="<?php echo $route->id; ?>"
+                                                        <?php echo (isset($selectedRoute) && $route->id == $selectedRoute) ? 'selected' : ''; ?>>
+                                                        <?php echo $route->name; ?>
+                                                    </option>
+                                                <?php }
+                                            } ?>
+                                        </select>
+                                    </div>
+                                </div>
+
                                     <div class="form-group">
                                         <label for="customer" class="col-sm-5 control-label">Customer <span class="required">*</span></label>
                                         <div class="col-sm-6">
-                                            <!-- <input type="text" class="form-control" autofocus required="required"  name="customer" id="customer" placeholder="Enter Customer" value="<?php echo $customer; ?>"> -->
-                                            <select class="form-control" required="required" name="customer" id="customer" placeholder="customer name">
-                                                    <option value="0">-Select a customer-</option>
-                                            </select>
+                                            <input type="text" class="form-control" autofocus required="required"  name="customer" id="customer" placeholder="Enter Customer" 
+                                            value="<?php echo $customer; ?>">
+                                          
                                         </div>
                                     </div>
-                                <?php endif; ?>
+                                
                                 <div class="form-group">
                                     <label for="customer" class="col-sm-5 control-label">Receipt Type <span class="required">*</span></label>
                                     <div class="col-sm-6">
@@ -152,6 +130,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <td>Customer </td>
                                         <td> : </td>
                                         <td> <span id="cusCode"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Salesperson </td>
+                                        <td> : </td>
+                                        <td> <span id="newsalesperson"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Route </td>
+                                        <td> : </td>
+                                        <td> <span id="route"></span></td>
                                     </tr>
                                     <tr>
                                         <td>Mobile No</td>
@@ -345,14 +333,81 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     div.ui-datepicker{
         font-size:10px;
     }
-    
+
+
+
     
 </style>
 <script type="text/javascript">
-       $('#customer').select2({
-            placeholder: "Select a customer",
-            allowClear: true,
-            minimumInputLength:1,
-            width: '100%'
-       });
+
+        $('.prd_icheck').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '50%'
+    });
+        $("#supplier").select2({
+        minimumInputLength: 1
+    });
+
+
+        $('#newsalesperson').on('change', function() {
+        var salespersonID = $(this).val();
+        if (salespersonID != "0") {
+
+        $.ajax({
+        url: "<?php echo base_url(); ?>" + "admin/customer/findemploeeroute",
+        method: 'POST',
+        data: { salespersonID: salespersonID },
+        dataType: 'json',
+        success: function(response) {
+
+        $('#route').empty();
+        $('#route').append('<option value="0">-Select-</option>');
+
+        $.each(response, function(index, routeID) {
+        console.log(routeID);
+        $('#route').append('<option value="'+ routeID.route_id +'">'+ routeID.route_name +'</option>');
+    });
+    },
+        error: function(xhr, status, error) {
+        console.error('Error fetching routes:', error);
+    }
+    });
+    } else {
+        $('#route').empty();
+        $('#route').append('<option value="0">-Select-</option>');
+    }
+    });
+
+        $('#route').on('change', function() {
+        var routeID = $(this).val();
+        if (routeID != "0") {
+
+        $.ajax({
+        url: "<?php echo base_url(); ?>" + "admin/sales/findroutecustomer",
+        method: 'POST',
+        data: { routeID: routeID },
+        dataType: 'json',
+        success: function(response) {
+
+        $('#customer').empty();
+        $('#customer').append('<option value="0">-Select-</option>');
+
+        $.each(response, function(index, customers) {
+        console.log(customers);
+        $('#customer').append('<option value="'+ customers.CusCode +'">'+ customers.CusName +'</option>');
+    });
+    },
+        error: function(xhr, status, error) {
+        console.error('Error fetching customer:', error);
+    }
+    });
+    } else {
+        $('#customer').empty();
+        $('#customer').append('<option value="0">-Select-</option>');
+    }
+    });
+
+
+
 </script>

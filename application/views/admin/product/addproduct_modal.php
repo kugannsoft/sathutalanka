@@ -36,7 +36,7 @@
                     <input class="form-control" name="appearname"  id="appearname" placeholder="Enter appear name"/>
                      
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="productCode" class="control-label">Product Brand <span class="required">*</span></label>
@@ -59,7 +59,7 @@
                             </select>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="productmaparea">
                     <h5 class="pull-right">Product mapping</h5><br/>
                     
@@ -169,12 +169,12 @@
                 </div>
 
                 <div class="row">
-<!--                    <div class="col-md-6">-->
-<!--                        <div class="form-group">-->
-<!--                            <label for="reorderlevel" class="control-label">Re Order Level<span class="required">*</span></label>-->
-<!--                            <input type="text" class="form-control" required="required"  name="reorderlevel" id="reorderlevel">-->
-<!--                        </div>-->
-<!--                    </div>-->
+                   <div class="col-md-6">
+                       <div class="form-group">
+                           <label for="reorderlevel" class="control-label">Re Order Level<span class="required">*</span></label>
+                           <input type="text" class="form-control" required="required"  name="reorderlevel" id="reorderlevel">
+                       </div>
+                   </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="reorderqty" class="control-label">Re Order Qty<span class="required">*</span></label>
@@ -208,18 +208,18 @@
 <!--                        </div>-->
                     </div>
 <!--                    <div class="col-md-4">-->
-<!--                        <div class="form-group">-->
-<!--                            <label for="ismultiprice" class="control-label">-->
-<!--                                <input class="prd_icheck" type="checkbox" name="ismultiprice" value="1"> -->
-<!--                                Is Multi Price-->
-<!--                            </label>-->
-<!--                        </div>-->
-                        <div class="form-group">
+                       <div class="form-group">
+                           <label for="ismultiprice" class="control-label">
+                               <input class="prd_icheck" type="checkbox" name="ismultiprice" value="1">
+                               Is Multi Price
+                           </label>
+                       </div>
+                        <!-- <div class="form-group">
                             <label for="isserialno" class="control-label">
                                 <input class="prd_icheck" type="checkbox" name="isserialno" value="1"> 
                                 Is Serial No
                             </label>
-                        </div>
+                        </div> -->
 <!--                        <div class="form-group">-->
 <!--                            <label for="israwmaterial" class="control-label">-->
 <!--                                <input class="prd_icheck" type="checkbox" name="israwmaterial" value="1"> -->
@@ -234,21 +234,21 @@
 <!--                                Is Fraction No-->
 <!--                            </label>-->
 <!--                        </div>-->
-<!--                        <div class="form-group">-->
-<!--                            <label for="isfreeissue" class="control-label">-->
-<!--                                <input class="prd_icheck" type="checkbox" name="isfreeissue" value="1"> -->
-<!--                                Is Free Issue-->
-<!--                            </label>-->
-<!--                        </div>-->
-                        <div class="form-group">
+                       <div class="form-group">
+                           <label for="isfreeissue" class="control-label">
+                               <input class="prd_icheck" type="checkbox" name="isfreeissue" value="1">
+                               Is Free Issue
+                           </label>
+                       </div>
+                        <!-- <div class="form-group">
                             <label for="isfreeissue" class="control-label">
                                 <input class="prd_icheck" type="checkbox" name="isvat" value="1"> 
                                 Is VAT
                             </label>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="isfraction" class="control-label">
@@ -266,7 +266,7 @@
                         </div>
                     </div>
                     <div class="col-md-4"> </div>
-                </div>
+                </div> -->
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -709,6 +709,18 @@
 
     $('#addproductform').submit(function(e) {
         e.preventDefault();
+
+        var department = $('#department').val();
+        var sub_department = $('#sub_department').val();
+        if(department == 0){
+            $.notify("Please select the Department.", "warn");
+            return false;
+        }
+
+        if(sub_department == 0){
+            $.notify("Please select the Sub department.", "warn");
+            return false;
+        }
         $('#savepro').attr('disabled', true);
         $.ajax({
             url: "<?php echo base_url('admin/product/add_product/') ?>",
@@ -913,27 +925,45 @@
     $('#saveDep1').click(function(e) {
         var department = $("#dep1").val();
         $.ajax({
-                type: "post",
-                url: "<?php echo base_url(); ?>" + "admin/master/addDep",
-                data: {department:department},
-                success: function (json) {
-                    var resultData = JSON.parse(json);
-                    var feedback = resultData['fb'];
-                    var val = resultData['DepCode'];
-                    var dec = resultData['Description'];
+            type: "post",
+            url: "<?php echo base_url(); ?>" + "admin/master/checkDep",
+            data: { department: department },
+            success: function(response) {
+                var resultData = JSON.parse(response);
+                console.log(resultData['exists']);
+                if (resultData['exists'] == true) {
+                   
+                    $.notify('This department name is already saved.');
+                    return false;
+                }else{
 
-                    if (feedback == true) {
-                        $("#department").append("<option value='"+val+"'>"+dec+"</option>");
-                        $("#dep1").val('');
-                        $("#panel_dep1").hide();
-                     }
-                },
-                error: function () {
-                    alert('Error while request..');
+                    $.ajax({
+                            type: "post",
+                            url: "<?php echo base_url(); ?>" + "admin/master/addDep",
+                            data: {department:department},
+                            success: function (json) {
+                                var resultData = JSON.parse(json);
+                                var feedback = resultData['fb'];
+                                var val = resultData['DepCode'];
+                                var dec = resultData['Description'];
+            
+                                if (feedback == true) {
+                                    $("#department").append("<option value='"+val+"'>"+dec+"</option>");
+                                    $("#dep1").val('');
+                                    $("#panel_dep1").hide();
+                                 }
+                            },
+                            error: function () {
+                                $.notify('Error while request..');
+                            }
+                        });
                 }
-            });
-        e.preventDefault();
+            }
+        })
+        
     });
+
+
 
     $('#saveDep2').click(function(e) {
     var subdepartment = $("#dep2").val();

@@ -10,6 +10,8 @@ class Invoice extends Admin_Controller {
         $this->load->helper('number');
         $this->load->model('admin/Invoice_model');
         date_default_timezone_set("Asia/Colombo");
+        $this->load->library('Datatables'); 
+        $this->load->database();
     }
 
     public function index() {
@@ -144,12 +146,14 @@ class Invoice extends Admin_Controller {
             $this->data['breadcrumb'] = $this->breadcrumbs->show();
 
             /* Data */
-             $this->data['plv'] = $this->Invoice_model->loadpricelevel();
+            $this->data['plv'] = $this->Invoice_model->loadpricelevel();
             $location = $_SESSION['location'];
             $this->load->model('admin/Invoice_model');
             $id3 = array('CompanyID' => $location);
             $this->data['company'] = $this->Invoice_model->get_data_by_where('company', $id3);
             $this->data['salesperson'] = $this->db->select()->from('salespersons')->get()->result();
+            $this->data['returnTypes'] = $this->db->select()->from('return_types')->get()->result();
+          
             // echo json_encode($this->data['salesperson']);
             // die();
             /* Load Template */
@@ -222,13 +226,18 @@ class Invoice extends Admin_Controller {
     }
     
    public function loadproductjson() {
+    
         $query = $_GET['q'];
-        $sup= $_REQUEST['nonRt'];$inv= $_REQUEST['invNo'];$pl=$_REQUEST['price_level'];$invType=$_REQUEST['invoiceType'];
+        $sup= $_REQUEST['nonRt'];
+        $inv= $_REQUEST['invNo'];
+        $pl=$_REQUEST['price_level'];
+        $invType=$_REQUEST['invoiceType'];
         echo $this->Invoice_model->loadproductjson($query,$sup,$inv,$pl,$invType);
         die;
     }
     
     public function saveReturn() {
+        
         $barcode = 1;
         
         $grnNo = $this->Invoice_model->get_max_code('Invoice Return');
@@ -271,6 +280,7 @@ class Invoice extends Admin_Controller {
         $price_levelArr = json_decode($_POST['price_level']);
         $totalAmountArr = json_decode($_POST['pro_total']);
         $pro_nameArr = json_decode($_POST['proName']);
+        $returninvoice_typeArr = json_decode($_POST['reinvoiceType']);
         $invDate = date("Y-m-d H:i:s");
         
         $retHed = array(
@@ -385,7 +395,7 @@ class Invoice extends Admin_Controller {
     }
 
     public function loadallreturns() {
-$this->load->library('Datatables');
+    $this->load->library('Datatables');
         $this->datatables->select('returninvoicehed.*');
         $this->datatables->from('returninvoicehed');
         echo $this->datatables->generate();
@@ -431,4 +441,457 @@ $this->load->library('Datatables');
         echo json_encode($arr);
         die;
     }
+
+    public function received_invoice($id=null) {
+        $action = isset($_GET['action'])?$_GET['action']:1;
+            $id = isset($_GET['id'])?$_GET['id']:NULL;
+            $decoded_id = base64_decode($id);
+            $this->data['inv'] =$this->db->select('*')->from('received_invoices')->where('id', $decoded_id)->get()->row();
+            $this->data['items']=$this->db->select('received_invoices_items.*')->from('received_invoices')
+                                ->join('received_invoices_items','received_invoices.id = received_invoices_items.InvoiceID')
+                                ->where('received_invoices.id',$decoded_id)->get()->result();
+            // echo var_dump($this->data['items']);die;
+        
+            $this->load->helper('url'); 
+            $this->breadcrumbs->unshift(1, lang('menu_invoice'), 'admin/invoice');
+           
+            $this->load->helper('url'); 
+            $this->page_title->push(('Add Received Invoice'));
+            $this->breadcrumbs->unshift(1, 'Received Invoice', 'admin/invoice/received_invoice');
+            $this->data['pagetitle'] = $this->page_title->show();
+            $this->data['breadcrumb'] = $this->breadcrumbs->show();
+            $location = $_SESSION['location'];
+            $this->load->model('admin/Invoice_model');
+            $id3 = array('CompanyID' => $location);
+            $this->data['company'] = $this->Invoice_model->get_data_by_where('company', $id3);
+            $this->data['salesperson'] = $this->db->select()->from('salespersons')->get()->result();
+
+            $this->data['selectedRoute'] = null;
+            $selectedRoute = $this->db->select('Route')->from('received_invoices')->where('id', $decoded_id)->get()->row();
+  
+            if ($selectedRoute) {
+              $this->data['selectedRoute'] = $selectedRoute->Route;
+          }
+  
+          $invoiceData = $this->db->select('SalespersonID, Route')
+                           ->from('received_invoices')
+                           ->where('id', $decoded_id)
+                           ->get()
+                           ->row();
+                           
+                           if ($invoiceData) {
+                               $selectedSalespersonID = $invoiceData->SalespersonID; 
+                            //    echo var_dump($selectedSalespersonID );die;
+                              $this->data['selectedRoute'] = $invoiceData->Route; 
+                          } else {
+                              $selectedSalespersonID = null; 
+                              $this->data['selectedRoute'] = null; 
+                          }
+                          
+      
+                          if ($selectedSalespersonID) {
+                              $this->data['routes'] = $this->db->select('cr.id, cr.name')
+                                  ->from('employeeroutes er')
+                                  ->join('customer_routes cr', 'er.route_id = cr.id')
+                                  ->where('er.emp_id', $selectedSalespersonID)
+                                  ->get()
+                                  ->result();
+                          } else {
+                              $this->data['routes'] = []; 
+                          }   
+            $this->data['customers'] = $this->db->select('c.CusCode, c.DisplayName')
+                 ->from('customer c')
+                ->where('c.HandelBy', $invoiceData->SalespersonID)
+                ->where('c.RouteId',$invoiceData->Route)
+                ->get()
+                ->result();  
+                // echo var_dump($this->data['customers']);die;   
+              $action = isset($_GET['action']) ? $_GET['action'] : 1; 
+              $this->data['selectedSalespersonID'] =$invoiceData->SalespersonID; 
+              $this->data['isEditMode'] = ($action == 2);
+            $this->template->admin_render('admin/invoice/collected-product', $this->data);
+    }
+
+    public function getSalesProductCodes() {
+        $query = $_GET['name_startsWith'];
+        $this->load->database();
+        $this->db->select('SalesProductCode, SalesProductName, SUM(salesinvoicedtl.SalesQty) as TotalSalesQty');
+        $this->db->from('salesinvoicedtl');
+        $this->db->like('SalesProductCode',$query);
+        $this->db->or_like('SalesProductName',$query);
+        $this->db->group_by(['SalesProductCode', 'SalesProductName']);
+        $result = $this->db->get()->result();
+
+        echo json_encode($result);
+        die;
+       
+     
+    }
+
+
+    public function saveReturnDetails() {
+        
+        $invoiceNo = $this->input->post('grnNo'); 
+        if (!empty($invoiceNo)) {
+          
+            $invDate = $this->input->post('invDate');
+            $grnRemark = $this->input->post('grnRemark');
+            $location = $this->input->post('location');
+            $invUser = $this->input->post('invUser');
+            $salesperson = $this->input->post('salesperson');
+            $route = $this->input->post('route');
+            $customer = $this->input->post('customer');
+            $items = $this->input->post('items');
+            
+          
+            $this->db->trans_start();
+            
+            
+            $invoice = $this->db->select('id')->from('received_invoices')
+                ->where('InvoiceNo', $invoiceNo)
+                ->get()->result();
+            
+           
+            if (!empty($invoice)) {
+                
+                $id = (int) $invoice[0]->id;
+                
+                
+                $data = [
+                    'ReceivedDate' => $invDate,
+                    'ReceivedRemark' => $grnRemark,
+                    'Location' => $location,
+                    'UserID' => $invUser,
+                    'SalespersonID' => $salesperson,
+                    'Route' => $route,
+                    'CustomerID' => $customer,
+                    'created_at' => $invDate,
+                ];
+                
+
+                $this->db->where('id', $id);
+                $this->db->update('received_invoices', $data);
+
+                if (!empty($items)) {
+                    foreach ($items as $item) {
+                        $ProductCode = $item['productCode']; 
+                        $ProductName = $item['productName']; 
+                        $quantity = (int)$item['quantity'];
+                       
+                        $productExist = $this->db->select('id')
+                        ->from('received_invoices_items') 
+                        ->where('InvoiceID', $id)
+                        ->where('ProductCode', $ProductCode)
+                        ->where('ProductName', $ProductName)
+                        ->get()->row();
+                        
+                        $item_id = (int) $productExist->id;
+                        if ($productExist) {
+                            $newQuantity = $quantity; 
+                            $this->db->where('id',$item_id);
+                            $this->db->update('received_invoices_items', ['Quantity' => $newQuantity]);
+                        } else {
+                            $productData = [
+                                'InvoiceID' => $id,
+                                'ProductCode' => $ProductCode,
+                                'Quantity' => $quantity,
+                                'created_at' => $invDate,
+                                'ProductName'=>$ProductName,
+                            ];
+                            
+                            $this->db->insert('received_invoices_items', $productData);
+                        }
+                    }
+                }
+                
+            } else {
+                echo "Invoice not found!";
+                die();
+            }
+            
+         
+            $this->db->trans_complete();
+            
+           
+            $res2 = $this->db->trans_status();
+            echo $res2 ? '1' : 'Failure'; die();
+        
+        
+        }else{
+
+            $invDate = $this->input->post('invDate');
+            $grnRemark = $this->input->post('grnRemark');
+            $location = $this->input->post('location');
+            $invUser = $this->input->post('invUser');
+            $salesperson = $this->input->post('salesperson');
+            $route = $this->input->post('route');
+            $customer = $this->input->post('customer');
+            $items = $this->input->post('items');
+            if (empty($items)) {
+                echo json_encode(['success' => false, 'message' => 'No items to save']);
+                return;
+            }
+            
+            $this->db->trans_start();
+            
+            $this->db->select('MAX(CAST(SUBSTRING_INDEX(InvoiceNo, "DINV", -1) AS UNSIGNED)) as last_no');
+            $query = $this->db->get('received_invoices'); 
+            
+            $result = $query->row();
+        
+            $nextNo = $result ? $result->last_no + 1 : 1;
+            $invoiceNo = 'DINV' . str_pad($nextNo, 5, '0', STR_PAD_LEFT);
+        
+            $grnData = [
+                'InvoiceNo' => $invoiceNo,  
+                'ReceivedDate' => date('Y-m-d', strtotime($invDate)),
+                'ReceivedRemark' => $grnRemark,
+                'Location' => $location,
+                'UserID' => $invUser,
+                'SalespersonID' => $salesperson,
+                'Route' => $route,
+                'CustomerID' => $customer,
+                'created_at' => date('Y-m-d H:i:s'),
+            ];
+            
+            $this->db->insert('received_invoices', $grnData);  
+            $invoiceId = $this->db->insert_id(); 
+    
+    
+        
+            foreach ($items as $item) {
+                $itemData = [
+                    'InvoiceID' => $invoiceId, 
+                    'ProductCode' => $item['productCode'],
+                    'ProductName' => $item['productName'],
+                    'Quantity' => $item['quantity'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                ];
+        
+                $this->db->insert('received_invoices_items', $itemData);  
+            }
+        
+            $this->db->trans_complete();
+        
+            $res2= $this->db->trans_status();
+            echo $res2;die;
+        }
+        
+    }
+
+    // public function saveReturnDetails() {
+    //     $invDate = $this->input->post('invDate');
+    //     $grnRemark = $this->input->post('grnRemark');
+    //     $location = $this->input->post('location');
+    //     $invUser = $this->input->post('invUser');
+    //     $salesperson = $this->input->post('salesperson');
+    //     $route = $this->input->post('route');
+    //     $customer = $this->input->post('customer');
+    //     $items = $this->input->post('items');
+    //     $invoiceNo = $this->input->post('grnNo');  
+    
+    //     if (empty($items)) {
+    //         echo json_encode(['success' => false, 'message' => 'No items to save']);
+    //         return;
+    //     }
+    
+    //     $this->db->trans_start();
+    
+    //     if ($invoiceNo !== NULL) {
+    //         $this->db->where('InvoiceNo', $invoiceNo);
+    //         $query = $this->db->get('received_invoices');
+    //         $invoice = $query->row();
+    
+    //         if ($invoice) {
+    //             $invoiceId = $invoice->id;
+                
+    //             // Update invoice
+    //             $this->db->where('id', $invoiceId);
+    //             $this->db->update('received_invoices', [
+    //                 'ReceivedDate' => date('Y-m-d', strtotime($invDate)),
+    //                 'ReceivedRemark' => $grnRemark,
+    //                 'Location' => $location,
+    //                 'UserID' => $invUser,
+    //                 'SalespersonID' => $salesperson,
+    //                 'Route' => $route,
+    //                 'CustomerID' => $customer,
+    //                 'updated_at' => date('Y-m-d H:i:s'),
+    //             ]);
+                
+    //             foreach ($items as $item) {
+    //                 $this->db->where('InvoiceID', $invoiceId);
+    //                 $this->db->where('ProductCode', $item['productCode']);
+    //                 $existingItem = $this->db->get('received_invoices_items')->row();
+    
+    //                 if ($existingItem) {
+    //                     $this->db->where('InvoiceID', $invoiceId);
+    //                     $this->db->where('ProductCode', $item['productCode']);
+    //                     $this->db->update('received_invoices_items', [
+    //                         'Quantity' => $item['quantity'],
+    //                         'updated_at' => date('Y-m-d H:i:s'),
+    //                     ]);
+    //                 } else {
+    //                     $itemData = [
+    //                         'InvoiceID' => $invoiceId,
+    //                         'ProductCode' => $item['productCode'],
+    //                         'ProductName' => $item['productName'],
+    //                         'Quantity' => $item['quantity'],
+    //                         'created_at' => date('Y-m-d H:i:s'),
+    //                     ];
+    //                     $this->db->insert('received_invoices_items', $itemData);
+    //                 }
+    //             }
+    //         } else {
+    //             echo json_encode(['success' => false, 'message' => 'Invoice not found']);
+    //             return;
+    //         }
+    //     } else {
+    //         // Create new invoice
+    //         $this->db->select('MAX(CAST(SUBSTRING_INDEX(InvoiceNo, "DINV", -1) AS UNSIGNED)) as last_no');
+    //         $query = $this->db->get('received_invoices'); 
+    //         $result = $query->row();
+    //         $nextNo = $result ? $result->last_no + 1 : 1;
+    //         $invoiceNo = 'DINV' . str_pad($nextNo, 5, '0', STR_PAD_LEFT);
+            
+    //         $grnData = [
+    //             'InvoiceNo' => $invoiceNo,
+    //             'ReceivedDate' => date('Y-m-d', strtotime($invDate)),
+    //             'ReceivedRemark' => $grnRemark,
+    //             'Location' => $location,
+    //             'UserID' => $invUser,
+    //             'SalespersonID' => $salesperson,
+    //             'Route' => $route,
+    //             'CustomerID' => $customer,
+    //             'created_at' => date('Y-m-d H:i:s'),
+    //         ];
+    //         $this->db->insert('received_invoices', $grnData);  
+    //         $invoiceId = $this->db->insert_id(); 
+            
+    //         foreach ($items as $item) {
+    //             $itemData = [
+    //                 'InvoiceID' => $invoiceId, 
+    //                 'ProductCode' => $item['productCode'],
+    //                 'ProductName' => $item['productName'],
+    //                 'Quantity' => $item['quantity'],
+    //                 'created_at' => date('Y-m-d H:i:s'),
+    //             ];
+    //             $this->db->insert('received_invoices_items', $itemData);
+    //         }
+    //     }
+    
+    //     $this->db->trans_complete();
+    //     $res2 = $this->db->trans_status();
+    //     echo $res2;die;
+    // }
+    
+    
+    
+    
+    public function all_received_invoice() {
+        /* Breadcrumbs */
+        $this->load->helper('url'); 
+        $this->breadcrumbs->unshift(1, lang('menu_invoice'), 'admin/invoice');
+       
+        $this->page_title->push(('All Received Invoice'));
+        $this->breadcrumbs->unshift(1, 'Received Invoice', 'admin/invoice/all_received_invoice');
+        $this->data['pagetitle'] = $this->page_title->show();
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        $location = $_SESSION['location'];
+        $this->load->model('admin/Invoice_model');
+        $id3 = array('CompanyID' => $location);
+        $this->data['company'] = $this->Invoice_model->get_data_by_where('company', $id3);
+        $this->data['salesperson'] = $this->db->select()->from('salespersons')->get()->result();
+        $this->template->admin_render('admin/invoice/all-collected-product', $this->data);
+    }
+    
+
+
+
+    public function loadallreceivedinvoices() {
+        $draw = intval($this->input->post("draw"));
+        $start = intval($this->input->post("start"));
+        $length = intval($this->input->post("length"));
+    
+        $query = $this->db->select('received_invoices.*, customer.DisplayName, SUM(received_invoices_items.Quantity) AS Qty')
+                  ->from('received_invoices')
+                  ->join('received_invoices_items', 'received_invoices.id = received_invoices_items.InvoiceID', 'inner')
+                  ->join('customer', 'received_invoices.CustomerID = customer.CusCode', 'left')
+                  ->group_by('received_invoices.id')
+                  ->limit($length, $start)
+                  ->get();
+
+    
+        $data = $query->result();
+    
+        $total_records = $this->db->count_all('received_invoices');
+    
+        $output = [
+            "draw" => $draw,
+            "recordsTotal" => $total_records,
+            "recordsFiltered" => $total_records,
+            "data" => $data
+        ];
+    
+        echo json_encode($output);
+        die;
+    }
+
+
+    // public function view_received_invoice($inv=null) {
+    //     $this->load->helper('url'); 
+    //     $this->breadcrumbs->unshift(1, lang('menu_invoice'), 'admin/invoice');
+    //     $invNo=base64_decode($inv);
+    //     /* Title Page */
+    //     $id = isset($_GET['id'])?$_GET['id']:NULL;
+    //     $this->page_title->push('Received Invoices');
+    //     $this->data['pagetitle'] = 'Received Invoices-'.$invNo;
+    //     /* Breadcrumbs */
+    //     $this->breadcrumbs->unshift(1, 'Job Card', 'admin/invoice/');
+    //     $this->breadcrumbs->unshift(1, 'Create Job Card', 'admin/invoice/');
+    //     $this->data['breadcrumb'] = $this->breadcrumbs->show();
+    //     $this->template->admin_render('admin/invoice/view-received-invoice');
+    // }
+
+    public function view_received_invoice($inv=null) {
+        /* Breadcrumbs */
+        $this->load->helper('url'); 
+        $this->breadcrumbs->unshift(1, lang('menu_invoice'), 'admin/invoice');
+       
+        $this->page_title->push(('All Received Invoice'));
+        $this->breadcrumbs->unshift(1, 'Received Invoice', 'admin/invoice/view_received_invoice');
+        $this->data['pagetitle'] = 'Return Invoice -'.$inv;
+      
+        $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        $location = $_SESSION['location'];
+        $this->load->model('admin/Invoice_model');
+        $id3 = array('CompanyID' => $location);
+        $this->data['company'] = $this->Invoice_model->get_data_by_where('company', $id3);
+
+        // $this->data['receivedInv'] = $this->db->select('received_invoices.*, customer.DisplayName, SUM(received_invoices_items.Quantity) AS Qty')
+        // ->from('received_invoices')
+        // ->join('received_invoices_items', 'received_invoices.id = received_invoices_items.InvoiceID', 'inner')
+        // ->join('customer', 'received_invoices.CustomerID = customer.CusCode', 'left')
+        // ->where('InvoiceNo',$inv)
+        // ->get()->result();
+
+        $this->data['invNo'] = $inv;
+      
+
+
+         $this->data['invHed']= $this->db->select('received_invoices.*')
+             ->from('received_invoices')
+             ->where('id',$inv)->get()->row();
+
+        $cusCode =  $this->db->select('CustomerID')->from('received_invoices')->where('id',$inv)->get()->row()->CustomerID;
+            
+        $this->data['invCus']= $this->db->select('customer.*')
+            ->from('customer')->where('customer.CusCode',$cusCode)->get()->row();
+
+
+         $this->data['invDtlArr']=$this->Invoice_model->getReceivedDtlbyid($inv);
+        //  echo var_dump($this->data['invDtlArr']); die;
+        $this->template->admin_render('admin/invoice/view-received-invoice', $this->data);
+    }
+    
+    
 }

@@ -365,6 +365,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <?php if ($this->router->fetch_method() == 'return_invoice'): ?>
                 <script src="<?php echo base_url('assets/frameworks/pos/return_invoice1.1.js'); ?>"></script>
             <?php endif; ?>
+            <?php if ($this->router->fetch_method() == 'received_invoice'): ?>
+                <script src="<?php echo base_url('assets/frameworks/pos/received_invoice.1.js'); ?>"></script>
+            <?php endif; ?>
             <script src="<?php echo base_url($frameworks_dir . '/bootstrap/js/bootstrap-switch.min.js'); ?>"></script>
             <script src="<?php echo base_url($plugins_dir . '/account/accounting.min.js'); ?>"></script>
             <script src="<?php echo base_url($plugins_dir . '/select2/js/select2.min.js'); ?>"></script>

@@ -68,7 +68,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     {"data": "LanLineNo"},
                     {"data": "Email"},
                     {"data": "SupOustandingAmount"},
-                    {"data": "IsActive"},
+                    {
+                    "data": null, orderable: false, searchable: false,
+                    mRender: function (data, type, row) {
+                        if (row.IsActive == 1) {
+                            return '<span class="label label-xs label-success" >Active</span>';
+                        } else if (row.IsActive == 0) {
+                            return '<span class="label label-xs label-danger" >Inactive</span>';
+                        }
+
+                    }
+                },
                     {"data": null, orderable: false, searchable: false,
                         mRender: function (data, type, row) {
                             return '<a href="<?php echo base_url() ?>admin/payment/view_supplier/' + (row.SupCode) +'"  class="btn btn-xs btn-default" >View</a> &nbsp;<button class="btn btn-xs btn-default" onclick="editm(\'' + row.SupCode + '\')">Edit</button>';

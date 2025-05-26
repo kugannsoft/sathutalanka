@@ -24,6 +24,8 @@ class Customer extends Admin_Controller {
         $this->page_title->push(lang('menu_addcustomer'));
         $this->data['pagetitle'] = $this->page_title->show();
         $this->data['breadcrumb'] = $this->breadcrumbs->show();
+        $this->data['salespersons'] = $this->db->select('RepID,RepName')->from('salespersons')->where('IsActive',1)->get()->result();
+        $this->data['routes'] = $this->db->select('id,name')->from('customer_routes')->get()->result();
         $this->template->admin_render('customer/view_addcustomer', $this->data);
     }
     public function outstandingcustomer() {
@@ -142,10 +144,11 @@ class Customer extends Admin_Controller {
         $this->data['paytype'] = $this->Customer_model->loadpaytype();
         $this->data['getCusTypes'] = $this->Customer_model->customerType();
         $this->data['custype'] = $this->db->select()->from('customer_type')->get()->result();
-        $this->data['emp'] = $this->db->select()->from('salespersons')->get()->result();
+        $this->data['emp'] = $this->db->select()->from('salespersons')->where('RepType',6)->where('IsActive',1)->get()->result();
         $this->data['cat'] = $this->db->select()->from('customer_category')->get()->result();
         $this->data['vehicle_company'] = $this->db->select()->from('vehicle_company')->get()->result();
-        $this->data['routes'] = $this->Customer_model->getRoutesByCusCode($id);
+        // $this->data['routes'] = $this->Customer_model->getRoutesByCusCode($id);
+        $this->data['routes'] = $this->db->select()->from('customer_routes')->get()->result();
         $this->load->view('customer/customeredit_modal', $this->data);
     }
 
@@ -180,8 +183,10 @@ class Customer extends Admin_Controller {
         $this->data['paytype'] = $this->Customer_model->loadpaytype();
         $this->data['getCusTypes'] = $this->Customer_model->customerType();
         $this->data['custype'] = $this->db->select()->from('customer_type')->get()->result();
-        $this->data['emp'] = $this->db->select()->from('salespersons')->get()->result();
+        $this->data['emp'] =$this->db->select()->from('salespersons')->where('RepType',6)->get()->result();
         $this->data['cat'] = $this->db->select()->from('customer_category')->get()->result();
+        $this->data['routes'] = $this->db->select()->from('customer_routes')->get()->result();
+
         $this->data['vehicle_company'] = $this->db->select()->from('vehicle_company')->get()->result();
         $this->load->view('customer/customeradd_modal', $this->data);
     }
@@ -534,24 +539,60 @@ class Customer extends Admin_Controller {
     }
     public function allCustomers() {
         $this->load->library('Datatables');
-        $this->datatables->select('customer.CusCode,customer.IsActive,customer.CusBookNo,customer.MobileNo,customer.CusName,customer.LastName,customer.CreditLimit,customer.Nic');
-        $this->datatables->from('customer');
+        $salesperson_id = $this->input->post('salesperson');
+        $route = $this->input->post('route');
+    
+        // Select common columns
+        $this->datatables->select('
+            customer.CusCode,
+            customer.IsActive,
+            customer.CusBookNo,
+            customer.MobileNo,
+            customer.CusName,
+            customer.LastName,
+            customer.CreditLimit,
+            customer.Nic,
+            customer.RouteID,
+            customer_routes.name,
+            salespersons.RepName,
+           
+        ');
+    
+        // Check for conditions
+        if ($salesperson_id != NULL && $route == 0) {
+            $this->datatables->from('employeeroutes');
+            $this->datatables->join('customer', 'customer.HandelBy = employeeroutes.emp_id', 'inner');
+            $this->datatables->join('customer_routes', 'customer_routes.id = customer.RouteID', 'left');
+            $this->datatables->join('salespersons', 'salespersons.RepID =customer.HandelBy', 'left');
+            $this->datatables->where('customer.HandelBy', $salesperson_id);
+        } elseif ($salesperson_id != NULL && $route != NULL) {
+            $this->datatables->from('employeeroutes');
+            $this->datatables->join('customer', 'customer.HandelBy = employeeroutes.emp_id', 'inner');
+            $this->datatables->join('customer_routes', 'customer_routes.id = customer.RouteID', 'left');
+            $this->datatables->join('salespersons', 'salespersons.RepID =customer.HandelBy', 'left');
+            $this->datatables->where('customer.HandelBy', $salesperson_id);
+            $this->datatables->where('customer.RouteID', $route);
+        } else {
+            $this->datatables->from('customer');
+            $this->datatables->join('customer_routes', 'customer_routes.id = customer.RouteID', 'left');
+            $this->datatables->join('salespersons', 'salespersons.RepID =customer.HandelBy', 'left');
+        }
+    
+        // Common conditions
         $this->datatables->where('customer.IsSyn', 0);
         $this->datatables->where('customer.IsDelete', 0);
-        //$this->datatables->join('customeroutstanding','customeroutstanding.CusCode=customer.CusCode');
-        //$this->datatables->join('creditinvoicedetails','creditinvoicedetails.CusCode=customer.CusCode');//shalika
-        //$this->datatables->where('creditinvoicedetails.IsCancel',0);//shalika
-        //$this->datatables->group_by("customer.CusCode");//shalika
-        // $this->datatables->unset_column('customeroutstanding.CusCode');
+    
+        // Output the query result
         echo $this->datatables->generate();
         die();
     }
     
+    
       public function allCustreport() {
         $this->load->library('Datatables');
-        $this->datatables->select('customer.CusCode,customer.IsActive,customer.CusBookNo,customer.MobileNo,customer.CusName,customer.LastName,customer.Address01,vehicledetail.RegNo,vehicledetail.ChassisNo');
+        $this->datatables->select('customer.CusCode,customer.IsActive,customer.CusBookNo,customer.MobileNo,customer.CusName,customer.LastName,customer.Address01');
         $this->datatables->from('customer');
-        $this->datatables->join('vehicledetail','vehicledetail.CusCode=customer.CusCode');
+        // $this->datatables->join('vehicledetail','vehicledetail.CusCode=customer.CusCode');
         echo $this->datatables->generate();
         die();
     }

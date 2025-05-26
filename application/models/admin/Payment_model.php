@@ -43,29 +43,39 @@ class Payment_model extends CI_Model {
         $q = $this->db->select('BankCode AS id,BankName AS text')->from('bank')->like('BankName', $query, 'after')->get()->result();
         return json_encode($q);
     }
-    
-    public function loadcustomersjson($query) {
-     
-        // $query1 =$this->db->select('CusCode,CusName')->like("CONCAT(' ',customer.CusCode,customer.CusName,customer.MobileNo)", $query ,'left')->limit(50)->get('customer');
 
-        $query1 =$this->db->select('customer.CusCode,customer.CusName,customer.LastName')->from('customer')->like("CONCAT(' ',customer.CusCode,customer.CusName,' ',customer.MobileNo)", $query ,'left')->where('IsActive',1)->limit(50)->get();
-       
+    public function loadcustomersjson($query, $salespersonID, $routeID) {
+        $this->db->select('customer.CusCode, customer.CusName, CONCAT(customer.CusName) AS text');
+        $this->db->from('customer');
+        $this->db->join('customer_routes', 'customer_routes.id = customer.RouteId');
+        $this->db->where("CONCAT(' ', customer.CusCode, customer.CusName, ' ', customer.MobileNo) LIKE", "%$query%");
+        $this->db->where('customer.HandelBy', $salespersonID);
+        $this->db->where('customer.RouteId', $routeID);
+        $this->db->where('customer.IsActive', 1);
+        $this->db->limit(50);
+
+        $query1 = $this->db->get();
+
+        $row_set = [];
         if ($query1->num_rows() > 0) {
             foreach ($query1->result_array() as $row) {
-                // $new_row['label'] = htmlentities(stripslashes($row['CusName']));
-                $name = $row['CusName'];
-                $new_row['label'] = htmlentities(stripslashes($name));
-                $new_row['value'] = htmlentities(stripslashes($row['CusCode']));
-                $row_set[] = $new_row; //build an array
+                $row_set[] = [
+                    'label' => htmlentities(stripslashes($row['text'])),
+                    'value' => htmlentities(stripslashes($row['CusCode']))
+                ];
             }
-            echo json_encode($row_set); //format the array into json data
         }
+
+        echo json_encode($row_set);
     }
-    
+
     public function getCustomersDataById($cusCode) {
-        return $this->db->select('customer.*,customeroutstanding.*')->from('customer')
+        return $this->db->select('customer.*,customer_routes.name,salespersons.RepName,customeroutstanding.*')->from('customer')
                         ->where('customer.CusCode', $cusCode)
+                        ->where('')
                         ->join('customeroutstanding', 'customer.CusCode = customeroutstanding.CusCode')
+                        ->join('customer_routes', 'customer_routes.id =customer.RouteId ')
+                        ->join(' salespersons', ' salespersons.RepID =customer.HandelBy ')
                         ->get()->row();
     }
     
@@ -115,7 +125,7 @@ class Payment_model extends CI_Model {
         $payAmount =$_POST['payAmount'];
         
         $this->db->trans_start();         
-         //update customer payment
+        //update customer payment
         $this->db->insert('customerpaymenthed', $cpHed);
         //update customer payment
         $this->db->insert('customerpaymentdtl', $cpDtl);
@@ -129,12 +139,13 @@ class Payment_model extends CI_Model {
         }
         //advance release
         if ($post['payType'] == 5){
-         $this->db->update('customerpaymentdtl',array('IsRelease'=>1),array('CusPayNo'=>$_POST['advance_payment_no']));
+            $this->db->update('customerpaymentdtl',array('IsRelease'=>1),array('CusPayNo'=>$_POST['advance_payment_no']));
         }
         //return release
         if ($post['payType'] == 4){
+           
             $completeDate = date("Y-m-d H:i:s");
-            $this->db->update('return_payment',array('IsComplete'=>1, 'Compete_date'=>$completeDate),array('ReturnNo'=>$_POST['return_payment_no']));
+            $this->db->update('returninvoicehed',array('IsComplete'=>1, 'Compete_date'=>$completeDate),array('ReturnNo'=>$_POST['return_payment_no']));
         }
         
         for ($i = 0; $i < count($credit_invoiceArr); $i++) {

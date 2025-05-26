@@ -40,11 +40,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <table class="table table-hover">
                                         <tbody>
                                         <tr><td>Supplier Code</td><td>:</td><td  id='mcash'  class='text-right'><?php echo $cus->SupCode?></td></tr>
-                                            <tr><td>Supplier Name</td><td>:</td><td  id='mcash'  class='text-right'><?php echo $cus->SupName?></td></tr>
+                                            <tr><td>Supplier Name</td><td>:</td><td  id='mcash'  class='text-right'><?php echo $cus->TitleName.".".$cus->SupName?></td></tr>
                                             <tr><td>Contact Person</td><td>:</td><td  id='mcash'  class='text-right'><?php echo $cus->TitleName.".".$cus->ContactPerson?></td></tr>
                                             <tr><td>Address</td><td>:</td><td  id='mcard'  class='text-right'><?php echo $cus->Address01?></td></tr>
                                             <tr><td>Mobile</td><td>:</td><td  id='mcheque'  class='text-right'>0<?php echo $cus->MobileNo?></td></tr>
-                                            <tr><td>Phone</td><td>:</td><td  id='mcredit'  class='text-right'><?php echo $cus->LanLineNo?></td></tr>
+                                            <tr><td>Office No</td><td>:</td><td  id='mcredit'  class='text-right'><?php echo $cus->LanLineNo?></td></tr>
+                                            <tr><td>Fax number</td><td>:</td><td  id='mcredit'  class='text-right'><?php echo $cus->Fax?></td></tr>
+                                            <tr><td>credit period</td><td>:</td><td  id='mcredit'  class='text-right'><?php echo $cus->CreditPeriod?></td></tr>
                                             <tr><td>Email</td><td>:</td><td  id='mcompany'  class='text-right'><?php echo $cus->Email?></td></tr>
                                             <tr><td>Remarks</td><td>:</td><td  id='mcompany'  class='text-right'><?php echo $cus->Remark?></td></tr>
                                         </tbody>
