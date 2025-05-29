@@ -1,90 +1,26 @@
 Company,ProductCode,ProductName,Price
 
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
-Sathutu Lanka (Pvt) Ltd,100002,PEPSI - 1500ML,372
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120
+Sathutu Lanka (Pvt) Ltd,100048,PRODUCT1,120

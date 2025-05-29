@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://localhost/sathutulanka';//'http://nsoftapp.com/webpos/
+$config['base_url'] = 'http://localhost/sathutalanka-new';//'http://nsoftapp.com/webpos/
 
 /*
 |--------------------------------------------------------------------------

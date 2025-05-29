@@ -23,44 +23,44 @@ $(document).ready(function() {
 
     
     //customer load according salesperson and route
-    // $('#route').on('change', function() {
-    //     var routeID = $(this).val();
-    //     var newsalesperson = $('#newsalesperson').val();
-    //     console.log("Route ID changed to:", routeID);
-    //     console.log("Customer newsalesperson selected:", newsalesperson);
+    $('#route').on('change', function() {
+        var routeID = $(this).val();
+        var newsalesperson = $('#newsalesperson').val();
+        console.log("Route ID changed to:", routeID);
+        console.log("Customer newsalesperson selected:", newsalesperson);
 
-    //     $.ajax({
-    //         url: baseUrl + '/job/loadcustomersroutewise',
-    //         type: 'POST',
-    //         dataType: "json",
-    //         data: {
-    //             routeID: routeID,
-    //             newsalesperson:newsalesperson
-    //         },
-    //         success: function(data) {
-    //             console.log("Customer Data:", data); 
-    //             $("#customer").html('<option value="">Select Customer</option>');
+        $.ajax({
+            url: baseUrl + '/job/loadcustomersroutewise',
+            type: 'POST',
+            dataType: "json",
+            data: {
+                routeID: routeID,
+                newsalesperson:newsalesperson
+            },
+            success: function(data) {
+                console.log("Customer Data:", data);
+                $("#customer").html('<option value="">Select Customer</option>');
                 
-    //             // Populate the dropdown with customers
-    //             if (data.length > 0) {
-    //                 $.each(data, function(index, customer) {
-    //                     $("#customer").append(
-    //                         `<option value="${customer.CusCode}">${customer.DisplayName}</option>`
-    //                     );
-    //                 });
-    //             }
+                // Populate the dropdown with customers
+                if (data.length > 0) {
+                    $.each(data, function(index, customer) {
+                        $("#customer").append(
+                            `<option value="${customer.CusCode}">${customer.DisplayName}</option>`
+                        );
+                    });
+                }
 
-    //             $('#customer').select2({
-    //                 placeholder: "Select a customer",
-    //                 allowClear: true,
-    //                 width: '100%'
-    //             });
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error("AJAX Error:", error); // Log any AJAX errors
-    //         }
-    //     });
-    // });
+                $('#customer').select2({
+                    placeholder: "Select a customer",
+                    allowClear: true,
+                    width: '100%'
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error); // Log any AJAX errors
+            }
+        });
+    });
     
     
     $('#customer').on('change', function() {
@@ -2445,37 +2445,37 @@ if(cusCode!=''){
 }
 
 //customer autoload
-    $("#customer").autocomplete({
-        source: function(request, response) {
-           
-            $.ajax({
-                url: baseUrl+'/job/loadcustomersjson',
-                dataType: "json",
-                data: {
-                    q: request.term
-                },
-                success: function(data) {
-                   
-                    response($.map(data, function(item) {
-                        return {
-                            label: item.text,
-                            value: item.id,
-                            data: item
-                        }
-                    }));
-                }
-            });
-        },
-        autoFocus: true,
-        minLength: 0,
-        select: function(event, ui) {
-            cusCode = ui.item.value;
-            clearCustomerData();
-            $("#tbl_payment tbody").html("");
-            loadCustomerDatabyId(cusCode);
-            getVehiclesByCustomer(cusCode);
-        }
-    });
+//     $("#customer").autocomplete({
+//         source: function(request, response) {
+//
+//             $.ajax({
+//                 url: baseUrl+'/job/loadcustomersjson',
+//                 dataType: "json",
+//                 data: {
+//                     q: request.term
+//                 },
+//                 success: function(data) {
+//
+//                     response($.map(data, function(item) {
+//                         return {
+//                             label: item.text,
+//                             value: item.id,
+//                             data: item
+//                         }
+//                     }));
+//                 }
+//             });
+//         },
+//         autoFocus: true,
+//         minLength: 0,
+//         select: function(event, ui) {
+//             cusCode = ui.item.value;
+//             clearCustomerData();
+//             $("#tbl_payment tbody").html("");
+//             loadCustomerDatabyId(cusCode);
+//             getVehiclesByCustomer(cusCode);
+//         }
+//     });
 
     function getVehiclesByCustomer(cus){
         if(cus!=''){
@@ -2632,7 +2632,7 @@ $("#compayto").autocomplete({
 
         $.ajax({
             type: "POST",
-            url: baseUrl+"/Payment/getCustomersDataById",
+            url: "../Payment/getCustomersDataById",
             data: { cusCode: customer },
             success: function(data) {
                 var resultData = JSON.parse(data);
@@ -2643,23 +2643,15 @@ $("#compayto").autocomplete({
                 customer_name = resultData.cus_data.CusName;
                 var encode_url = "../Payment/view_customer/"+(cusCode);
 
-                $("#cusName1").html("<a href='"+encode_url+"'>"+resultData.cus_data.CusName+" "+resultData.cus_data.LastName+"</a>");
+                $("#cusName").html("<a href='"+encode_url+"'>"+resultData.cus_data.CusName+"</a>");
                 $("#customer,#cusCode").val(resultData.cus_data.CusCode);
                 $("#creditLimit").html(accounting.formatMoney(resultData.cus_data.CreditLimit));
                 $("#creditPeriod").html(resultData.cus_data.CreditPeriod);
                 $("#cusOutstand").html(accounting.formatMoney(outstanding));
                 $("#availableCreditLimit").html(accounting.formatMoney(available_balance));
-                $("#vididateCreditLimit").val(accounting.formatMoney(available_balance));
                 $("#cusAddress").html(resultData.cus_data.Address01 + ", " + resultData.cus_data.Address02);
                 $("#cusAddress2").html(resultData.cus_data.Address03);
                 $("#cusPhone").html(resultData.cus_data.MobileNo);
-                $("#newsalesperson").html(resultData.cus_data.HandelBy);
-                $("#route").html(resultData.cus_data.name);
-                if (resultData.cus_data.payMethod == 1) {
-                    $("#creditSection").hide();
-                } else {
-                    $("#creditSection").show();
-                }
             }
         });
     }

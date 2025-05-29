@@ -59,14 +59,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     </div>
                                 </div>
 
-                                    <div class="form-group">
-                                        <label for="customer" class="col-sm-5 control-label">Customer <span class="required">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control" autofocus required="required"  name="customer" id="customer" placeholder="Enter Customer" 
-                                            value="<?php echo $customer; ?>">
-                                          
-                                        </div>
+                                <div class="form-group">
+                                    <label for="customer" class="col-sm-5 control-label">Customer <span class="required">*</span></label>
+                                    <div class="col-sm-6">
+                                        <!-- <input type="text" class="form-control" autofocus required="required"  name="customer" id="customer" placeholder="Enter Customer" value="<?php echo $customer; ?>"> -->
+                                        <select class="form-control" required="required" name="customer" id="customer" placeholder="customer name">
+                                            <option value="0">-Select a customer-</option>
+                                            <?php foreach ($allroutecustomer as $trns) { ?>
+                                                <option value="<?php echo $trns->CusCode; ?>"
+                                                    <?php echo ($trns->CusCode == $selectedcus) ? 'selected' : ''; ?>>
+                                                    <?php echo $trns->DisplayName; ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
+                                </div>
                                 
                                 <div class="form-group">
                                     <label for="customer" class="col-sm-5 control-label">Receipt Type <span class="required">*</span></label>
@@ -340,14 +347,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </style>
 <script type="text/javascript">
 
-        $('.prd_icheck').iCheck({
-        checkboxClass: 'icheckbox_square-blue',
-        radioClass: 'iradio_square-blue',
-        increaseArea: '50%'
+        $('#customer').select2({
+        placeholder: "Select a customer",
+        allowClear: true,
+        minimumInputLength:1,
+        width: '100%'
     });
-        $("#supplier").select2({
-        minimumInputLength: 1
-    });
+
 
 
         $('#newsalesperson').on('change', function() {
@@ -379,34 +385,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
     });
 
-        $('#route').on('change', function() {
-        var routeID = $(this).val();
-        if (routeID != "0") {
-
-        $.ajax({
-        url: "<?php echo base_url(); ?>" + "admin/sales/findroutecustomer",
-        method: 'POST',
-        data: { routeID: routeID },
-        dataType: 'json',
-        success: function(response) {
-
-        $('#customer').empty();
-        $('#customer').append('<option value="0">-Select-</option>');
-
-        $.each(response, function(index, customers) {
-        console.log(customers);
-        $('#customer').append('<option value="'+ customers.CusCode +'">'+ customers.CusName +'</option>');
-    });
-    },
-        error: function(xhr, status, error) {
-        console.error('Error fetching customer:', error);
-    }
-    });
-    } else {
-        $('#customer').empty();
-        $('#customer').append('<option value="0">-Select-</option>');
-    }
-    });
+    //    $('#route').on('change', function() {
+    //    var routeID = $(this).val();
+    //    if (routeID != "0") {
+    //
+    //    $.ajax({
+    //    url: "<?php //echo base_url(); ?>//" + "admin/sales/findroutecustomer",
+    //    method: 'POST',
+    //    data: { routeID: routeID },
+    //    dataType: 'json',
+    //    success: function(response) {
+    //
+    //    $('#customer').empty();
+    //    $('#customer').append('<option value="0">-Select-</option>');
+    //
+    //    $.each(response, function(index, customers) {
+    //    console.log(customers);
+    //    $('#customer').append('<option value="'+ customers.CusCode +'">'+ customers.CusName +'</option>');
+    //});
+    //},
+    //    error: function(xhr, status, error) {
+    //    console.error('Error fetching customer:', error);
+    //}
+    //});
+    //} else {
+    //    $('#customer').empty();
+    //    $('#customer').append('<option value="0">-Select-</option>');
+    //}
+    //});
 
 
 

@@ -843,7 +843,7 @@ class Customer extends Admin_Controller {
         $this->load->database();
         $this->db->select('er.route_id, cr.name');
         $this->db->from('employeeroutes er');
-        $this->db->join('customer_routes cr', 'er.route_id = cr.id'); 
+        $this->db->join('customer_routes cr', 'er.route_id = cr.id');
         $this->db->where('er.emp_id', $salespersonID);
         $query = $this->db->get();
         // $routes = $query->result_array();
@@ -857,20 +857,20 @@ class Customer extends Admin_Controller {
             foreach ($query->result() as $row) {
                 $routes[] = [
                     'route_id' => $row->route_id,
-                    'route_name' => $row->name 
+                    'route_name' => $row->name
                 ];
             }
-    
+
             // Encode the result to JSON and return it
             echo json_encode($routes);
         } else {
             // Return an empty array if no routes are found
             echo json_encode([]);
         }
-    
+
         // Exit after outputting the response
         exit();
-        
+
     }
-    
+
 }

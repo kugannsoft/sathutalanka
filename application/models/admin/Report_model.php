@@ -1603,26 +1603,25 @@ class Report_model extends CI_Model {
     }
 
 
-    public function productdetail($route, $isall, $product,$dep,$subdep,$sup,$subcat) {
-        // echo var_dump();die;
+    public function productdetail($route, $isall, $product = NULL,$dep,$subdep,$sup,$subcat) {
         $this->db->select('product.ProductCode,
                            product.Prd_Description,
                            product.Prd_CostPrice,
                            product.SubDepCode,
                            product.Prd_ROL,
                            product.Prd_ROQ,
-                           subdepartment.Description,
+                           department.Description,
                            location.location,
                            productstock.Stock,
-                            productstock.Expired,
+                           productstock.Expired,
                             productstock.Damage,
-                            productstock.NormalReturn,
+                  
                            productprice.ProductPrice,
                            supplier.SupName');
         $this->db->from('product');
         $this->db->join('supplier', 'supplier.SupCode = product.Prd_Supplier', 'LEFT');
         $this->db->join('productstock', 'productstock.ProductCode = product.ProductCode', 'LEFT');
-        $this->db->join('subdepartment', 'subdepartment.SubDepCode = product.SubDepCode', 'INNER');
+        $this->db->join('department', 'department.DepCode = product.DepCode', 'INNER');
         $this->db->join('productprice', 'productprice.ProductCode = product.ProductCode', 'LEFT');
         $this->db->join('subcategory', 'subcategory.SubCategoryCode = product.SubCategoryCode', 'left');
         $this->db->join('location', 'location.location_id = productstock.Location', 'INNER');
@@ -1636,15 +1635,15 @@ class Report_model extends CI_Model {
         if (isset($dep) && $dep != '' ) {
             $this->db->where_in('product.DepCode', $dep);
         }
-        
+
         if (isset($subdep) && $subdep != '' ) {
             $this->db->where_in('product.SubDepCode', $subdep);
         }
-        
+
         if ( isset($subcat) && $subcat != '' && count($subcat) != 0) {
             $this->db->where_in('product.SubCategoryCode', $subcat);
         }
-        
+
         if (isset($sup) && $sup != '') {
             $this->db->where('product.Prd_Supplier', $sup);
         }
@@ -1653,9 +1652,9 @@ class Report_model extends CI_Model {
         $this->db->order_by('product.CategoryCode', 'ASC');
 //        $this->db->order_by('product.SubCategoryCode', 'ASC');
         $this->db->order_by('subcategory.Description', 'ASC');
-        
+
         $result=$this->db->get();
-        
+
         $list = array();
         foreach ($result->result() as $row) {
             $list[$row->Description][] = $row;
@@ -1670,14 +1669,14 @@ class Report_model extends CI_Model {
                             product.SubDepCode,
                              product.Prd_ROL,
                               product.Prd_ROQ,
-                            subdepartment.Description,
+                            department.Description,
                             location.location,
                             productstock.Stock,
                             supplier.SupName');
         $this->db->from('product');
         $this->db->join('supplier', 'supplier.SupCode = product.Prd_Supplier', 'INNER');
         $this->db->join('productstock', 'productstock.ProductCode = product.ProductCode', 'LEFT');
-        $this->db->join('subdepartment', 'subdepartment.SubDepCode = product.SubDepCode', 'INNER');
+        $this->db->join('department', 'department.DepCode = product.DepCode', 'INNER');
         $this->db->join('subcategory', 'subcategory.SubCategoryCode = product.SubCategoryCode', 'INNER');
         $this->db->join('location', 'location.location_id = productstock.Location', 'INNER');
         $this->db->where('productstock.Stock < product.Prd_ROL');
