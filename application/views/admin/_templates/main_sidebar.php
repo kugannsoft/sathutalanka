@@ -422,21 +422,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li class="<?= active_link_function('mercedes_model_codes') ?>"><a
-                                        href="<?php echo site_url('admin/master/mercedes_model_codes'); ?>">Models
-                                    Codes</a></li>
+<!--                            <li class="--><?php //= active_link_function('mercedes_model_codes') ?><!--"><a-->
+<!--                                        href="--><?php //echo site_url('admin/master/mercedes_model_codes'); ?><!--">Models-->
+<!--                                    Codes</a></li>-->
 
                             <?php if (!in_array('vcategory', $block_function)) { ?>
                                 <!-- <li class="<?= active_link_function('vcategory') ?>"><a href="<?php echo site_url('admin/master/vcategory'); ?>">Vehicle Make & Models</a></li> -->
                             <?php } ?>
                             <?php if (!in_array('view_inscompany', $block_function)) { ?>
-                                <li class="<?= active_link_function('view_inscompany') ?>"><a
-                                            href="<?php echo site_url('admin/master/view_inscompany'); ?>">Third Party
-                                        Companies</a></li>
+<!--                                <li class="--><?php //= active_link_function('view_inscompany') ?><!--"><a-->
+<!--                                            href="--><?php //echo site_url('admin/master/view_inscompany'); ?><!--">Third Party-->
+<!--                                        Companies</a></li>-->
                             <?php } ?>
-                            <li class="<?= active_link_function('invoice_condition') ?>"><a
-                                        href="<?php echo site_url('admin/master/invoice_condition'); ?>">Terms &
-                                    Conditions</a></li>
+<!--                            <li class="--><?php //= active_link_function('invoice_condition') ?><!--"><a-->
+<!--                                        href="--><?php //echo site_url('admin/master/invoice_condition'); ?><!--">Terms &-->
+<!--                                    Conditions</a></li>-->
 
 
                             <?php if (!in_array('trans_type', $block_function)) { ?>

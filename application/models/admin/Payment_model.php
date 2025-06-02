@@ -44,41 +44,37 @@ class Payment_model extends CI_Model {
         return json_encode($q);
     }
 
-    public function loadcustomersjson($query, $salespersonID, $routeID) {
-        $this->db->select('customer.CusCode, customer.CusName, CONCAT(customer.CusName) AS text');
-        $this->db->from('customer');
-        $this->db->join('customer_routes', 'customer_routes.id = customer.RouteId');
-        $this->db->where("CONCAT(' ', customer.CusCode, customer.CusName, ' ', customer.MobileNo) LIKE", "%$query%");
-        $this->db->where('customer.HandelBy', $salespersonID);
-        $this->db->where('customer.RouteId', $routeID);
-        $this->db->where('customer.IsActive', 1);
-        $this->db->limit(50);
+    public function loadcustomersjson($query) {
 
-        $query1 = $this->db->get();
+        // $query1 =$this->db->select('CusCode,CusName')->like("CONCAT(' ',customer.CusCode,customer.CusName,customer.MobileNo)", $query ,'left')->limit(50)->get('customer');
 
-        $row_set = [];
+        $query1 =$this->db->select('customer.CusCode,customer.CusName,customer.LastName')->from('customer')
+            ->like("CONCAT(' ',customer.CusCode,customer.CusName,' ',customer.MobileNo)", $query ,'left')
+            ->where('IsActive',1)
+            ->limit(50)->get();
+
         if ($query1->num_rows() > 0) {
             foreach ($query1->result_array() as $row) {
-                $row_set[] = [
-                    'label' => htmlentities(stripslashes($row['text'])),
-                    'value' => htmlentities(stripslashes($row['CusCode']))
-                ];
+                // $new_row['label'] = htmlentities(stripslashes($row['CusName']));
+                $name = $row['CusName'];
+                $new_row['label'] = htmlentities(stripslashes($name));
+                $new_row['value'] = htmlentities(stripslashes($row['CusCode']));
+                $row_set[] = $new_row; //build an array
             }
+            echo json_encode($row_set); //format the array into json data
         }
-
-        echo json_encode($row_set);
     }
+
 
     public function getCustomersDataById($cusCode) {
-        return $this->db->select('customer.*,customer_routes.name,salespersons.RepName,customeroutstanding.*')->from('customer')
-                        ->where('customer.CusCode', $cusCode)
-                        ->where('')
-                        ->join('customeroutstanding', 'customer.CusCode = customeroutstanding.CusCode')
-                        ->join('customer_routes', 'customer_routes.id =customer.RouteId ')
-                        ->join(' salespersons', ' salespersons.RepID =customer.HandelBy ')
-                        ->get()->row();
+        return $this->db->select('customer.*,customeroutstanding.*')->from('customer')
+            ->where('customer.CusCode', $cusCode)
+            ->join('customeroutstanding', 'customer.CusCode = customeroutstanding.CusCode')
+            ->get()->row();
     }
-    
+
+
+
     public function getCustomersCreditDataById($cusCode) {
 //        $q= $this->db->query("SELECT C.AppNo,C.Type,C.InvoiceDate,C.InvoiceNo,C.Location,C.CusCode,C.NetAmount,C.CreditAmount,C.SettledAmount,C.IsCloseInvoice,C.IsCancel,IFNULL(R.ReturnAmount,0) As ReturnAmount FROM `creditinvoicedetails` C 
 // LEFT JOIN 
@@ -224,11 +220,13 @@ class Payment_model extends CI_Model {
         $query = $this->db->get_where($table, $data)->row_array();
         return $query;
     }
-    
-   public function getActiveCusPayment($table, $q,$location,$cusCode) {
+
+
+
+    public function getActiveCusPayment($table, $q,$location,$cusCode) {
         $this->db->select('CusPayNo');
         $this->db->like('CusPayNo', $q)->where('IsCancel', 0)->where('CusCode', $cusCode)->where('Location', $location)->order_by('CusPayNo', 'DESC');
-        
+
         $query = $this->db->get($table);
         if ($query->num_rows() > 0) {
             foreach ($query->result_array() as $row) {
@@ -239,6 +237,7 @@ class Payment_model extends CI_Model {
             echo json_encode($row_set); //format the array into json data
         }
     }
+
     public function getActiveSupPayment($table, $q,$location,$cusCode) {
         $this->db->select('SupPayNo');
         $this->db->like('SupPayNo', $q)->where('IsCancel', 0)->where('SupCode', $cusCode)->where('Location', $location)->order_by('SupPayNo', 'DESC');
@@ -279,10 +278,10 @@ class Payment_model extends CI_Model {
 
     public function loadSupPaymentById($inv) {
         return $this->db->select('supplierpaymentdtl.*,bank.BankName,supplierpaymenthed.AvailableOustanding,supplierpaymenthed.TotalPayment AS totalAmount')->from('supplierpaymentdtl')
-                        ->where('supplierpaymentdtl.SupPayNo', $inv)
-                        ->join('supplierpaymenthed', 'supplierpaymenthed.SupPayNo = supplierpaymentdtl.SupPayNo')
-                        ->join('bank', 'bank.BankCode = supplierpaymentdtl.BankNo','left')
-                        ->get()->result();
+            ->where('supplierpaymentdtl.SupPayNo', $inv)
+            ->join('supplierpaymenthed', 'supplierpaymenthed.SupPayNo = supplierpaymentdtl.SupPayNo')
+            ->join('bank', 'bank.BankCode = supplierpaymentdtl.BankNo','left')
+            ->get()->result();
     }
 
     public function supplierPayment($cpHed,$cpDtl,$post,$paymentNo,$chqDtl) {

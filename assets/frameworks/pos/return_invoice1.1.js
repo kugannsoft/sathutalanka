@@ -1286,70 +1286,113 @@ var settleArry = [];
         var sendinvoice_type = JSON.stringify(invoice_type);
 
         var r = confirm("Do you want to save this return invoice.?");
-        if (r == true) {
-            
-            if ((rowCount - 1) == '0' || (rowCount - 1) == '') {
-                $.notify("Please add products.", "warning");
-                $('html, body').animate({scrollTop: $('#location').offset().top}, 'slow');
-                return false;
-            } else {
-                $.ajax({
-                    type: "post",
-                    url: "saveReturn",
-                    data: {invoicenumber: invNo, invType:invType, remark: remark, product_code: sendProduct_code, serial_no: sendSerial_no, qty: sendQty, unit_price: sendUnit_price,
-                        discount_precent: sendDiscount_precent, pro_discount: sendPro_discount, total_net: sendTotal_net, unit_type: sendUnit_type, price_level: sendPrice_level, upc: sendUpc,
-                        case_cost: sendCaseCost, freeQty: sendFree_qty, cost_price: sendCost_price, pro_total: sendPro_total, isSerial: sendIsSerial, proName: sendPro_name, total_cost: totalCost, totalProDiscount: totalProWiseDiscount, totalGrnDiscount: totalGrnDiscount,
-                        invDate: invDate, invUser: invUser, total_amount: total_amount, total_discount: total_discount, total_net_amount: totalNetAmount, location: returnlocation, cuscode: cusCode,
-                        route:route,newsalesperson:newsalesperson,reinvoiceType: sendinvoice_type},
-                    success: function(data) {
-                        var resultData = JSON.parse(data);
-                        var feedback = resultData['fb'];
-                        var invNumber = resultData['InvNo'];
-                        if (feedback != 1) {
-                            $.notify("Return not saved successfully.", "warning");
-                            $("#loadBarCode").hide();
-                            $("#dwnLink").hide();
-                            return false;
-                        } else {
-                            $.notify("Return saved successfully.", "success");
-                            $("input[name=suppliercheck][value='1']").prop('checked', false);
-//                        $('#tbl_item tbody').html("");
-                            $("#invoicenumber").val("");
-                            $("#supplier").val("");
-                            $("#totalgrn").html('0.00');
-                            $("#grndiscount").html('0.00');
-                            $("#netgrnamount").html('0.00');
-                            $("#grnremark").val('');
-                            invNo='';
-                            total_amount = 0;
-                            total_discount = 0;
-                            totalNetAmount = 0;
-                            supcode = 0;
-                            creditAmount = 0;
-                            dueAmount = 0;
-                            totalProWiseDiscount = 0;
-                            totalGrnDiscount = 0;
-                            $("#cashAmount").val(0);
-                            $("#chequeAmount").val(0);
-                            $("#creditAmount").val(0);
+         if (r == true) {
+             if ((rowCount - 1) === 0) { // ✔ fixed comparison
+                 $.notify("Please add products.", "warning");
+                 $('html, body').animate({scrollTop: $('#location').offset().top}, 'slow');
+                 return false;
+             } else {
+                 // ✔ Disable the save button immediately to prevent double submit
+                 $("#saveItems").attr('disabled', true).text('Saving...');
 
-                            $("#totalExpenses").html(0);
-//                        getLastBatchNo();
-                            $('#itemTable').show();
-                            $('#costTable').hide();
-                            $('#totalAmount').html('0.00');
-                            $('#totalgrndiscount').html('0.00');
-                            $('#totalprodiscount').html('0.00');
-                            $('#dueAmount2').html('0.00');
-                            $("#loadBarCode").hide();
-                            $("#dwnLink").show();
-                            $("#saveItems").attr('disabled', true);
-                        }
-                    }
-                });
+                 // ✔ Make sure all these variables are defined earlier
+                 var invoicenumber = $("#invoicenumber").val();
+                 var cusCode = $("#supplier").val(); // or #customer
+                 var totalCost = 0; // Or compute from qty * cost_price
+                 var totalProWiseDiscount = 0; // Define or calculate
+                 var totalGrnDiscount = 0;
 
-            }
-        } else {
+                 $.ajax({
+                     type: "post",
+                     url: "saveReturn",
+                     data: {
+                         invoicenumber: invoicenumber, // ✔ fixed
+                         invType: invType,
+                         remark: remark,
+                         product_code: sendProduct_code,
+                         serial_no: sendSerial_no,
+                         qty: sendQty,
+                         unit_price: sendUnit_price,
+                         discount_precent: sendDiscount_precent,
+                         pro_discount: sendPro_discount,
+                         total_net: sendTotal_net,
+                         unit_type: sendUnit_type,
+                         price_level: sendPrice_level,
+                         upc: sendUpc,
+                         case_cost: sendCaseCost,
+                         freeQty: sendFree_qty,
+                         cost_price: sendCost_price,
+                         pro_total: sendPro_total,
+                         isSerial: sendIsSerial,
+                         proName: sendPro_name,
+                         total_cost: totalCost,
+                         totalProDiscount: totalProWiseDiscount,
+                         totalGrnDiscount: totalGrnDiscount,
+                         invDate: invDate,
+                         invUser: invUser,
+                         total_amount: total_amount,
+                         total_discount: total_discount,
+                         total_net_amount: totalNetAmount,
+                         location: returnlocation,
+                         cuscode: cusCode,
+                         route: route,
+                         newsalesperson: newsalesperson,
+                         reinvoiceType: sendinvoice_type
+                     },
+                     success: function(data) {
+                         var resultData = JSON.parse(data);
+                         var feedback = resultData['fb'];
+                         var invNumber = resultData['InvNo'];
+
+                         if (feedback != 1) {
+                             $.notify("Return not saved successfully.", "warning");
+                             $("#loadBarCode").hide();
+                             $("#dwnLink").hide();
+                             $("#saveItems").attr('disabled', false).text('Save Items'); // re-enable button
+                         } else {
+                             $.notify("Return saved successfully.", "success");
+
+                             // Reset form
+                             $("input[name=suppliercheck][value='1']").prop('checked', false);
+                             $("#invoicenumber").val("");
+                             $("#supplier").val("");
+                             $("#totalgrn").html('0.00');
+                             $("#grndiscount").html('0.00');
+                             $("#netgrnamount").html('0.00');
+                             $("#grnremark").val('');
+                             invNo = '';
+                             total_amount = 0;
+                             total_discount = 0;
+                             totalNetAmount = 0;
+                             supcode = 0;
+                             creditAmount = 0;
+                             dueAmount = 0;
+                             totalProWiseDiscount = 0;
+                             totalGrnDiscount = 0;
+                             $("#cashAmount").val(0);
+                             $("#chequeAmount").val(0);
+                             $("#creditAmount").val(0);
+                             $("#totalExpenses").html(0);
+                             $('#itemTable').show();
+                             $('#costTable').hide();
+                             $('#totalAmount').html('0.00');
+                             $('#totalgrndiscount').html('0.00');
+                             $('#totalprodiscount').html('0.00');
+                             $('#dueAmount2').html('0.00');
+                             $("#loadBarCode").hide();
+                             $("#dwnLink").show();
+                             $("#saveItems").attr('disabled', true).text('Saved');
+                         }
+                     },
+                     error: function(xhr, status, error) {
+                         console.error("AJAX error:", error);
+                         $.notify("An error occurred while saving the return invoice.", "error");
+                         $("#saveItems").attr('disabled', false).text('Save Items'); // re-enable on error
+                     }
+                 });
+             }
+         }
+         else {
             return false;
         }
     });

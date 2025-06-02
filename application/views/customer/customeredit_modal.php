@@ -144,6 +144,7 @@
                         <div class="form-group">
                             <label for="phoneNo">Customer Phone </label>
                             <input type="text"  class="form-control" value="<?php echo $cusdata->LanLineNo; ?>" name="phoneNo" id="phoneNo" placeholder="Enter customer phone" maxlength="12" value="+94">
+
                         </div>
                     </div>
                 </div>

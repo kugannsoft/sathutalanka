@@ -140,7 +140,7 @@ class Invoice_model extends CI_Model {
         // $query1 = $this->db->select('CusCode,CusName')
         // ->like("CONCAT(' ',customer.CusCode,customer.CusName,customer.MobileNo)", $query, 'left')
         // ->limit(50)->get('customer');
-        $query1 =$this->db->select('customer.CusCode,customer.CusName,customer.LastName,CONCAT(CusName," ",customer_routes.name) AS text')->from('customer')
+        $query1 =$this->db->select('customer.CusCode,customer.CusName,customer.LastName,CONCAT(CusName) AS text')->from('customer')
         ->join('customer_routes', 'customer_routes.id = customer.RouteId')
         ->like("CONCAT(' ',customer.CusCode,customer.CusName,' ',customer.MobileNo)", $query ,'left')
         ->where('IsActive',1)->limit(50)->get();
@@ -299,7 +299,7 @@ class Invoice_model extends CI_Model {
                 ->where('Location', $location)
                 ->update('productstock');
        
-                echo $this->db->last_query();
+//                echo $this->db->last_query();
             }
 
             if ($returninvoice_typeArr[$i] == 2) {

@@ -153,7 +153,7 @@ class Invoice extends Admin_Controller {
             $this->data['company'] = $this->Invoice_model->get_data_by_where('company', $id3);
             $this->data['salesperson'] = $this->db->select()->from('salespersons')->get()->result();
             $this->data['returnTypes'] = $this->db->select()->from('return_types')->get()->result();
-          
+
             // echo json_encode($this->data['salesperson']);
             // die();
             /* Load Template */
@@ -235,11 +235,9 @@ class Invoice extends Admin_Controller {
         echo $this->Invoice_model->loadproductjson($query,$sup,$inv,$pl,$invType);
         die;
     }
-    
+
     public function saveReturn() {
-        
-        $barcode = 1;
-        
+
         $grnNo = $this->Invoice_model->get_max_code('Invoice Return');
         $invNo = $_POST['invoicenumber'];
         $invType = $_POST['invType'];
@@ -255,6 +253,7 @@ class Invoice extends Admin_Controller {
         $newsalesperson = $_POST['newsalesperson'];
         $location = $_POST['location'];
         $supplier =$_POST['cuscode'];
+//        echo json_encode($supplier); die;
         $isComplete=0;
         $totalGrnDiscount = $_POST['totalGrnDiscount'];
         $totalProDiscount = $_POST['totalProDiscount'];
@@ -263,8 +262,8 @@ class Invoice extends Admin_Controller {
         }else{
             $totalDisPerent = 0;
         }
-        
-        
+
+
         $product_codeArr = json_decode($_POST['product_code']);
         $unitArr = json_decode($_POST['unit_type']);
         $freeQtyArr = json_decode($_POST['freeQty']);
@@ -282,7 +281,7 @@ class Invoice extends Admin_Controller {
         $pro_nameArr = json_decode($_POST['proName']);
         $returninvoice_typeArr = json_decode($_POST['reinvoiceType']);
         $invDate = date("Y-m-d H:i:s");
-        
+
         $retHed = array(
             'AppNo' => '1','ReturnNo' => $grnNo,'ReturnLocation' => $location,'ReturnDate' => $invDate,'RootNo' =>$route,'SalesPerson'=>$newsalesperson,
             'InvoiceNo' => $invNo,'InvoiceType' => $invType,'CustomerNo' => $supplier,'Remark' => $remark,'ReturnAmount' => $total_amount,'ReturnUser' => $invUser,'IsComplete' => $isComplete,'IsCancel'=>0
@@ -292,13 +291,13 @@ class Invoice extends Admin_Controller {
             'AppNo' => '1','ReturnNo' => $grnNo,'ReturnLocation' => $location,'ReturnDate' => $invDate,'RootNo' =>$route,
             'InvoiceNo' => $invNo,'InvoiceType' => $invType,'CustomerNo' => $supplier,'Remark' => $remark,'ReturnAmount' => $total_amount,'ReturnUser' => $invUser
         );
-        
+
         $nonRet = array(
             'AppNo' => '1','ReturnNo' => $grnNo,'ReturnLocation' => $location,'ReturnDate' => $invDate,'RootNo' => $grnDattime,'InvCount'=> 1,
             'InvoiceNo' => $invNo,'CustomerNo' => $supplier,'Remark' => $remark,'ReturnAmount' => $total_amount,'ReturnUser' => $invUser,'IsComplete' => $isComplete,'IsCancel'=>0
         );
-    
-        
+
+
         $id3 = array('CompanyID' => $location);
         $this->data['company'] = $this->Invoice_model->get_data_by_where('company',$id3);
         $company = $this->data['company']['CompanyName'];

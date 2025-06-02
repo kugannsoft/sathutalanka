@@ -708,22 +708,23 @@ class Job extends Admin_Controller {
     }
 
     public function loadcustomersroutewise() {
-        $routeID = $this->input->post('routeID'); 
+        $routeID = $this->input->post('routeID');
         $newsalesperson = $this->input->post('newsalesperson');
         $this->load->database();
-    
-    
+
+
         $customers = $this->db->select('customer.CusCode,customer.DisplayName')
-        ->from('customer')
-        ->where('RouteId', $routeID)
-        ->where('HandelBy',$newsalesperson)
-        ->get()
-        ->result();
-    
-        echo json_encode($customers); 
-        die; 
+            ->from('customer')
+            ->where('RouteId', $routeID)
+            ->where('HandelBy',$newsalesperson)
+            ->get()
+            ->result();
+
+        echo json_encode($customers);
+        die;
     }
-    
+
+
 
     public function loadjobjson() {
         $query = $_GET['q'];

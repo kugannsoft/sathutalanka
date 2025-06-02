@@ -326,7 +326,8 @@ class Grn extends Admin_Controller {
         die;
     }
 
-     public function cancelGRN() {
+
+    public function cancelGRN() {
         $cancelNo = $this->Grn_model->get_max_code('CancelGRN');
         
         $location=$_POST['location'];

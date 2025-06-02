@@ -246,20 +246,20 @@ class Payment extends Admin_Controller {
     }
 
     public function loadcustomersroutewise() {
-        $routeID = $this->input->post('routeID'); 
+        $routeID = $this->input->post('routeID');
         $newsalesperson = $this->input->post('newsalesperson');
         $this->load->database();
-    
-    
+
+
         $customers = $this->db->select('customer.CusCode,customer.DisplayName')
-        ->from('customer')
-        ->where('RouteId', $routeID)
-        ->where('HandelBy',$newsalesperson)
-        ->get()
-        ->result();
-    
-        echo json_encode($customers); 
-        die; 
+            ->from('customer')
+            ->where('RouteId', $routeID)
+            ->where('HandelBy',$newsalesperson)
+            ->get()
+            ->result();
+
+        echo json_encode($customers);
+        die;
     }
 
     /*=========Supplier payment===========================================*/
@@ -561,7 +561,6 @@ class Payment extends Admin_Controller {
     public function getCustomersDataById() {
         $cusCode = $_POST['cusCode'];
 
-      
         $arr['cus_data'] = $this->Payment_model->getCustomersDataById($cusCode);
         $arr['credit_data'] = $this->Payment_model->getCustomersCreditDataById($cusCode);
         $arr['return_data'] = $this->Payment_model->getCustomersReturnDataById($cusCode);
@@ -576,6 +575,7 @@ class Payment extends Admin_Controller {
         echo json_encode($arr);
         die;
     }
+
 
     public function customerPayment() {
         $paymentNo = $this->Payment_model->get_max_code('Customer Payment');

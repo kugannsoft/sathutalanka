@@ -137,10 +137,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="phoneNo">Customer Phone </label>
-                            <input type="number"  class="form-control" name="phoneNo" id="phoneNo" placeholder="Enter customer phone" maxlength="12" 
-                           
-                                value="+94" pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
-                        </div>
+                            <input type="text" class="form-control" name="phoneNo" id="phoneNo" placeholder="Enter customer phone" maxlength="12"
+                                   value="+94" >
+
+                            </div>
                     </div>
                 </div>
                 <div class="row">
@@ -148,8 +148,9 @@
                         <div class="form-group">
                             <label for="mobileNo">Work Phone</label>
                             <div class="input-group">
-                                <input type="number"  class="form-control" name="workPhone" id="workPhone" placeholder="Enter Work Phone " maxlength="12" 
-                                value="+94"  pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
+                                <input type="text"  class="form-control" name="workPhone" id="workPhone" placeholder="Enter Work Phone " maxlength="12"
+                                value="+94"  >
+
                             </div>
                         </div>
                     </div>
@@ -170,6 +171,7 @@
                             <label for="mobileNo">Contact Person</label>
                             <div class="input-group">
                                 <input type="text"  class="form-control" name="contactName" id="contactName" placeholder="Enter Contact Person ">
+
                             </div>
                         </div>
                     </div>
@@ -177,8 +179,10 @@
                         <div class="form-group">
                             <label for="mobileNo">Contact Phone</label>
                             <div class="input-group">
-                                <input type="number"  class="form-control" name="contactPhone" id="contactPhone" placeholder="Enter Work Phone "maxlength="12" 
-                                value="+94" required pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
+                               <input type="text" class="form-control" name="contactPhone" id="contactPhone" placeholder="Enter Work Phone" maxlength="12"
+                                       value="+94" >
+
+
                             </div>
                         </div>
                     </div>

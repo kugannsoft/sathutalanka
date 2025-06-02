@@ -67,7 +67,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <div class="form-group">
                                     <label for="supplier" class="col-sm-4 control-label">Customer<span class="required">*</span></label>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control" tabindex="4" required="required"  name="customer" id="customer" placeholder="Customer name/Code/ Phone">
+                                        <input type="text" class="form-control" tabindex="4" required="required"  name="customer" id="customer" placeholder="Customer name">
                                         <!-- <select class="form-control" required="required" name="customer" id="customer" placeholder="customer name">
                                                     <option value="0">-Select a customer-</option>
                                         </select> -->
@@ -287,10 +287,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         increaseArea: '50%'
     });
 
-//     $('#customer').select2({
-//     placeholder: "Select a customer",
-//     allowClear: true,
-//     minimumInputLength:1,
-//     width: '100%'
-// });
+    $('#customer').select2({
+    placeholder: "Select a customer",
+    allowClear: true,
+    minimumInputLength:1,
+    width: '100%'
+});
 </script>

@@ -42,76 +42,76 @@ $('.prd_icheck').iCheck({
     var return_amount=0;
 
 
-    // $('#newsalesperson').on('change', function() {
-    //     var salespersonID = $(this).val();
-    //     if (salespersonID != "0") {
+    $('#newsalesperson').on('change', function() {
+        var salespersonID = $(this).val();
+        if (salespersonID != "0") {
            
-    //         $.ajax({
-    //             url: 'findemploeeroute',
-    //             method: 'POST',
-    //             data: { salespersonID: salespersonID },
-    //             dataType: 'json',
-    //             success: function(response) {
+            $.ajax({
+                url: 'findemploeeroute',
+                method: 'POST',
+                data: { salespersonID: salespersonID },
+                dataType: 'json',
+                success: function(response) {
                     
-    //                 $('#route').empty();
-    //                 $('#route').append('<option value="0">-Select-</option>');
+                    $('#route').empty();
+                    $('#route').append('<option value="0">-Select-</option>');
                     
-    //                 $.each(response, function(index, routeID) {
-    //                 console.log(routeID);
-    //                 $('#route').append('<option value="'+ routeID.route_id +'">'+ routeID.route_name +'</option>');
-    //             });
+                    $.each(response, function(index, routeID) {
+                    console.log(routeID);
+                    $('#route').append('<option value="'+ routeID.route_id +'">'+ routeID.route_name +'</option>');
+                });
               
-    //             },
-    //             error: function(xhr, status, error) {
-    //                 console.error('Error fetching routes:', error);
-    //             }
-    //         });
-    //     } else {
-    //         $('#route').empty();
-    //         $('#route').append('<option value="0">-Select-</option>');
-    //     }
-    // });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching routes:', error);
+                }
+            });
+        } else {
+            $('#route').empty();
+            $('#route').append('<option value="0">-Select-</option>');
+        }
+    });
 
-    // $('#route').on('change', function() {
-    //     var routeID = $(this).val();
-    //     var newsalesperson = $('#newsalesperson').val();
-    //     console.log("Route ID changed to:", routeID);
-    //     console.log("Customer newsalesperson selected:", newsalesperson);
+    $('#route').on('change', function() {
+        var routeID = $(this).val();
+        var newsalesperson = $('#newsalesperson').val();
+        console.log("Route ID changed to:", routeID);
+        console.log("Customer newsalesperson selected:", newsalesperson);
 
-    //     $.ajax({
-    //         url: 'loadcustomersroutewise',
-    //         type: 'POST',
-    //         dataType: "json",
-    //         data: {
-    //             routeID: routeID,
-    //             newsalesperson:newsalesperson
-    //         },
-    //         success: function(data) {
-    //             console.log("Customer Data:", data); 
-    //             $("#customer").html('<option value="">Select Customer</option>');
+        $.ajax({
+            url: 'loadcustomersroutewise',
+            type: 'POST',
+            dataType: "json",
+            data: {
+                routeID: routeID,
+                newsalesperson:newsalesperson
+            },
+            success: function(data) {
+                console.log("Customer Data:", data);
+                $("#customer").html('<option value="">Select Customer</option>');
                 
-    //             // Populate the dropdown with customers
-    //             if (data.length > 0) {
-    //                 $.each(data, function(index, customer) {
-    //                     $("#customer").append(
-    //                         `<option value="${customer.CusCode}">${customer.DisplayName}</option>`
-    //                     );
-    //                 });
+                // Populate the dropdown with customers
+                if (data.length > 0) {
+                    $.each(data, function(index, customer) {
+                        $("#customer").append(
+                            `<option value="${customer.CusCode}">${customer.DisplayName}</option>`
+                        );
+                    });
 
                   
-    //             }
+                }
 
-    //             $('#customer').select2({
-    //                 placeholder: "Select a customer",
-    //                 allowClear: true,
-    //                 width: '100%'
-    //             });
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error("AJAX Error:", error); // Log any AJAX errors
-    //         }
-    //     });
-    // });
+                $('#customer').select2({
+                    placeholder: "Select a customer",
+                    allowClear: true,
+                    width: '100%'
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error); // Log any AJAX errors
+            }
+        });
+    });
 
    
 
@@ -359,140 +359,140 @@ console.log('key',key);
 
     }
     //customer autoload
-    $("#customer").autocomplete({
-        source: function(request, response) {
-            cusType = $("#CustType option:selected").val();
-
-            $.ajax({
-                url: 'loadcustomersjson',
-                dataType: "json",
-                data: {
-                    q: request.term
-                },
-                success: function(data) {
-                    response($.map(data, function(item) {
-                        return {
-                            label: item.label,
-                            value: item.value,
-                            data: item
-                        }
-                    }));
-                }
-            });
-        },
-        autoFocus: true,
-        minLength: 0,
-        select: function(event, ui) {
-            cusCode = ui.item.value;
-            $("#tbl_payment tbody").html("");
-            total_due_amount = 0;
-            total_over_payment = 0;
-
-            $.ajax({
-                type: "POST",
-                url: "../../admin/Payment/getCustomersDataById",
-                data: { cusCode: cusCode},
-                success: function(data)
-                {
-                    var resultData = JSON.parse(data);
-
-                    var returnComplete = 0;
-
-                    if (resultData.over_return__complete_payments === null) {
-                        returnComplete = 0.00;
-                    } else {
-                        returnComplete = resultData.over_return__complete_payments;
-                    }
-
-                    cusCode = resultData.cus_data.CusCode;
-                    outstanding = parseFloat(resultData.total_credit) - parseFloat(resultData.total_payment) - parseFloat(resultData.return_payment) + parseFloat(returnComplete);
-                    available_balance = parseFloat(resultData.cus_data.CreditLimit) - parseFloat(outstanding);
-                    customer_name=resultData.cus_data.CusName+" "+resultData.cus_data.LastName;
-                    $("#cusCode").html(resultData.cus_data.CusName+" "+resultData.cus_data.LastName);
-                    $("#customer").val(resultData.cus_data.CusCode);
-                    $("#creditLimit").html(accounting.formatMoney(resultData.cus_data.CreditLimit));
-                    $("#creditPeriod").html(resultData.cus_data.CreditPeriod);
-                    $("#returnPyment").html(resultData.return_payment);
-                    $("#returnAvailable").html(accounting.formatMoney(resultData.return_payments));
-                    $("#creditAmount").html(accounting.formatMoney(resultData.total_credit));
-                    $("#settledAmount").html(accounting.formatMoney(resultData.total_payment));
-                    $("#cusOutstand").html(accounting.formatMoney(outstanding));
-                    $("#availableCreditLimit").html(accounting.formatMoney(available_balance));
-                    $("#city").html(resultData.cus_data.MobileNo);
-                    $("#newsalesperson").html(resultData.cus_data.RepName);
-                    $("#route").html(resultData.cus_data.name);
-
-
-                    var creditAmount = 0;
-                    var settleAmount = 0;
-                    var z = 1;
-                    $.each(resultData.credit_data, function(key, value) {
-
-                        var paymentNo = value.InvoiceNo;
-                        var invDate = value.InvoiceDate;
-                        var totalNetAmount = parseFloat(value.NetAmount);
-                        var creditAmount = parseFloat(value.CreditAmount);
-                        var settleAmount = parseFloat(value.SettledAmount);
-                        var returnAmount = parseFloat(value.ReturnAmount);
-                        var customerPayment = parseFloat(value.payAmount);
-                        var dueAmount = 0;
-                        total_due_amount += (creditAmount - settleAmount-returnAmount);
-
-                        var isdueZero = creditAmount - settleAmount-returnAmount;
-                        var isclose = (settleAmount == creditAmount);
-                        if (isdueZero !== 0 && isclose === false) {
-                            $("#tbl_payment tbody").append("<tr id='" + z + "'>" +
-                                "<td>" + z + "&nbsp;&nbsp;<input rowid='" + z + "' type='checkbox' name='rownum' class='prd_icheck rowcheck '></td>" +
-                                "<td  class='invoiceNo'>" + paymentNo + "</td>" +
-                                "<td>" + invDate + "</td>" +
-                                "<td class='text-right'>" + accounting.formatMoney(totalNetAmount) + "</td>" +
-                                "<td class='text-right creditAmount'>" + accounting.formatMoney(creditAmount) + "</td>" +
-                                "<td class='text-right settleAmount' invPay='0'>" + accounting.formatMoney(settleAmount) + "</td>" +
-                                "<td class='text-right returnAmount' invPay='0'>" + accounting.formatMoney(returnAmount) + "</td>" +
-                                "<td class='text-right dueAmount' isColse='0'>" + accounting.formatMoney(creditAmount - (settleAmount + returnAmount)) + "</td>" +
-                                "<td></td></tr>");
-                             z=z+1;
-                        }
-                       // $("#cusOutstand").html(accounting.formatMoney(total_due_amount));
-                    });
-
-
-                    // $.each(resultData.return_data, function(key, value) {
-                    //
-                    //     var paymentNo = value.InvoiceNo;
-                    //     var invDate = value.InvoiceDate;
-                    //      var totalNetAmount = parseFloat(value.NetAmount);
-                    //     var creditAmount = parseFloat(value.CreditAmount);
-                    //     var settleAmount = parseFloat(value.SettledAmount);
-                    //     var returnAmount = parseFloat(0);
-                    //     var customerPayment = parseFloat(value.payAmount);
-                    //     // var totalNetAmount = value.NetAmount;
-                    //     // var creditAmount = value.CreditAmount;
-                    //     // var settleAmount = value.SettledAmount;
-                    //     // var customerPayment = value.payAmount;
-                    //     var dueAmount = 0;
-                    //     total_due_amount += (creditAmount - settleAmount-returnAmount);
-                    //
-                    //     $("#over_payment_rows").append("<tr style='background-color:#fbb5b5;' ><td>" + (key + 1) + "&nbsp;&nbsp;</td><td  class='invoiceNo'>" + paymentNo + " Return </td><td>" + invDate + "</td><td class='text-right'>" + accounting.formatMoney(totalNetAmount) + "</td><td class='text-right creditAmount'>" + accounting.formatMoney(creditAmount) + "</td><td class='text-right settleAmount' invPay='0'>" + accounting.formatMoney(0) + "</td><td class='text-right returnAmount' invPay='0'>" + accounting.formatMoney(settleAmount) + "</td><td class='text-right dueAmount' isColse='0'>" + accounting.formatMoney(creditAmount - settleAmount-returnAmount) + "</td><td></td></tr>");
-                    //     // $("#cusOutstand").html(accounting.formatMoney(total_due_amount));
-                    // });
-
-                    // $("#tbl_payment").dataTable().fnDestroy();
-                }
-            });
-
-
-        }
-    });
-
-    function clearCustomerData() {
-        $("#cusCode").html('');
-        $("#cusAddress").html('');
-        $("#cusAddress2").html('');
-        $("#cusPhone").html('');
-        $("#newsalesperson").html('');
-        $("#route").html('');
-    }
+    // $("#customer").autocomplete({
+    //     source: function(request, response) {
+    //         cusType = $("#CustType option:selected").val();
+    //
+    //         $.ajax({
+    //             url: 'loadcustomersjson',
+    //             dataType: "json",
+    //             data: {
+    //                 q: request.term
+    //             },
+    //             success: function(data) {
+    //                 response($.map(data, function(item) {
+    //                     return {
+    //                         label: item.label,
+    //                         value: item.value,
+    //                         data: item
+    //                     }
+    //                 }));
+    //             }
+    //         });
+    //     },
+    //     autoFocus: true,
+    //     minLength: 0,
+    //     select: function(event, ui) {
+    //         cusCode = ui.item.value;
+    //         $("#tbl_payment tbody").html("");
+    //         total_due_amount = 0;
+    //         total_over_payment = 0;
+    //
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "../../admin/Payment/getCustomersDataById",
+    //             data: { cusCode: cusCode},
+    //             success: function(data)
+    //             {
+    //                 var resultData = JSON.parse(data);
+    //
+    //                 var returnComplete = 0;
+    //
+    //                 if (resultData.over_return__complete_payments === null) {
+    //                     returnComplete = 0.00;
+    //                 } else {
+    //                     returnComplete = resultData.over_return__complete_payments;
+    //                 }
+    //
+    //                 cusCode = resultData.cus_data.CusCode;
+    //                 outstanding = parseFloat(resultData.total_credit) - parseFloat(resultData.total_payment) - parseFloat(resultData.return_payment) + parseFloat(returnComplete);
+    //                 available_balance = parseFloat(resultData.cus_data.CreditLimit) - parseFloat(outstanding);
+    //                 customer_name=resultData.cus_data.CusName+" "+resultData.cus_data.LastName;
+    //                 $("#cusCode").html(resultData.cus_data.CusName+" "+resultData.cus_data.LastName);
+    //                 $("#customer").val(resultData.cus_data.CusCode);
+    //                 $("#creditLimit").html(accounting.formatMoney(resultData.cus_data.CreditLimit));
+    //                 $("#creditPeriod").html(resultData.cus_data.CreditPeriod);
+    //                 $("#returnPyment").html(resultData.return_payment);
+    //                 $("#returnAvailable").html(accounting.formatMoney(resultData.return_payments));
+    //                 $("#creditAmount").html(accounting.formatMoney(resultData.total_credit));
+    //                 $("#settledAmount").html(accounting.formatMoney(resultData.total_payment));
+    //                 $("#cusOutstand").html(accounting.formatMoney(outstanding));
+    //                 $("#availableCreditLimit").html(accounting.formatMoney(available_balance));
+    //                 $("#city").html(resultData.cus_data.MobileNo);
+    //                 $("#newsalesperson").html(resultData.cus_data.RepName);
+    //                 $("#route").html(resultData.cus_data.name);
+    //
+    //
+    //                 var creditAmount = 0;
+    //                 var settleAmount = 0;
+    //                 var z = 1;
+    //                 $.each(resultData.credit_data, function(key, value) {
+    //
+    //                     var paymentNo = value.InvoiceNo;
+    //                     var invDate = value.InvoiceDate;
+    //                     var totalNetAmount = parseFloat(value.NetAmount);
+    //                     var creditAmount = parseFloat(value.CreditAmount);
+    //                     var settleAmount = parseFloat(value.SettledAmount);
+    //                     var returnAmount = parseFloat(value.ReturnAmount);
+    //                     var customerPayment = parseFloat(value.payAmount);
+    //                     var dueAmount = 0;
+    //                     total_due_amount += (creditAmount - settleAmount-returnAmount);
+    //
+    //                     var isdueZero = creditAmount - settleAmount-returnAmount;
+    //                     var isclose = (settleAmount == creditAmount);
+    //                     if (isdueZero !== 0 && isclose === false) {
+    //                         $("#tbl_payment tbody").append("<tr id='" + z + "'>" +
+    //                             "<td>" + z + "&nbsp;&nbsp;<input rowid='" + z + "' type='checkbox' name='rownum' class='prd_icheck rowcheck '></td>" +
+    //                             "<td  class='invoiceNo'>" + paymentNo + "</td>" +
+    //                             "<td>" + invDate + "</td>" +
+    //                             "<td class='text-right'>" + accounting.formatMoney(totalNetAmount) + "</td>" +
+    //                             "<td class='text-right creditAmount'>" + accounting.formatMoney(creditAmount) + "</td>" +
+    //                             "<td class='text-right settleAmount' invPay='0'>" + accounting.formatMoney(settleAmount) + "</td>" +
+    //                             "<td class='text-right returnAmount' invPay='0'>" + accounting.formatMoney(returnAmount) + "</td>" +
+    //                             "<td class='text-right dueAmount' isColse='0'>" + accounting.formatMoney(creditAmount - (settleAmount + returnAmount)) + "</td>" +
+    //                             "<td></td></tr>");
+    //                          z=z+1;
+    //                     }
+    //                    // $("#cusOutstand").html(accounting.formatMoney(total_due_amount));
+    //                 });
+    //
+    //
+    //                 // $.each(resultData.return_data, function(key, value) {
+    //                 //
+    //                 //     var paymentNo = value.InvoiceNo;
+    //                 //     var invDate = value.InvoiceDate;
+    //                 //      var totalNetAmount = parseFloat(value.NetAmount);
+    //                 //     var creditAmount = parseFloat(value.CreditAmount);
+    //                 //     var settleAmount = parseFloat(value.SettledAmount);
+    //                 //     var returnAmount = parseFloat(0);
+    //                 //     var customerPayment = parseFloat(value.payAmount);
+    //                 //     // var totalNetAmount = value.NetAmount;
+    //                 //     // var creditAmount = value.CreditAmount;
+    //                 //     // var settleAmount = value.SettledAmount;
+    //                 //     // var customerPayment = value.payAmount;
+    //                 //     var dueAmount = 0;
+    //                 //     total_due_amount += (creditAmount - settleAmount-returnAmount);
+    //                 //
+    //                 //     $("#over_payment_rows").append("<tr style='background-color:#fbb5b5;' ><td>" + (key + 1) + "&nbsp;&nbsp;</td><td  class='invoiceNo'>" + paymentNo + " Return </td><td>" + invDate + "</td><td class='text-right'>" + accounting.formatMoney(totalNetAmount) + "</td><td class='text-right creditAmount'>" + accounting.formatMoney(creditAmount) + "</td><td class='text-right settleAmount' invPay='0'>" + accounting.formatMoney(0) + "</td><td class='text-right returnAmount' invPay='0'>" + accounting.formatMoney(settleAmount) + "</td><td class='text-right dueAmount' isColse='0'>" + accounting.formatMoney(creditAmount - settleAmount-returnAmount) + "</td><td></td></tr>");
+    //                 //     // $("#cusOutstand").html(accounting.formatMoney(total_due_amount));
+    //                 // });
+    //
+    //                 // $("#tbl_payment").dataTable().fnDestroy();
+    //             }
+    //         });
+    //
+    //
+    //     }
+    // });
+    //
+    // function clearCustomerData() {
+    //     $("#cusCode").html('');
+    //     $("#cusAddress").html('');
+    //     $("#cusAddress2").html('');
+    //     $("#cusPhone").html('');
+    //     $("#newsalesperson").html('');
+    //     $("#route").html('');
+    // }
     $("#bank").select2({
         placeholder: "Select a bank",
         allowClear: true,

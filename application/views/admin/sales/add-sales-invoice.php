@@ -40,11 +40,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <input type="hidden" name="nbtRatioRate" id="nbtRatioRate" value="<?php echo $company['NBT_Ratio']; ?>">
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
-                                    <label class="col-sm-4 control-label">Price Level</label>  
+                                    <label class="col-sm-4 control-label">Price Level</label>
                                     <div class="col-sm-7">
-                                        <select tabindex="7" class="form-control" id="priceLevel"> 
+                                        <select tabindex="7" class="form-control" id="priceLevel">
                                          <?php foreach ($plv as $pl) { ?>
                                         <option value="<?php echo $pl->PL_No; ?>" <?php if ($pl->PL_No == 1) {echo 'selected';}?>><?php echo $pl->PriceLevel; ?></option>
                                         <?php } ?></select>
@@ -62,7 +62,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <select class="form-control" required="required"  name="newsalesperson" id="newsalesperson" placeholder="sales person">
                                         <option value="">-Select a sales person-</option>
                                         <?php foreach ($salesperson as $trns) { ?>
-                                            <option value="<?php echo $trns->RepID; ?>" 
+                                            <option value="<?php echo $trns->RepID; ?>"
                                                     <?php echo ($trns->RepID == $selectedSalespersonID) ? 'selected' : ''; ?>>
                                                 <?php echo $trns->RepName; ?>
                                             </option>
@@ -108,39 +108,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <row class="form-horizontal" >
                                 <div class="form-group">
                                     <label for="supplier" class="col-sm-4 control-label">Customer<span class="required">*</span></label>
-                               
+
                                     <div class="col-sm-7">
                                         <div class="input-group">
-                                          <input type="text" tabindex="1" class="form-control" required="required"  name="customer" id="customer" placeholder="Customer" value="<?php echo $customer; ?>">
-                                         
+<!--                                          <input type="text" tabindex="1" class="form-control" required="required"  name="customer" id="customer" placeholder="Customer" value="--><?php //echo $customer; ?><!--">-->
+                                            <select class="form-control" required="required" name="customer" id="customer" placeholder="customer name">
+                                                <option value="">Select Customer</option>
+                                                <?php foreach ($customers as $customer): ?>
+                                                    <option value="<?= $customer->CusCode ?>"><?= $customer->DisplayName ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                           <span class="input-group-btn">
                                             <button data-target="#customermodal"  id="addNewCustomer" class="btn btn-flat btn-primary pull-right" title="New Customer"><i class="fa fa-user-plus"></i></button>
                                           </span>
                                         </div>
                                     </div>
-                                  
-                                    
+
+
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-4">
-                                        <span id="cusName1"></span><br> 
-                                         <span id="cusPhone"></span> 
-                                         <br> 
-                                         <span id="cusAddress"></span>  
+                                        <span id="cusName1"></span><br>
+                                         <span id="cusPhone"></span>
+                                         <br>
+                                         <span id="cusAddress"></span>
                                         <input type="hidden" tabindex="5" name="invoicenumber" id="invoicenumber" class="form-control" />
                                         <input type="hidden" tabindex="5" name="vididateCreditLimit" id="vididateCreditLimit" class="form-control" />
                                         <input type="hidden" tabindex="6"  min="0" step="200" name="additional" value="0" id="additional" class="form-control" />
                                         <input type="hidden" tabindex="5" name="discountLimit" id="discountLimit" class="form-control" />
                                     </div>
                                     <div class="col-sm-4">
-                                        Credit Limit : <span id="creditLimit"></span><br> 
+                                        Credit Limit : <span id="creditLimit"></span><br>
                                         Outstanding : <span id="cusOutstand"></span> <br>
                                         Available Limit : <span id="availableCreditLimit"></span>
                                     </div>
                                     <div class="col-sm-4">
-                                        Salesperson : <span id="newsalesperson"></span><br> 
+                                        Salesperson : <span id="newsalesperson"></span><br>
                                         Route : <span id="route"></span> <br>
-                                        
+
                                     </div>
                                 </div>
                                  <div class="form-group">
@@ -154,9 +159,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     </div>
                                 </div>
                                 <!-- <div class="form-group">
-                                    <label class="col-sm-4 control-label">Invoice Type</label>  
+                                    <label class="col-sm-4 control-label">Invoice Type</label>
                                     <div class="col-sm-7">
-                                        <select tabindex="7" class="form-control" id="invType"> 
+                                        <select tabindex="7" class="form-control" id="invType">
                                             <option value="1">General Invoice</option>
                                             <option value="2">Tax Invoice</option>
                                             <option value="3">Credit Invoice</option>
@@ -164,7 +169,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     </div>
                                 </div>  -->
                                 <!-- <div class="form-group">
-                                    <div class="col-sm-4"><input type="text" tabindex="8" class="form-control" required="required"  name="shippingLabel" id="shippingLabel"  placeholder="Shipping" value="Shipping"></div>  
+                                    <div class="col-sm-4"><input type="text" tabindex="8" class="form-control" required="required"  name="shippingLabel" id="shippingLabel"  placeholder="Shipping" value="Shipping"></div>
                                     <div class="col-sm-7">
                                      <input type="number" step="50" tabindex="8" onfocus="this.select();"  class="form-control" required="required"  name="shipping" id="shipping" placeholder="Shipping charges" value="0">
                                      <input type="hidden" tabindex="1" class="form-control" required="required"  name="soNo" id="soNo" placeholder="Transport charges">
@@ -175,16 +180,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         </select>
                                     </div>
                                 </div> -->
-                               <!--  
+                               <!--
                                <div class="form-group">
-                                        <label class="col-sm-4 control-label">Price Level</label>  
+                                        <label class="col-sm-4 control-label">Price Level</label>
                                         <div class="col-sm-6">
-                                            <select tabindex="7" class="form-control" id="priceLevel"> 
+                                            <select tabindex="7" class="form-control" id="priceLevel">
                                              <?php foreach ($plv as $pl) { ?>
                                             <option value="<?php echo $pl->PL_No; ?>" <?php if ($pl->PL_No == 1) {echo 'selected';}?>><?php echo $pl->PriceLevel; ?></option>
                                             <?php } ?></select>
                                         </div>
-                                    </div> 
+                                    </div>
                                     -->
                             </row>
 <!--                            </form>-->
@@ -202,7 +207,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!--                                          </span>-->
                                         </div><!-- /input-group -->
                                     <div class="form-group">
-                                        
+
                                     </div>
 <!--                                    <table style="font-size: 9px;">-->
 <!--                                    <tr>-->
@@ -262,7 +267,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                             </div>
                             <!-- <h4><b>Invoice Details</b></h4> -->
-                            
+
                         </div><span id="lastInvoice" class="pull-right"></span>
                     </div>
                     <div class="row">
@@ -291,7 +296,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div>
                                             <label for="itemCode" class="col-sm-4 control-label"><span class="required"></span></label>
                                             <div class="col-sm-8"><span id="productName" style="font-size: 10px;"></span>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -307,12 +312,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                                     <button class="btn btn-warning" id="addpro"><i class="fa fa-plus"></i></button>
                                                 </span>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                     <div id="lotPriceLable" >
                                         <div class="form-group">
-                                            <label class="col-sm-4 control-label">Loan Type</label>  
+                                            <label class="col-sm-4 control-label">Loan Type</label>
                                             <div class="col-sm-6">
                                                 <select class="form-control" disabled id="loanType">
                                                     <!--<option value="">-Select-</option>-->
@@ -320,7 +325,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-4 control-label">Loan Amount</label>  
+                                            <label class="col-sm-4 control-label">Loan Amount</label>
                                             <div class="col-sm-6">
                                                 <input type="number" step="10000" id="lotPrice" value="0" class="form-control">
                                             </div>
@@ -366,8 +371,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         <div class="form-group">
                                             <label for="sellingPrice" class="col-sm-4 control-label">Selling Price <span class="required">*</span></label>
                                             <div class="col-sm-5">
-                                                <input type="number"  tabindex="13"  min="0" step="1" class="form-control" required="required"  name="sellingPrice" id="sellingPrice" placeholder="Enter Selling Price" onfocus="this.select();" > 
-                                                
+                                                <input type="number"  tabindex="13"  min="0" step="1" class="form-control" required="required"  name="sellingPrice" id="sellingPrice" placeholder="Enter Selling Price" onfocus="this.select();" >
+
                                                 <input type="hidden" disabled class="form-control" required="required"  name="prdName" id="prdName" placeholder="Enter product Code">
                                                 <input type="hidden" class="form-control" required="required"  name="batchCode" id="batchCode">
                                                 <input type="hidden" class="form-control" required="required"  name="upc" id="upc">
@@ -379,7 +384,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                          <div class="form-group" style="display:none;">
                                             <label for="sellingPrice" class="col-sm-4 control-label">VAT Selling Price <span class="required"></span></label>
                                             <div class="col-sm-5">
-                                                
+
                                                 <input type="text" class="form-control" required="required"  name="proVatPrice" id="proVatPrice" >
                                             </div>
                                             <div class="col-sm-1"></div>
@@ -487,14 +492,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <a class="btn btn-warning"  tabindex="20"  id="dwnLink" href="<?php echo base_url("admin/grn/downloadBarCode")?>">Download Barcode</a>&nbsp; -->
                                 <button data-target="#modelPayment" type="button"  data-toggle="modal" class="btn btn-primary" id="cart-pay-button">
                                     <i class="fa fa-money"></i>
-                                    Save            
+                                    Save
                                 </button>&nbsp;
 
                                 <!-- <button id="loadBarCode" class="btn btn-info">Barcode Generate</button>&nbsp; -->
-                              <!--    <button  tabindex="19" id="saveItems" class="btn btn-success">Save</button>&nbsp;--><button id="btnPrint" link="#" class="btn btn-primary">Print</button>&nbsp; 
+                              <!--    <button  tabindex="19" id="saveItems" class="btn btn-success">Save</button>&nbsp;--><button id="btnPrint" link="#" class="btn btn-primary">Print</button>&nbsp;
                                  <button  tabindex="21" id="resetItems" class="btn btn-danger">Reset</button>&nbsp;
                                 <input type="hidden" name="action" id="action" value="<?php echo $action; ?>">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -522,8 +527,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="modal fade bs-print-modal-lg" id="modelInvoice" tabindex="-1" role="dialog" aria-hidden="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content"><div class="modal-body" >
-             <?php //invoice print 
-                    $this->load->view('admin/sales/sales_invoice_print.php',true); ?>  
+             <?php //invoice print
+                    $this->load->view('admin/sales/sales_invoice_print.php',true); ?>
             </div></div>
         </div>
     </div>
@@ -669,9 +674,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <input type="text" name="compayto" id="compayto"  class="form-control" placeholder="Commission Pay to" onfocus="this.select();" >
                                             <input type="hidden" name="compaytoid" id="compaytoid"  class="form-control" placeholder="Commission Pay to" onfocus="this.select();" >
                                         </div><br>
-                                        
+
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-11">
                                         <div class="input-group">If item receiver different from customer</div>
@@ -683,12 +688,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                             <span class="input-group-addon">NIC</span>
                                             <input type="text" name="receiver_nic" id="receiver_nic"  class="form-control" placeholder="Receiver Nic" onfocus="this.select();" minlength="10" maxlength="12" >
                                         </div><br>
-                                        
+
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
                             </form>
-                        </div> 
+                        </div>
                         <div class="row">
                             <div class="col-md-12"><div id='chequeData'><hr><h4>Cheque Details</h4>
                             <div class="col-md-4">
@@ -744,11 +749,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
     </div>
 
-      
+
 </div>
 <script>
-    
-    
+
+
     $('.prd_icheck').iCheck({
         checkboxClass: 'icheckbox_square-blue',
         radioClass: 'iradio_square-blue',
@@ -793,44 +798,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-     $('#route').on('change', function() {
-         var routeID = $(this).val();
-         if (routeID != "0") {
-
-             $.ajax({
-                 url: "<?php echo base_url(); ?>" + "admin/sales/findroutecustomer",
-                 method: 'POST',
-                 data: { routeID: routeID },
-                 dataType: 'json',
-                 success: function(response) {
-
-                     $('#customer').empty();
-                     $('#customer').append('<option value="0">-Select-</option>');
-
-                     $.each(response, function(index, customers) {
-                     console.log(customers);
-                     $('#customer').append('<option value="'+ customers.CusCode +'">'+ customers.CusName +'</option>');
-                 });
-                 },
-                 error: function(xhr, status, error) {
-                     console.error('Error fetching customer:', error);
-                 }
-             });
-         } else {
-             $('#customer').empty();
-             $('#customer').append('<option value="0">-Select-</option>');
-         }
-     });
+     //$('#route').on('change', function() {
+     //    var routeID = $(this).val();
+     //    if (routeID != "0") {
+     //
+     //        $.ajax({
+     //            url: "<?php //echo base_url(); ?>//" + "admin/sales/findroutecustomer",
+     //            method: 'POST',
+     //            data: { routeID: routeID },
+     //            dataType: 'json',
+     //            success: function(response) {
+     //
+     //                $('#customer').empty();
+     //                $('#customer').append('<option value="0">-Select-</option>');
+     //
+     //                $.each(response, function(index, customers) {
+     //                console.log(customers);
+     //                $('#customer').append('<option value="'+ customers.CusCode +'">'+ customers.CusName +'</option>');
+     //            });
+     //            },
+     //            error: function(xhr, status, error) {
+     //                console.error('Error fetching customer:', error);
+     //            }
+     //        });
+     //    } else {
+     //        $('#customer').empty();
+     //        $('#customer').append('<option value="0">-Select-</option>');
+     //    }
+     //});
 
 </script>
 
 <script type="text/javascript">
-    //    $('#customer').select2({
-    //         placeholder: "Select a customer",
-    //         allowClear: true,
-    //         minimumInputLength:1,
-    //         width: '100%'
-    //    });
+    $('#customer').select2({
+        placeholder: "Select a customer",
+        allowClear: true,
+        minimumInputLength:1,
+        width: '100%'
+    });
 </script>
 <!-- <style type="text/css">
     ul.ui-autocomplete {
