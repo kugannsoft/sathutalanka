@@ -47,19 +47,25 @@
                 </div>
                 <div class="form-group">
                     <label for="mobile">Mobile No</label>
-                    <input type="text"  class="form-control" name="mobile" id="mobile"  maxlength="12" 
-                    value="+94" required pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits." >
-                   
+                    <input type="tel" class="form-control" name="mobile" id="mobile"
+                           pattern="\+94\d{9}" maxlength="12"
+                           title="Please enter a valid mobile number starting with +94 and followed by 9 digits."
+                           value="+94" required>
                 </div>
+
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="office">Office No</label>
-                    <input type="text"  class="form-control" name="office" id="office" >
+                    <input type="tel"  class="form-control" name="office" id="office" pattern="\+94\d{9}" maxlength="12"
+                           title="Please enter a valid mobile number starting with +94 and followed by 9 digits."
+                           value="+94" required>
                 </div>
                 <div class="form-group">
                     <label for="fax">Fax No</label>
-                    <input type="text"  class="form-control" name="fax" id="fax" >
+                    <input type="tel"  class="form-control" name="fax" id="fax" pattern="\+94\d{9}" maxlength="12"
+                           title="Please enter a valid mobile number starting with +94 and followed by 9 digits."
+                           value="+94" required>
                 </div>
 
                 <div class="form-group">
@@ -101,4 +107,45 @@
             }
         });
     });
+
+//for mobile no
+        const mobileInput = document.getElementById('mobile');
+
+        mobileInput.addEventListener('input', function () {
+
+        if (!this.value.startsWith('+94')) {
+        this.value = '+94';
+    } else {
+
+        let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+        this.value = '+94' + digitsOnly.substring(0, 9);
+    }
+    });
+//for office no
+    const officeInput = document.getElementById('office');
+
+    officeInput.addEventListener('input', function () {
+
+        if (!this.value.startsWith('+94')) {
+            this.value = '+94';
+        } else {
+
+            let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+            this.value = '+94' + digitsOnly.substring(0, 9);
+        }
+    });
+//for fax
+    const faxInput = document.getElementById('fax');
+
+    faxInput.addEventListener('input', function () {
+
+        if (!this.value.startsWith('+94')) {
+            this.value = '+94';
+        } else {
+
+            let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+            this.value = '+94' + digitsOnly.substring(0, 9);
+        }
+    });
+
 </script>

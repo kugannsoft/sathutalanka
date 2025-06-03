@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="col-md-12">
                 <div class="box box-default">
                     <div class="box-body">
-                        <div class="row">
+
                             <form id="filterform">
                                 <div class="row">
                                 <div class="input-daterange input-group" id="datepicker">
@@ -102,7 +102,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <div class="col-md-1">
                                 <button onclick="printdiv()" class="btn btn-flat btn-default">Print</button>
                             </div>
-                                </div>
+
                         </div>
                     </div>
                 </div>

@@ -75,9 +75,12 @@
                     <label for="respectSign" >Salesperson</label>
                     <select class="form-control" name="salesperson" id="salesperson">
                         <option value="0">-Select-</option>
-                        <?php foreach ($emp AS $t) { ?>
-                            <option value="<?php echo $t->RepID ?>"><?php echo $t->RepName ?></option>
-                        <?php } ?>
+                        <?php foreach ($emp as $t): ?>
+                            <?php if ($t->IsActive == 1): ?>
+                                <option value="<?php echo $t->RepID ?>"><?php echo $t->RepName ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
                     </select>
                 </div></div>
             </div>
@@ -128,7 +131,7 @@
                         <div class="form-group">
                             <label for="mobileNo">Customer Mobile </label>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="mobileNo" id="mobileNo" placeholder="Enter customer mobile" maxlength="12" 
+                                <input type="tel" class="form-control" name="mobileNo" id="mobileNo" placeholder="Enter customer mobile" maxlength="12"
                                 value="+94" required pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
 
                             </div>
@@ -403,7 +406,7 @@ var proCodeDuplicate=0;
 
 $("#btnAddJob").prop("disabled",true);
 $("#btnAddEst").prop("disabled",true);
-    
+
 $("#cusName").blur(function(){
     cusNameDuplicate=0;
     var cusname=$(this).val();
@@ -584,7 +587,7 @@ $("input[name='Isvehicle']").click(function(){
             $.notify("Please enter balance Date", "warn");
         }else{
 		     $("#btnsave").prop("disabled",true);
-             
+
 		    $.ajax({
 		            url: "<?php echo base_url('admin/customer/savecustomer/') ?>",
 		            type: "POST",
@@ -983,5 +986,17 @@ $('#salesperson').on('change', function() {
             $('#route').append('<option value="0">-Select-</option>');
         }
 });
-    
+//Mobile No
+    const mobileNoInput = document.getElementById('mobileNo');
+
+    mobileNoInput.addEventListener('input', function () {
+
+        if (!this.value.startsWith('+94')) {
+            this.value = '+94';
+        } else {
+
+            let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+            this.value = '+94' + digitsOnly.substring(0, 9);
+        }
+    });
 </script>

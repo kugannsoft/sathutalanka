@@ -116,7 +116,10 @@ class Customer_model extends CI_Model {
         $q = $this->db->select('CusCode AS id,CusName AS text')->from('customer')->like('CusName', $query, 'after')->where('IsActive', 1)->where('CusCode!=', $cus)->get()->result();
         return json_encode($q);
     }
-    
+    public function loademployeejson($query) {
+        $q = $this->db->select('RepId AS id,RepName AS text')->from('salespersons')->like('RepName', $query, 'after')->where('IsActive',1)->get()->result();
+        return json_encode($q);
+    }
     public function loadmodelbymake($make) {
         $q = $this->db->select('model_id,model')->from('model')->where('makeid',$make)->get()->result();
         return json_encode($q);

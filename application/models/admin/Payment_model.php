@@ -264,7 +264,7 @@ class Payment_model extends CI_Model {
 
     public function loadsuppliersjson($query) {
      
-        $query1 =$this->db->select('SupCode,SupName')->like("CONCAT(' ',supplier.SupCode,supplier.SupName,supplier.MobileNo)", $query ,'left')->limit(50)->get('supplier');
+        $query1 =$this->db->select('SupCode,SupName')->like("CONCAT(' ',supplier.SupCode,supplier.SupName,supplier.MobileNo)", $query ,'left')->where('IsActive',1)->get('supplier');
        
         if ($query1->num_rows() > 0) {
             foreach ($query1->result_array() as $row) {

@@ -718,7 +718,7 @@
         }
 
         if(sub_department == 0){
-            $.notify("Please select the Sub department.", "warn");
+            $.notify("Please select the Sub Department.", "warn");
             return false;
         }
         $('#savepro').attr('disabled', true);

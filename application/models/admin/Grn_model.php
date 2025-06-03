@@ -13,7 +13,7 @@ class Grn_model extends CI_Model {
     }
 
     public function loadsupplierjson($query) {
-        $q = $this->db->select('SupCode AS id,SupName AS text')->from('supplier')->like('SupName', $query, 'after')->get()->result();
+        $q = $this->db->select('SupCode AS id,SupName AS text')->from('supplier')->like('SupName', $query, 'after')->where('IsActive',1)->get()->result();
         return json_encode($q);
     }
 
@@ -25,15 +25,16 @@ class Grn_model extends CI_Model {
                     ->where('product.Prd_Supplier', $supCode)
                     ->where('product.Prd_IsActive',1)
                     ->like("CONCAT(' ',product.ProductCode,product.Prd_Description,product.BarCode)", $query ,'left')
-                    ->limit(50)->get();
+                    ->get();
      
         }else{
             $query1 =$this->db->select('product.ProductCode,product.Prd_Description,productprice.ProductPrice')
                     ->from('product')
                     ->join('productprice', 'productprice.ProductCode = product.ProductCode', 'INNER')
+
                     ->where('product.Prd_IsActive',1)
                     ->like("CONCAT(' ',product.ProductCode,product.Prd_Description,product.BarCode)", $query ,'left')
-                    ->limit(50)->get();
+                    ->get();
         }
 
         if ($query1->num_rows() > 0) {

@@ -24,6 +24,7 @@ class Preferences_model extends CI_Model {
     }
 
 
+
     public function update_interfaces($table, $data)
     {
         $where = "id = 1";

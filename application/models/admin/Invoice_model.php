@@ -287,10 +287,10 @@ class Invoice_model extends CI_Model {
             }
 
             if ($returninvoice_typeArr[$i] == 1) {
-               
+
                 // Update price stock
                 $this->db->query("CALL SPT_UPDATE_PRICE_STOCK('$product_codeArr[$i]', '$totalGrnQty', '$price_levelArr[$i]', '$cost_priceArr[$i]', '$sell_priceArr[$i]', '$location')");
-        
+
                 // Update product stock
                 $this->db->query("CALL SPT_UPDATE_PRO_STOCK('$product_codeArr[$i]', '$totalGrnQty', 0, '$location')");
 
@@ -298,7 +298,7 @@ class Invoice_model extends CI_Model {
                 ->where('ProductCode', $product_codeArr[$i])
                 ->where('Location', $location)
                 ->update('productstock');
-       
+
 //                echo $this->db->last_query();
             }
 
@@ -309,8 +309,8 @@ class Invoice_model extends CI_Model {
                 ->where('Location', $location)
                 ->update('productstock');
 
-                
-   
+
+
             }
 
             if ($returninvoice_typeArr[$i] == 3) {
@@ -318,7 +318,7 @@ class Invoice_model extends CI_Model {
                 ->where('ProductCode', $product_codeArr[$i])
                 ->where('Location', $location)
                 ->update('productstock');
-   
+
             }
 
         }
@@ -366,7 +366,7 @@ class Invoice_model extends CI_Model {
                             'IsCancel'=>0);
 
                     //add credit invoice data
-                    //$this->db->insert('creditinvoicedetails',$invCredit);
+                    $this->db->insert('creditinvoicedetails',$invCredit);
                 } else {
                      $invCredit = array(
                             'AppNo' => '1',
@@ -382,7 +382,7 @@ class Invoice_model extends CI_Model {
                             'IsCloseInvoice'=>0,
                             'IsCancel'=>0);
 
-                    // $this->db->insert('creditinvoicedetails',$invCredit);
+                     $this->db->insert('creditinvoicedetails',$invCredit);
 
                     //$this->db->insert('supplieroustanding', array('SupCode'=> $supCode,'SupTotalInvAmount'=> $totalNet,'SupOustandingAmount'=>$totalNet,'SupSettlementAmount'=>0,'OpenOustanding'=>0,'OustandingDueAmount'=>0));
                 }
