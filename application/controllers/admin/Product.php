@@ -194,7 +194,7 @@ class Product extends Admin_Controller {
         echo json_encode($arr);
         die;
     }
-    
+
     public function getProductByIdforSTO() {
         $dep = $_POST['proCode'];
         $pl = $_POST['prlevel'];

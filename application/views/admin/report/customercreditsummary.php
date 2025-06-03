@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="col-md-12">
                 <div class="box box-default">
                     <div class="box-body">
-                        <div class="row">
+
                             <form id="filterform">
                                 <div class="row">
                                 <div class="col-md-3">
@@ -62,7 +62,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 </div>
                             </form>
 
-                        </div>
+
                     </div>
                 </div>
             </div>

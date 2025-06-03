@@ -103,11 +103,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         format: 'yyyy-mm-dd'
     });
 
-   
 
     $('#filterform').submit(function (e) {
         e.preventDefault();
-     
+
         $.ajax({
             type: 'POST',
             url: "<?php echo base_url(); ?>" + "admin/report/recivedreturnreport1",
@@ -115,44 +114,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             success: function(response) {
                 if (typeof response === 'string') {
                     response = JSON.parse(response);
-                    console.log(response);
-                   
-                    if (Array.isArray(response)) {
-                        $('#saletable tbody').empty();
-                        if (response.length > 0) {
-                        
-                            $.each(response, function(index, item) {
-                             
-                                $('#saletable tbody').append(`
-                                
-                                    <tr>
-                                        <td>${item.created_at || 'N/A'}</td>
-                                        <td>${item.SalesProductName || 'N/A'}</td>
-                                        <td>${item.TotalSalesQty || '0'}</td>
-                                        <td>${item.TotalReceivedQty || '0'}</td>
-                                        <td>${(item.TotalSalesQty - item.TotalReceivedQty) || '0'}</td>
-                                                                         
-                                    </tr>
-                                `);
-                              
-                            });
+                }
 
-                        }else{
+                console.log(response);
+
+                if (Array.isArray(response)) {
+                    $('#saletable tbody').empty();
+
+                    if (response.length > 0) {
+                        $.each(response, function(index, item) {
                             $('#saletable tbody').append(`
-                                <tr>
-                                    <td colspan="3" class="text-center">No data found for the selected date range.</td>
-                                </tr>
-                            `);
-                        }
+                            <tr>
+                                <td>${item.SalesInvDate || 'N/A'}</td>
+                                <td>${item.SalesProductName || 'N/A'}</td>
+                                <td>${item.SalesQty || '0'}</td>
+                                <td>${item.SalesReturnQty || '0'}</td>
+                                <td>${(item.SalesQty - item.SalesReturnQty) || '0'}</td>
+                            </tr>
+                        `);
+                        });
+                    } else {
+                        $('#saletable tbody').append(`
+                        <tr>
+                            <td colspan="5" class="text-center">No data found for the selected date range.</td>
+                        </tr>
+                    `);
                     }
                 }
-              
-                
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.error('Error:', textStatus, errorThrown);
             }
-        })
+        });
     });
 
  

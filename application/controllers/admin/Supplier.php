@@ -34,6 +34,7 @@ class Supplier extends Admin_Controller {
         $this->datatables->select('supplier.*,supplieroustanding.SupOustandingAmount');
         $this->datatables->from('supplier');
         $this->datatables->join('supplieroustanding','supplieroustanding.SupCode=supplier.SupCode');
+//        $this->datatables->where('IsActive',1);
         echo $this->datatables->generate();
         die();
     }

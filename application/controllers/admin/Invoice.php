@@ -253,16 +253,15 @@ class Invoice extends Admin_Controller {
         $newsalesperson = $_POST['newsalesperson'];
         $location = $_POST['location'];
         $supplier =$_POST['cuscode'];
-//        echo json_encode($supplier); die;
         $isComplete=0;
         $totalGrnDiscount = $_POST['totalGrnDiscount'];
         $totalProDiscount = $_POST['totalProDiscount'];
+
         if($total_amount>0){
             $totalDisPerent = ($totalGrnDiscount*100)/($total_amount-$totalProDiscount);
         }else{
             $totalDisPerent = 0;
         }
-
 
         $product_codeArr = json_decode($_POST['product_code']);
         $unitArr = json_decode($_POST['unit_type']);
@@ -270,6 +269,7 @@ class Invoice extends Admin_Controller {
         $serial_noArr = json_decode($_POST['serial_no']);
         $qtyArr = json_decode($_POST['qty']);
         $sell_priceArr = json_decode($_POST['unit_price']);
+
         $cost_priceArr = json_decode($_POST['cost_price']);
         $pro_discountArr = json_decode($_POST['pro_discount']);
         $pro_discount_precentArr = json_decode($_POST['discount_precent']);

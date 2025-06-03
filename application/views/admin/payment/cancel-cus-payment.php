@@ -23,6 +23,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-5">
+
+                                <div class="form-group">
+                                    <label for="additional" class="col-sm-5 control-label">Sales Person</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" required="required"  name="newsalesperson" id="newsalesperson" placeholder="sales person">
+                                            <option value="">-Select a sales person-</option>
+                                            <?php foreach ($salesperson as $trns) { ?>
+                                                <option value="<?php echo $trns->RepID; ?>"
+                                                    <?php echo ($trns->RepID == $selectedSalespersonID) ? 'selected' : ''; ?>>
+                                                    <?php echo $trns->RepName; ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="route" class="col-sm-5 control-label">Routes</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" name="route" id="route" required>
+                                            <option value="">-Select a Route-</option>
+                                            <?php if (!empty($routes)) {
+                                                foreach ($routes as $route) { ?>
+                                                    <option value="<?php echo $route->id; ?>"
+                                                        <?php echo (isset($selectedRoute) && $route->id == $selectedRoute) ? 'selected' : ''; ?>>
+                                                        <?php echo $route->name; ?>
+                                                    </option>
+                                                <?php }
+                                            } ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+
                                 <div class="form-group">
                                     <label for="customer" class="col-sm-5 control-label">Customer <span class="required">*</span></label>
                                     <div class="col-sm-6">
@@ -163,6 +197,74 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     }
 </style>
 <script type="text/javascript">
+
+    $('#customer').select2({
+        placeholder: "Select a customer",
+        allowClear: true,
+        minimumInputLength:1,
+        width: '100%'
+    });
+
+
+
+    $('#newsalesperson').on('change', function() {
+        var salespersonID = $(this).val();
+        if (salespersonID != "0") {
+
+            $.ajax({
+                url: "<?php echo base_url(); ?>" + "admin/customer/findemploeeroute",
+                method: 'POST',
+                data: { salespersonID: salespersonID },
+                dataType: 'json',
+                success: function(response) {
+
+                    $('#route').empty();
+                    $('#route').append('<option value="0">-Select-</option>');
+
+                    $.each(response, function(index, routeID) {
+                        console.log(routeID);
+                        $('#route').append('<option value="'+ routeID.route_id +'">'+ routeID.route_name +'</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching routes:', error);
+                }
+            });
+        } else {
+            $('#route').empty();
+            $('#route').append('<option value="0">-Select-</option>');
+        }
+    });
+
+    //    $('#route').on('change', function() {
+    //    var routeID = $(this).val();
+    //    if (routeID != "0") {
+    //
+    //    $.ajax({
+    //    url: "<?php //echo base_url(); ?>//" + "admin/sales/findroutecustomer",
+    //    method: 'POST',
+    //    data: { routeID: routeID },
+    //    dataType: 'json',
+    //    success: function(response) {
+    //
+    //    $('#customer').empty();
+    //    $('#customer').append('<option value="0">-Select-</option>');
+    //
+    //    $.each(response, function(index, customers) {
+    //    console.log(customers);
+    //    $('#customer').append('<option value="'+ customers.CusCode +'">'+ customers.CusName +'</option>');
+    //});
+    //},
+    //    error: function(xhr, status, error) {
+    //    console.error('Error fetching customer:', error);
+    //}
+    //});
+    //} else {
+    //    $('#customer').empty();
+    //    $('#customer').append('<option value="0">-Select-</option>');
+    //}
+    //});
+
 
 
 </script>
