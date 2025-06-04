@@ -981,6 +981,20 @@ class Payment extends Admin_Controller {
         die;
     }
 
+//    public function getSuppliersDataById() {
+//        $supCode = $_POST['supCode'];
+//        $arr['sup_data'] = $this->db->select('supplier.*,supplieroustanding.*')->from('supplier')
+//            ->where('supplier.SupCode', $supCode)
+//            ->join('supplieroustanding', 'supplier.SupCode = supplieroustanding.SupCode')
+//            ->get()->row();
+//        $arr['credit_data'] =$this->db->select('creditgrndetails.*,goodsreceivenotehed.*')->from('goodsreceivenotehed')
+//            ->where('goodsreceivenotehed.GRN_SupCode', $supCode)
+//            ->where('goodsreceivenotehed.GRN_IsCancel', 0)
+//            ->join('creditgrndetails','goodsreceivenotehed.GRN_No = creditgrndetails.GRNNo ')->get()->result();
+//        echo json_encode($arr);
+//        die;
+//    }
+
     public function getActiveSupPayment() {
 
         if (isset($_GET['name_startsWith'])) {

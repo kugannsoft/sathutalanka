@@ -154,7 +154,7 @@
                             <label for="mobileNo">Work Phone</label>
                             <div class="input-group">
                                 <input type="text"  class="form-control" value="<?php echo $cusdata->WorkNo; ?>" name="workPhone" id="workPhone" placeholder="Enter Work Phone " maxlength="12" 
-                                value="+94" pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
+                                value="+94"  title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
                             </div>
                         </div>
                     </div>
@@ -183,7 +183,7 @@
                             <label for="mobileNo">Contact Phone</label>
                             <div class="input-group">
                                 <input type="text"  class="form-control" name="contactPhone"  value="<?php echo $cusdata->ContactNo; ?>" id="contactPhone" placeholder="Enter Work Phone " maxlength="12" 
-                                value="+94" required pattern="\+94\d{9}" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
+                                value="+94" title="Please enter a valid mobile number starting with +94 and followed by 9 digits.">
                             </div>
                         </div>
                     </div>
@@ -648,4 +648,58 @@ $('#salesperson').on('change', function() {
             $('#route').append('<option value="0">-Select-</option>');
         }
 });
+
+
+const mobileNoInput = document.getElementById('mobileNo');
+
+mobileNoInput.addEventListener('input', function () {
+
+    if (!this.value.startsWith('+94')) {
+        this.value = '+94';
+    } else {
+
+        let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+        this.value = '+94' + digitsOnly.substring(0, 9);
+    }
+});
+const phoneNoInput = document.getElementById('phoneNo');
+
+phoneNoInput.addEventListener('input', function () {
+
+    if (!this.value.startsWith('+94')) {
+        this.value = '+94';
+    } else {
+
+        let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+        this.value = '+94' + digitsOnly.substring(0, 9);
+    }
+});
+
+const workPhoneInput = document.getElementById('workPhone');
+
+workPhoneInput.addEventListener('input', function () {
+
+    if (!this.value.startsWith('+94')) {
+        this.value = '+94';
+    } else {
+
+        let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+        this.value = '+94' + digitsOnly.substring(0, 9);
+    }
+});
+
+const contactPhoneInput = document.getElementById('contactPhone');
+
+contactPhoneInput.addEventListener('input', function () {
+
+    if (!this.value.startsWith('+94')) {
+        this.value = '+94';
+    } else {
+
+        let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+        this.value = '+94' + digitsOnly.substring(0, 9);
+    }
+});
+
+
 </script>

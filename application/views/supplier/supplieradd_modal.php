@@ -57,15 +57,15 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="office">Office No</label>
-                    <input type="tel"  class="form-control" name="office" id="office" pattern="\+94\d{9}" maxlength="12"
+                    <input type="tel"  class="form-control" name="office" id="office"  maxlength="12"
                            title="Please enter a valid mobile number starting with +94 and followed by 9 digits."
-                           value="+94" required>
+                           value="+94" >
                 </div>
                 <div class="form-group">
                     <label for="fax">Fax No</label>
-                    <input type="tel"  class="form-control" name="fax" id="fax" pattern="\+94\d{9}" maxlength="12"
+                    <input type="tel"  class="form-control" name="fax" id="fax"  maxlength="12"
                            title="Please enter a valid mobile number starting with +94 and followed by 9 digits."
-                           value="+94" required>
+                           value="+94" >
                 </div>
 
                 <div class="form-group">
