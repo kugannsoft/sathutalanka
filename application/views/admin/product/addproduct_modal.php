@@ -95,6 +95,9 @@
                         <div class="input-group">
                             <select  class="form-control" name="sub_department"   id="sub_department">
                             <option value="0">-Select a sub department-</option>
+                                <?php foreach ($allsubdepartment AS $subdep) { ?>
+                                    <option value="<?php echo $subdep->SubDepCode ?>"><?php echo $subdep->Description ?></option>
+                                <?php } ?>
                         </select>
                         <div class="input-group-btn">
                                 <button class="btn btn-warning" id="addSubDep"><i class="fa fa-plus"></i></button>
