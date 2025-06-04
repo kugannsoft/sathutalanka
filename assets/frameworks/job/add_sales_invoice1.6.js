@@ -2,7 +2,7 @@ $(document).ready(function() {
 
     var supcode;
     var customProCode='100001';
-    
+
     $("#addNewCustomer").click(function(){
         var customer_search = $("#customer").val();
         var url = encodeURI('../customer/loadmodal_customeradd/'+customer_search);
@@ -17,11 +17,11 @@ $(document).ready(function() {
                 $('#vehiclemodal').modal({show: true, backdrop: 'static',keyboard: false});
             });
         }else{
-             $.notify("Please select a customer.", "warning");
+            $.notify("Please select a customer.", "warning");
         }
     });
 
-    
+
     //customer load according salesperson and route
     $('#route').on('change', function() {
         var routeID = $(this).val();
@@ -40,7 +40,7 @@ $(document).ready(function() {
             success: function(data) {
                 console.log("Customer Data:", data);
                 $("#customer").html('<option value="">Select Customer</option>');
-                
+
                 // Populate the dropdown with customers
                 if (data.length > 0) {
                     $.each(data, function(index, customer) {
@@ -61,16 +61,16 @@ $(document).ready(function() {
             }
         });
     });
-    
-    
+
+
     $('#customer').on('change', function() {
-        var cusCode = $(this).val(); 
+        var cusCode = $(this).val();
         console.log("Customer Code selected:", cusCode);
         if (cusCode) {
             clearCustomerData();
-            $("#tbl_payment tbody").html(""); 
+            $("#tbl_payment tbody").html("");
             loadCustomerDatabyId(cusCode);
-            getVehiclesByCustomer(cusCode); 
+            getVehiclesByCustomer(cusCode);
         }
     });
 
@@ -161,7 +161,7 @@ $(document).ready(function() {
     var priceLevel = 1;
     var supcode = 0;
     var isSup = 0;
-    
+
     var sinput = 0;
     var fsinput = 0;
     var maxSerialQty = 0;
@@ -215,7 +215,7 @@ $(document).ready(function() {
         autoFocus: true,
         minLength: 0,
         select: function(event, ui) {
-            advance_payment_no = ui.item.value;            
+            advance_payment_no = ui.item.value;
             $("#advance_amount").val(0);
             $("#madvance").html(0);
             loadAdvanceData(advance_payment_no);
@@ -246,7 +246,7 @@ $(document).ready(function() {
         autoFocus: true,
         minLength: 0,
         select: function(event, ui) {
-            return_payment_no = ui.item.value; 
+            return_payment_no = ui.item.value;
             $("#return_amount").val(0);
             $("#mareturn").html(0);
             loadReturnData(return_payment_no);
@@ -418,9 +418,9 @@ $(document).ready(function() {
 
     if(poNo!=''){
         $("#tbl_item tbody").html("");
-            total_due_amount = 0;
-            total_over_payment = 0;
-            loadSAlesInvoice(poNo);
+        total_due_amount = 0;
+        total_over_payment = 0;
+        loadSAlesInvoice(poNo);
     }
 
     $("#grn_no").autocomplete({
@@ -445,13 +445,13 @@ $(document).ready(function() {
         autoFocus: true,
         minLength: 0,
         select: function(event, ui) {
-            poNo = ui.item.value;            
+            poNo = ui.item.value;
             $("#tbl_item tbody").html("");
             total_due_amount = 0;
             total_over_payment = 0;
             loadSAlesInvoice(poNo);
         }
-    });    
+    });
 
     $("#soNo").autocomplete({
         source: function(request, response) {
@@ -476,7 +476,7 @@ $(document).ready(function() {
         minLength: 0,
         select: function(event, ui) {
             soNo = ui.item.value;
-            
+
             // $("#tbl_item tbody").html("");
             // total_due_amount = 0;
             // total_over_payment = 0;/
@@ -484,7 +484,7 @@ $(document).ready(function() {
         }
     });
 
-     function loadAdvanceData(pay_no){
+    function loadAdvanceData(pay_no){
         $.ajax({
             type: "POST",
             url: baseUrl+'/salesinvoice/getadvancepaymentbyid',
@@ -514,7 +514,7 @@ $(document).ready(function() {
             data: { payid: pay_no },
             success: function(data) {
                 var resultData = JSON.parse(data);
-                
+
                 if (resultData.return){
                     return_amount = parseFloat(resultData.return.ReturnAmount);
                     return_payment_no = resultData.return.ReturnNo;
@@ -569,7 +569,7 @@ $(document).ready(function() {
             var barCode = $(this).val();
             price_level = 1;
             //var loc = $("#location").val();
-                // url: baseUrl+"/Product/getProductByBarCodeforSTO",
+            // url: baseUrl+"/Product/getProductByBarCodeforSTO",
 //            alert(price_level);
             $.ajax({
                 type: "post",
@@ -579,14 +579,14 @@ $(document).ready(function() {
 
                     var resultData = JSON.parse(json);
                     if (resultData) {
-                         if(resultData.serial){
-                        $.each(resultData.serial, function(key, value) {
-                            var serialNoArrIndex2 = $.inArray(value, stockSerialnoArr);
-                            if (serialNoArrIndex2 < 0) {
-                                stockSerialnoArr.push(value);
-                            }
-                        });
-                    }
+                        if(resultData.serial){
+                            $.each(resultData.serial, function(key, value) {
+                                var serialNoArrIndex2 = $.inArray(value, stockSerialnoArr);
+                                if (serialNoArrIndex2 < 0) {
+                                    stockSerialnoArr.push(value);
+                                }
+                            });
+                        }
 
                         if(resultData.product){
                             itemCode = resultData.product.ProductCode;
@@ -600,11 +600,11 @@ $(document).ready(function() {
 
                         $("#proStock").html('');
 
-                         if(resultData.pro_stock){
+                        if(resultData.pro_stock){
                             $("#proStock").html(resultData.pro_stock);
-                         }else{
+                        }else{
                             $("#proStock").html(0);
-                         }
+                        }
 //                        itemCode = resultData.ProductCode;
 //                        loadProModal(resultData.Prd_Description, resultData.ProductCode, resultData.ProductPrice, resultData.Prd_CostPrice, resultData.SerialNo, resultData.IsSerial, resultData.IsFreeIssue, resultData.IsOpenPrice, resultData.IsMultiPrice, resultData.Prd_UPC, resultData.WarrantyPeriod);
 //                        $('html, body').animate({scrollTop: $('#cart-table-body').offset().top}, 'slow');
@@ -619,7 +619,7 @@ $(document).ready(function() {
                     $.notify("Error while request.", "warning");
                 }
             });
-           e.preventDefault();
+            e.preventDefault();
         }
     });
 
@@ -627,30 +627,30 @@ $(document).ready(function() {
         itemCode=customProCode;
         setCustomProduct();
         e.preventDefault();
-        
+
     });
 
     function setCustomProduct(){
-         var mname = $("#itemCode").val();
+        var mname = $("#itemCode").val();
         $("#prdName").val(mname);
         $("#productName").html(mname);
-        
+
         $("#qty").val(1);
         $("#qty").focus();
         $("#itemCode").val(itemCode);
         // $("#sellingPrice").val(0);
         // $("#orgSellPrice").val(0);
         // $("#proVatPrice").val(0);
-        
+
 
         $("#unitcost").val(1);
         $("#isSerial").val(0);
         $("#upc").val(1);
         $("#upm").html(1);
 
-            $("#dv_SN").hide();
-        
-            $("#dv_FreeQty").hide();
+        $("#dv_SN").hide();
+
+        $("#dv_FreeQty").hide();
     }
 
 //isSup =  $("[name='suppliercheck']:checked").val();
@@ -659,7 +659,7 @@ $(document).ready(function() {
         isSup = $("input[name='suppliercheck']:checked").val();
 
         if (!isSup) {
-           isSup = 0;
+            isSup = 0;
         }
     });
 
@@ -706,7 +706,7 @@ $(document).ready(function() {
                     var resultData = JSON.parse(json);
 //                    alert(resultData.serial);
                     if (resultData) {
-                         if(resultData.serial){
+                        if(resultData.serial){
                             $.each(resultData.serial, function(key, value) {
                                 var serialNoArrIndex1 = $.inArray(value, stockSerialnoArr);
 
@@ -716,25 +716,25 @@ $(document).ready(function() {
                             });
                         }
 
-                         if(resultData.product){
-                        autoSerial = resultData.product.IsRawMaterial;
-                        $("#discountLimit").val(resultData.product.DiscountLimit);
-                        // loadVATNBT(isJobVat,isJobNbt,isJobNbtRatio);
-                         $("#productStock").html('/ Available Stock = ' + resultData.productstock.Stock);
-                         stockavalibal = resultData.productstock.Stock;
+                        if(resultData.product){
+                            autoSerial = resultData.product.IsRawMaterial;
+                            $("#discountLimit").val(resultData.product.DiscountLimit);
+                            // loadVATNBT(isJobVat,isJobNbt,isJobNbtRatio);
+                            $("#productStock").html('/ Available Stock = ' + resultData.productstock.Stock);
+                            stockavalibal = resultData.productstock.Stock;
 
-                        loadVATNBT(resultData.product.IsTax,resultData.product.IsNbt,resultData.product.NbtRatio);
-                        loadProModal(resultData.product.Prd_Description, resultData.product.ProductCode, resultData.product.ProductPrice, resultData.product.Prd_CostPrice, 0, resultData.product.IsSerial, resultData.product.IsFreeIssue, resultData.product.IsOpenPrice, resultData.product.IsMultiPrice, resultData.product.Prd_UPC, resultData.product.WarrantyPeriod, resultData.product.IsRawMaterial,resultData.product.UOM_Name, resultData.product.ProductVatPrice);
-                        //  loadProModal(resultData.Prd_Description, resultData.ProductCode, resultData.ProductPrice, resultData.Prd_CostPrice, 0, resultData.IsSerial, resultData.IsFreeIssue, resultData.IsOpenPrice, resultData.IsMultiPrice, resultData.Prd_UPC, resultData.WarrantyPeriod);
-                    }
+                            loadVATNBT(resultData.product.IsTax,resultData.product.IsNbt,resultData.product.NbtRatio);
+                            loadProModal(resultData.product.Prd_Description, resultData.product.ProductCode, resultData.product.ProductPrice, resultData.product.Prd_CostPrice, 0, resultData.product.IsSerial, resultData.product.IsFreeIssue, resultData.product.IsOpenPrice, resultData.product.IsMultiPrice, resultData.product.Prd_UPC, resultData.product.WarrantyPeriod, resultData.product.IsRawMaterial,resultData.product.UOM_Name, resultData.product.ProductVatPrice);
+                            //  loadProModal(resultData.Prd_Description, resultData.ProductCode, resultData.ProductPrice, resultData.Prd_CostPrice, 0, resultData.IsSerial, resultData.IsFreeIssue, resultData.IsOpenPrice, resultData.IsMultiPrice, resultData.Prd_UPC, resultData.WarrantyPeriod);
+                        }
 
-                    $("#proStock").html('');
+                        $("#proStock").html('');
 
-                    if(resultData.pro_stock){
-                        $("#proStock").html(resultData.pro_stock);
-                     }else{
-                        $("#proStock").html(0);
-                     }
+                        if(resultData.pro_stock){
+                            $("#proStock").html(resultData.pro_stock);
+                        }else{
+                            $("#proStock").html(0);
+                        }
 
                     } else {
 
@@ -746,79 +746,79 @@ $(document).ready(function() {
                 },
                 error: function() {
                     $.notify("Error while request.", "warning");
-                 }
+                }
             });
         }
     });
 
-   // VAT
-var isProVat =0;
-var isProNbt =0;
-var proNbtRatio =0;
-var isTotalVat =0;
-var isTotalNbt =0;
-var totalNbtRatio =0;
-var vatRate=parseFloat($("#vatRate").val());
-var nbtRate=parseFloat($("#nbtRate").val());
-var nbtRatio=parseFloat($("#nbtRatioRate").val());
+    // VAT
+    var isProVat =0;
+    var isProNbt =0;
+    var proNbtRatio =0;
+    var isTotalVat =0;
+    var isTotalNbt =0;
+    var totalNbtRatio =0;
+    var vatRate=parseFloat($("#vatRate").val());
+    var nbtRate=parseFloat($("#nbtRate").val());
+    var nbtRatio=parseFloat($("#nbtRatioRate").val());
 
-$("input[name='isProVat']").on('ifChanged', function(event){
-     isProVat = $("input[name='isProVat']:checked").val();
+    $("input[name='isProVat']").on('ifChanged', function(event){
+        isProVat = $("input[name='isProVat']:checked").val();
 
-    if(isProVat){
-        $("#isTotalVat").prop('disabled',true);
-        $("#isTotalNbt").prop('disabled',true);
-        isTotalVat=0;isTotalNbt=0;totalVat=0;
-    }else{
-        $("#isTotalVat").prop('disabled',false);
-        $("#isTotalNbt").prop('disabled',false);
-       isProVat=0;
-    }
-});
+        if(isProVat){
+            $("#isTotalVat").prop('disabled',true);
+            $("#isTotalNbt").prop('disabled',true);
+            isTotalVat=0;isTotalNbt=0;totalVat=0;
+        }else{
+            $("#isTotalVat").prop('disabled',false);
+            $("#isTotalNbt").prop('disabled',false);
+            isProVat=0;
+        }
+    });
 
-$("input[name='isProNbt']").on('ifChanged', function(event){
+    $("input[name='isProNbt']").on('ifChanged', function(event){
 
-     isProNbt = $("input[name='isProNbt']:checked").val();
-    if(isProNbt){
-        $("#isTotalVat").prop('disabled',true);
-        $("#isTotalNbt").prop('disabled',true);
-         isTotalVat=0;isTotalNbt=0;totalNbt=0;
-    }else{
-        $("#isTotalVat").prop('disabled',false);
-        $("#isTotalNbt").prop('disabled',false);
-        isProNbt=0;
-    }
-});
+        isProNbt = $("input[name='isProNbt']:checked").val();
+        if(isProNbt){
+            $("#isTotalVat").prop('disabled',true);
+            $("#isTotalNbt").prop('disabled',true);
+            isTotalVat=0;isTotalNbt=0;totalNbt=0;
+        }else{
+            $("#isTotalVat").prop('disabled',false);
+            $("#isTotalNbt").prop('disabled',false);
+            isProNbt=0;
+        }
+    });
 
-$("input[name='isTotalVat']").on('ifChanged', function(event){
-     isTotalVat = $("input[name='isTotalVat']:checked").val();
+    $("input[name='isTotalVat']").on('ifChanged', function(event){
+        isTotalVat = $("input[name='isTotalVat']:checked").val();
 
-    if(isTotalVat){
-        $("#isProVat").prop('disabled',true);
-        $("#isProNbt").prop('disabled',true);
-        isProVat=0;isProNbt=0;totalProVAT=0;
-    }else{
-        $("#isProVat").prop('disabled',false);
-        $("#isProNbt").prop('disabled',false);
-        isTotalVat=0;
-    }
-});
+        if(isTotalVat){
+            $("#isProVat").prop('disabled',true);
+            $("#isProNbt").prop('disabled',true);
+            isProVat=0;isProNbt=0;totalProVAT=0;
+        }else{
+            $("#isProVat").prop('disabled',false);
+            $("#isProNbt").prop('disabled',false);
+            isTotalVat=0;
+        }
+    });
 
-$("input[name='isTotalNbt']").on('ifChanged', function(event){
-     isTotalNbt = $("input[name='isTotalNbt']:checked").val();
+    $("input[name='isTotalNbt']").on('ifChanged', function(event){
+        isTotalNbt = $("input[name='isTotalNbt']:checked").val();
 
-    if(isTotalNbt){
-        $("#isProVat").prop('disabled',true);
-        $("#isProNbt").prop('disabled',true);
-         isProVat=0;isProNbt=0;totalProNBT=0;
-    }else{
-        $("#isProVat").prop('disabled',false);
-        $("#isProNbt").prop('disabled',false);
-        isTotalNbt=0;
-    }
-});
+        if(isTotalNbt){
+            $("#isProVat").prop('disabled',true);
+            $("#isProNbt").prop('disabled',true);
+            isProVat=0;isProNbt=0;totalProNBT=0;
+        }else{
+            $("#isProVat").prop('disabled',false);
+            $("#isProNbt").prop('disabled',false);
+            isTotalNbt=0;
+        }
+    });
 
-function loadVATNBT(vat,nbt,nratio){
+    function loadVATNBT(vat,nbt,nratio){
         if(vat==1 && isTotalVat!=1 && isTotalNbt!=1){
             $("input[name='isProVat']").iCheck('check');
         }else{
@@ -847,10 +847,10 @@ function loadVATNBT(vat,nbt,nratio){
         }
     }
 
-var totalNbt=0;
-var totalVat=0;
-var proVat=0;
-var proNbt=0;
+    var totalNbt=0;
+    var totalVat=0;
+    var proVat=0;
+    var proNbt=0;
 
     function addProductVat(amount,vat,nbt,nratio){
         if(vat==1 && isTotalVat!=1 && isTotalNbt!=1){
@@ -891,18 +891,18 @@ var proNbt=0;
 //load model
     function loadProModal(mname, mcode, msellPrice, mcostPrice, mserial, misSerial, misFree, isOP, isMP, upc, waranty, isautoSerial,upm,vatSell) {
 //        clearProModal();
-$("#productName").html('');
+        $("#productName").html('');
         $("#qty").focus();
-      console.log(misSerial,isautoSerial,mserial);
+        console.log(misSerial,isautoSerial,mserial);
         if (misSerial == 1 || isautoSerial == 1) {
-           $("#serialNo").val(mserial);
-           $("#serialNoCheck").val(mserial);
-           $("#qty").val(1);
-           $("#qty").attr('disabled', true);
+            $("#serialNo").val(mserial);
+            $("#serialNoCheck").val(mserial);
+            $("#qty").val(1);
+            $("#qty").attr('disabled', true);
             $("#dv_SN").show();
             $("#qty").focus();
         } else {
-           $("#mSerial").val('');
+            $("#mSerial").val('');
             $("#qty").attr('disabled', false);
             $("#dv_SN").hide();
         }
@@ -1003,28 +1003,28 @@ $("#productName").html('');
             return false;
         }
     });
-var shipping=0;
-$("#shipping").keyup(function() {
-    shipping = parseFloat($(this).val());
+    var shipping=0;
+    $("#shipping").keyup(function() {
+        shipping = parseFloat($(this).val());
 
-    if(isNaN(shipping) == true){
-        shipping=0;
-    }else{
-        shipping=shipping;
-    }
-    cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
-});
+        if(isNaN(shipping) == true){
+            shipping=0;
+        }else{
+            shipping=shipping;
+        }
+        cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
+    });
 
-$("#shipping").blur(function() {
-    shipping = parseFloat($(this).val());
+    $("#shipping").blur(function() {
+        shipping = parseFloat($(this).val());
 
-    if(isNaN(shipping) == true){
-        shipping=0;
-    }else{
-        shipping=shipping;
-    }
-    cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
-});
+        if(isNaN(shipping) == true){
+            shipping=0;
+        }else{
+            shipping=shipping;
+        }
+        cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
+    });
 
     $("#proVatPrice").keyup(function() {
         vatSellingPrice = parseFloat($(this).val());
@@ -1053,7 +1053,7 @@ $("#shipping").blur(function() {
         }else{
             sellingPrice=Math.round((vatSellingPrice));
         }
-        
+
         // sellingPrice=Math.round((vatSellingPrice-newproVat-newproNbt));
         $("#sellingPrice").val(sellingPrice);
         if (costPrice > sellingPrice && isSellZero !=1) {
@@ -1126,7 +1126,7 @@ $("#shipping").blur(function() {
     //     }else{
     //         newproVat=addProductVat((sellingPrice),1,1,newNbtRatio);
     //     }
-        
+
     //     vatSellingPrice=sellingPrice+newproVat+newproNbt;
     //     $("#proVatPrice").val(vatSellingPrice);
     //     if (costPrice > sellingPrice && isSellZero !=1) {
@@ -1178,8 +1178,8 @@ $("#shipping").blur(function() {
         }
     });
 
-var isSellZero =0;
-var vatSellingPrice = 0;
+    var isSellZero =0;
+    var vatSellingPrice = 0;
     function add_products() {
         var serialQty = 0;
         sellingPrice = parseFloat($("#sellingPrice").val());
@@ -1188,7 +1188,7 @@ var vatSellingPrice = 0;
         var prdName = $("#prdName").val();
         var serialNo = $("#serialNo").val();
         var is_serail = $("#isSerial").val();
-         priceLevel = $("#priceLevel option:selected").val();
+        priceLevel = $("#priceLevel option:selected").val();
         var qty = parseFloat($("#qty").val());
         var upc = parseFloat($("#upc").val());
         costPrice = parseFloat($("#unitcost").val());
@@ -1201,9 +1201,9 @@ var vatSellingPrice = 0;
         var warrantytype = $("#warrantytype option:selected").html();
         // vatSellingPrice = parseFloat($("#proVatPrice").val());
         var serialNoCheck = $("#serialNoCheck").val();
-      
 
-        var discountLimit = $("#discountLimit").val().replace(/,/g, ''); 
+
+        var discountLimit = $("#discountLimit").val().replace(/,/g, '');
         discountLimit = parseFloat(discountLimit) || 0;
         vatSellingPrice = sellingPrice;
 
@@ -1269,7 +1269,7 @@ var vatSellingPrice = 0;
             return false;
         } else if ((sellingPrice == '' || sellingPrice == 0 || isNaN(sellingPrice) == true) && isSellZero==0) {
             $.notify("Selling price can not be 0.", "warning");
-           return false;
+            return false;
         } else if (costPrice == '' || costPrice == 0 || isNaN(costPrice) == true) {
             $.notify("Cost price can not be 0.", "warning");
             return false;
@@ -1285,13 +1285,13 @@ var vatSellingPrice = 0;
         }else if ((qty + freeQty) > stockavalibal) {
             $.notify("Stock not available for the combined quantity and free quantity.", "warning");
             return false;
-        
+
         } else if (is_serail == 1 && serialNoCheck == '') {
             $.notify("Please Enter valid Serial No", "warning");
             return false;
-        // } else if (warrantytype == '' || warrantytype == 0) {
-        //     $.notify("Please Select Warranty Type", "warning");
-        //     return false;
+            // } else if (warrantytype == '' || warrantytype == 0) {
+            //     $.notify("Please Select Warranty Type", "warning");
+            //     return false;
         } else {
             if (is_serail == 0) {
                 if ((itemCodeArrIndex < 0)) {
@@ -1302,7 +1302,7 @@ var vatSellingPrice = 0;
                         totalNet2 = (vatSellingPrice * qty);
                         sellingPrice = vatSellingPrice;
                     }
-                    
+
                     if(itemCode!=customProCode){
                         itemcode.push(itemCode);
                     }
@@ -1350,7 +1350,7 @@ var vatSellingPrice = 0;
                             clear_gem_data();
                         } else {
                             $("#serialNo").val('');
-                           $("#serialNo").focus();
+                            $("#serialNo").focus();
                         }
                     }
                     setProductTable();
@@ -1361,93 +1361,93 @@ var vatSellingPrice = 0;
             }
             else if (is_serail == 1) {
 
-console.log('Serial',serialNo,stockSerialnoArr);
+                console.log('Serial',serialNo,stockSerialnoArr);
                 var serialNoArrIndex = $.inArray(serialNo, serialnoarr);
                 var StockserialNoArrIndex = $.inArray(serialNo, stockSerialnoArr);
-                    if (serialNo == '' || serialNo == 0) {
-                        $.notify("Serial Number can not be empty.", "warning");
-                        $("#serialNo").focus();
-                        return false;
+                if (serialNo == '' || serialNo == 0) {
+                    $.notify("Serial Number can not be empty.", "warning");
+                    $("#serialNo").focus();
+                    return false;
+                }
+                else if (((serialNoArrIndex >= 0 && is_serail == 1))) {
+                    $.notify("Serial Number already exists.", "warning");
+                    $("#serialNo").val('');
+                    return false;
+                } else if (((StockserialNoArrIndex < 0 && is_serail == 1))) {
+                    $.notify("Serial Number product not in  stock..", "warning");
+                    $("#serialNo").val('');
+                    return false;
+                }
+                else if (((itemCodeArrIndex >= 0 && is_serail == 1) || (itemCodeArrIndex < 0 && is_serail == 1))) {
+
+                    if(isNewVat==1 || isTotalVat==1){
+                        totalNet2 = (sellingPrice * qty);
+                    }else{
+                        totalNet2 = (vatSellingPrice * qty);
+                        sellingPrice = vatSellingPrice;
                     }
-                    else if (((serialNoArrIndex >= 0 && is_serail == 1))) {
-                        $.notify("Serial Number already exists.", "warning");
-                        $("#serialNo").val('');
-                        return false;
-                    } else if (((StockserialNoArrIndex < 0 && is_serail == 1))) {
-                        $.notify("Serial Number product not in  stock..", "warning");
-                        $("#serialNo").val('');
-                        return false;
+                    itemcode.push(itemCode);
+                    serialnoarr.push(serialNo);
+                    total_amount2 += totalNet2;
+                    totalCost += (costPrice * qty);
+
+                    $("#totalWithOutDiscount").val(total_amount2);
+
+                    calculateProductWiseDiscount(totalNet2, discount, discount_type, discount_precent, discount_amount, total_amount2, sellingPrice,discountLimit);
+
+                    proVat=addProductVat((totalNet),isNewVat,isNewNbt,newNbtRatio);
+                    proNbt=addProductNbt((totalNet),isNewVat,isNewNbt,newNbtRatio) ;
+
+                    totalNet +=proVat ;
+                    totalNet +=proNbt ;
+                    totalProVAT+=parseFloat(proVat);
+                    totalProNBT+=parseFloat(proNbt);
+
+                    cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
+                    i++;
+                    if (is_serail == 1) {
+                        serialQty--;
+                        $("#serialQty").val(serialQty);
                     }
-                    else if (((itemCodeArrIndex >= 0 && is_serail == 1) || (itemCodeArrIndex < 0 && is_serail == 1))) {
 
-                        if(isNewVat==1 || isTotalVat==1){
-                            totalNet2 = (sellingPrice * qty);
-                        }else{
-                            totalNet2 = (vatSellingPrice * qty);
-                            sellingPrice = vatSellingPrice;
-                        }
-                        itemcode.push(itemCode);
-                        serialnoarr.push(serialNo);
-                        total_amount2 += totalNet2;
-                        totalCost += (costPrice * qty);
+                    $("#tbl_item tbody").append("<tr serial_batch='"+serialBatch+"' ri=" + i + " id=" + i + "  isZero='"+isSellZero+"'  proCode='" + itemCode + "' uc='" + unit + "' qty='" + qty + "' unit_price='" + sellingPrice + "'  vatunit_price='" + vatSellingPrice + "'   org_unit_price='" + orgSellingPrice + "'  upc='" + upc + "' caseCost='" + casecost + "' isSerial='" + is_serail + "' serial='" + serialNo + "' discount_percent='" + discount_precent + "' cPrice='" + costPrice + "' pL='" + priceLevel + "' fQ='" + freeQty + "' nonDisTotalNet='" + totalNet2 + "' netAmount='" + totalNet + "' proDiscount='" + product_discount + "' proName='" + prdName + "'  isvat='"+isNewVat+"' isnbt='"+isNewNbt+"' nbtRatio='"+newNbtRatio+"' proVat='"+proVat+"' proNbt='"+proNbt+"' salesPerson='"+salesperson+"' isbatchSerial='1' warranty='"+warranty+"'>" +
+                        "<td class='text-center'>" + i + "</td>" +
+                        "<td class='text-left'>" + itemCode + "</td>" +
+                        "<td>" + prdName + "</td><td>" + unit + "</td>" +
+                        "<td class='qty" + i + "'>" + accounting.formatNumber(qty) + "</td>" +
+                        "<td class='text-center'>" + accounting.formatNumber(freeQty) + "</td>" +
+                        "<td class='text-right'>" + accounting.formatNumber(sellingPrice) + "</td>" +
+                        "<td class='text-center'>" + discount_precent + "</td>" +
+                        "<td class='text-right' >" + accounting.formatMoney(totalNet) + "</td>" +
+                        "<td>" + serialNo + "</td>" +
+                        //"<td>" + warrantytype + "</td>" +
+                        // "<td>"+salespname+"</td>" +
+                        "<td class='rem" + i + "'><a href='#' class='remove btn btn-xs btn-danger'><i class='fa fa-remove'></i></a></td>" +
+                        "</tr>");
 
-                        $("#totalWithOutDiscount").val(total_amount2);
-
-                        calculateProductWiseDiscount(totalNet2, discount, discount_type, discount_precent, discount_amount, total_amount2, sellingPrice,discountLimit);
-
-                        proVat=addProductVat((totalNet),isNewVat,isNewNbt,newNbtRatio);
-                        proNbt=addProductNbt((totalNet),isNewVat,isNewNbt,newNbtRatio) ;
-
-                        totalNet +=proVat ;
-                        totalNet +=proNbt ;
-                        totalProVAT+=parseFloat(proVat);
-                        totalProNBT+=parseFloat(proNbt);
-
-                        cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
-                        i++;
-                        if (is_serail == 1) {
-                            serialQty--;
-                            $("#serialQty").val(serialQty);
-                        }
-
-                        $("#tbl_item tbody").append("<tr serial_batch='"+serialBatch+"' ri=" + i + " id=" + i + "  isZero='"+isSellZero+"'  proCode='" + itemCode + "' uc='" + unit + "' qty='" + qty + "' unit_price='" + sellingPrice + "'  vatunit_price='" + vatSellingPrice + "'   org_unit_price='" + orgSellingPrice + "'  upc='" + upc + "' caseCost='" + casecost + "' isSerial='" + is_serail + "' serial='" + serialNo + "' discount_percent='" + discount_precent + "' cPrice='" + costPrice + "' pL='" + priceLevel + "' fQ='" + freeQty + "' nonDisTotalNet='" + totalNet2 + "' netAmount='" + totalNet + "' proDiscount='" + product_discount + "' proName='" + prdName + "'  isvat='"+isNewVat+"' isnbt='"+isNewNbt+"' nbtRatio='"+newNbtRatio+"' proVat='"+proVat+"' proNbt='"+proNbt+"' salesPerson='"+salesperson+"' isbatchSerial='1' warranty='"+warranty+"'>" +
-                            "<td class='text-center'>" + i + "</td>" +
-                            "<td class='text-left'>" + itemCode + "</td>" +
-                            "<td>" + prdName + "</td><td>" + unit + "</td>" +
-                            "<td class='qty" + i + "'>" + accounting.formatNumber(qty) + "</td>" +
-                            "<td class='text-center'>" + accounting.formatNumber(freeQty) + "</td>" +
-                            "<td class='text-right'>" + accounting.formatNumber(sellingPrice) + "</td>" +
-                            "<td class='text-center'>" + discount_precent + "</td>" +
-                            "<td class='text-right' >" + accounting.formatMoney(totalNet) + "</td>" +
-                            "<td>" + serialNo + "</td>" +
-                            //"<td>" + warrantytype + "</td>" +
-                            // "<td>"+salespname+"</td>" +
-                            "<td class='rem" + i + "'><a href='#' class='remove btn btn-xs btn-danger'><i class='fa fa-remove'></i></a></td>" +
-                            "</tr>");
-
-                        if (is_serail != 1) {
-                            clear_gem_data();
-                        } else {
-                            if (serialQty == 0) {
-                                clear_gem_data();
-                                serialBatch++;
-                            } else {
-                                $("#serialNo").val('');
-                                $("#serialNo").focus();
-                            }
-                        }
-                        setProductTable();
+                    if (is_serail != 1) {
+                        clear_gem_data();
                     } else {
-                        $.notify("Item already exists.", "warning");
-                        $("#serialNo").val('');
-                        return false;
+                        if (serialQty == 0) {
+                            clear_gem_data();
+                            serialBatch++;
+                        } else {
+                            $("#serialNo").val('');
+                            $("#serialNo").focus();
+                        }
                     }
+                    setProductTable();
+                } else {
+                    $.notify("Item already exists.", "warning");
+                    $("#serialNo").val('');
+                    return false;
+                }
             }
         }
     }
 
 // edit grid
-     $("#tbl_item tbody").on('click', '.edit', function() {
+    $("#tbl_item tbody").on('click', '.edit', function() {
         var proname = $(this).parent().parent().attr('proName')
         var proCode = $(this).parent().parent().attr('proCode');
         var isZero = $(this).parent().parent().attr('isZero');
@@ -1499,7 +1499,7 @@ console.log('Serial',serialNo,stockSerialnoArr);
             $("#salesperson").val(salesPerson);
             $("#warrantytype").val(warranty);
             // $("#disPercent").val(disPrecent);
-            
+
             $("input[name='isZero']:checked").val();
 
             if(itemCode!=customProCode){
@@ -1582,11 +1582,11 @@ console.log('Serial',serialNo,stockSerialnoArr);
             var removeSerial = $(this).parent().parent().attr("serial");
 
             if(itemcode!=customProCode){
-               itemcode = jQuery.grep(itemcode, function(value) {
+                itemcode = jQuery.grep(itemcode, function(value) {
                     return value != removeItem;
                 });
             }
-            
+
             serialnoarr = jQuery.grep(serialnoarr, function(value) {
                 return value != removeSerial;
             });
@@ -1600,11 +1600,11 @@ console.log('Serial',serialNo,stockSerialnoArr);
         }
     });
 
-var action=0;
+    var action=0;
 
 //===============save products ==============================
     $("#saveItems").click(function() {
-        
+
         setProductTable();
         var rowCount = $('#tbl_item tr').length;
         var product_code = new Array();
@@ -1669,7 +1669,7 @@ var action=0;
         var bankacc    = $("#bank_acc").val();
         var shippingLabel  = $("#shippingLabel").val();
         var newsalesperson = $("#newsalesperson").html();
-      
+
         var route = $("#route").html();
 
         var com_amount = $('#com_amount').val();
@@ -1678,18 +1678,18 @@ var action=0;
         var receiver_nic = $('#receiver_nic').val();
         var refferNo = $('#refferNo').val();
         var mchange =  $("#mchange1").val();
-        
-         var remark = $("#remark").val();
+
+        var remark = $("#remark").val();
         action = $("#action").val();
         var nbtRatioRate=$("#nbtRatioRate").val();
         var cusCode =$('#customer').val();
-      
+
         // var availableCreditLimit = $("#vididateCreditLimit").val().replace(/,/g, '');
         // availableCreditLimit = parseFloat(availableCreditLimit) || 0
-       
+
         // if (totalNetAmount > availableCreditLimit) {
         //     $.notify("Total amount cannot exceed Credit Limit.");
-            
+
         //     return;
         // }
         $('#tbl_item tbody tr').each(function(rowIndex, element) {
@@ -1744,8 +1744,8 @@ var action=0;
         var salePersonArr = JSON.stringify(salePerson);
         var warrantytypeArr = JSON.stringify(warrantytype);
 
-       
-         var r = confirm("Do you want to save this invoice.?");
+
+        var r = confirm("Do you want to save this invoice.?");
         if (r == true) {
             if (cusCode == '' || cusCode == '0') {
                 $.notify("Please select a customer.", "warning");
@@ -1754,8 +1754,8 @@ var action=0;
                 $.notify("Please add products.", "warning");
                 return false;
             }  else if(totalNetAmount>(cashAmount+cardAmount+chequeAmount+advance_amount+bank_amount+creditAmount+return_amount)){
-                 $.notify("Please enter payments.", "warning");
-                  $("#saveItems").attr('disabled', true);
+                $.notify("Please enter payments.", "warning");
+                $("#saveItems").attr('disabled', true);
                 return false;
             }else {
                 maxSerialQty += parseFloat($("#maxSerial").val());
@@ -1767,7 +1767,7 @@ var action=0;
                         discount_precent: sendDiscount_precent, pro_discount: sendPro_discount, total_net: sendTotal_net, unit_type: sendUnit_type, price_level: sendPrice_level, upc: sendUpc,
                         case_cost: sendCaseCost, freeQty: sendFree_qty, cost_price: sendCost_price, pro_total: sendPro_total, isSerial: sendIsSerial, proName: sendPro_name,isVat:isVatArr,isNbt:isNbtArr,nbtRatio:nbtRatioArr,proVat:proVatArr,proNbt:proNbtArr,salePerson:salePersonArr, total_cost: totalCost, totalProDiscount: totalProWiseDiscount, totalGrnDiscount: totalGrnDiscount,
                         grnDate: grnDate, invUser: invUser, total_amount: total_amount, total_discount: total_discount, total_net_amount: totalNetAmount, location: location, supcode: supcode, maxSerialQty: maxSerialQty, serialAutoGen: serialAutoGen,nbtRatioRate: nbtRatioRate,isTotalVat:isTotalVat,isTotalNbt:isTotalNbt,totalVat:finalVat,totalNbt:finalNbt,bankacc:bankacc,bank_amount:bank_amount,cashAmount:cashAmount,creditAmount:creditAmount,chequeAmount:chequeAmount,cardAmount:cardAmount,advance_amount:advance_amount,advance_pay_no:advance_payment_no,return_payment_no:return_payment_no,return_amount:return_amount,
-                    ccAmount: ccAmountArr, ccRef: ccRefArr, ccType: ccTypeArr, ccName: ccNameArr,chequeNo:chequeNo,bank: bank, chequeReference: chequeReference, chequeRecivedDate: chequeReciveDate, chequeDate: chequeDate, mchange: mchange, warrantytype:warrantytypeArr},
+                        ccAmount: ccAmountArr, ccRef: ccRefArr, ccType: ccTypeArr, ccName: ccNameArr,chequeNo:chequeNo,bank: bank, chequeReference: chequeReference, chequeRecivedDate: chequeReciveDate, chequeDate: chequeDate, mchange: mchange, warrantytype:warrantytypeArr},
                     success: function(data) {
                         var resultData = JSON.parse(data);
                         var feedback = resultData['fb'];
@@ -1776,18 +1776,18 @@ var action=0;
                         if (feedback != 1) {
                             $.notify("Sales Invoice not saved successfully.", "warning");
                             $("#saveItems").attr('disabled', true);
-                           
-                           // loadSAlesInvoice(invNumber);
+
+                            // loadSAlesInvoice(invNumber);
                             return false;
                         } else {
-                            
+
                             $("#cart-pay-button").prop('disabled',true);
-                             var invlink = baseUrl+"/Salesinvoice/view_sales_invoice/"+Base64.encode(invNumber);
+                            var invlink = baseUrl+"/Salesinvoice/view_sales_invoice/"+Base64.encode(invNumber);
                             $("#lastInvoice").html("<a href='"+invlink+"'>Last Invoice - "+invNumber+"</a>");
                             $("#btnPrint").attr('link',invlink);
                             $.notify("Sales Invoice saved successfully.", "warning");
                             $("#tbl_item tbody").html('');
-                             loadSAlesInvoice(invNumber);
+                            loadSAlesInvoice(invNumber);
                             $("input[name=suppliercheck][value='1']").prop('checked', false);
                             $("#invoicenumber").val("");
                             $("#supplier").val("");
@@ -1797,7 +1797,7 @@ var action=0;
                             // $("#grnremark").val('');
                             $("#saveItems").attr('disabled', true);
                             $("#modelPayment").modal('hide');
-                            
+
                             $("#cart-pay-button").prop('disabled',true);
                             serialAutoGen = 0;
                             total_amount = 0;
@@ -1812,7 +1812,7 @@ var action=0;
                             totalProWiseDiscount = 0;
                             totalGrnDiscount = 0;
                             shipping = 0;
-                             cashAmount=0;
+                            cashAmount=0;
                             chequeAmount=0;cardAmount=0;
                             return_payment_no=0;returnAmount=0;
                             bank_amount=0;
@@ -1833,7 +1833,7 @@ var action=0;
                             $('#totalprodiscount').html('0.00');
                             $('#dueAmount2').html('0.00');
                             $("#loadBarCode").hide();
-                            
+
                         }
                     }
                 });
@@ -1858,15 +1858,15 @@ var action=0;
     var total_expenses = 0;
 
     //================Common Functions====================//
-var finalVat=0;
-var finalNbt=0;
+    var finalVat=0;
+    var finalNbt=0;
 
     //===========calculate total summery======================================
     function cal_total(total, discount, extra, downPay, downPayInt, qurPayInt, totalInt, totalExtra) {
 
         var total_net2 = parseFloat(total) - parseFloat(discount);
 
-     
+
         totalVat=addTotalVat(total_net2,isTotalVat,isTotalNbt,nbtRatio);
         totalNbt=addTotalNbt(total_net2,isTotalVat,isTotalNbt,nbtRatio);
         finalAmount = parseFloat(total_net2+totalVat+totalNbt+totalProVAT+totalProNBT+shipping);
@@ -1884,7 +1884,7 @@ var finalNbt=0;
         $('#mnetpay').html(accounting.formatMoney(finalAmount));
         $('#mvat').html(accounting.formatMoney(totalVat+totalProVAT));
         $('#mnbt').html(accounting.formatMoney(totalNbt+totalProNBT));
-        
+
         var coPayment = $('#advance_amount').val();
 
         if (coPayment != 0) {
@@ -1903,9 +1903,9 @@ var finalNbt=0;
                 $("#mchange").css({"color": "green", "font-size": "150%"});
 
             }
-         }
-        
-        
+        }
+
+
         total_discount = discount;
         total_amount  = total;
         total_amount2  = total;
@@ -1916,25 +1916,17 @@ var finalNbt=0;
 
     //===============calculate product wise discount================================
 
-    function calculateProductWiseDiscount(totalNet3, discount, discount_type, disPercent, disAmount, total_amount4, sellingPrice,discountLimit) {
-           
-        //product wise discount 
+    function calculateProductWiseDiscount(totalNet3, discount, discount_type, disPercent, disAmount, total_amount4, sellingPrice) {
+
+        //product wise discount
         if (discount_type == 1) {
             if (discount == 1) {
                 //discount by percent
                 product_discount = totalNet3 * (disPercent / 100);
-                if(product_discount > discountLimit){
-                    $.notify("Product Discount Over the Discount Limit", "warning");
-                    return false;
-                }
                 disAmount = 0;
             } else if (discount == 2) {
                 //discount by amount
                 product_discount = disAmount * totalNet3 / sellingPrice;
-                if(product_discount > discountLimit){
-                    $.notify("Product Discount Over the Discount Limit", "warning");
-                    return false;
-                }
                 disPercent = product_discount * 100 / totalNet3;
             }
 
@@ -1947,7 +1939,7 @@ var finalNbt=0;
         }
 
         totalProWiseDiscount += parseFloat(product_discount);
-       
+
         total_discount = totalProWiseDiscount + parseFloat(totalGrnDiscount);
         total_amount += totalNet3;
 
@@ -1964,7 +1956,7 @@ var finalNbt=0;
     //=============calculate total item wise discount================================
 
     function calculateTotalItemWiseDiscount(discount, discount_type, disPercent, disAmount, total_amount4) {
-        //product wise discount 
+        //product wise discount
         if (discount_type == 1) {
             product_discount = 0;
         } else if (discount_type == 2) {
@@ -2088,7 +2080,7 @@ var finalNbt=0;
         vatSellingPrice=0;
         isSellZero=0;
         $("#itemCode").focus();
-        
+
     }
 
     function deleteImg(imgid) {
@@ -2104,31 +2096,31 @@ var finalNbt=0;
         });
     }
 
-$('.supplier_icheck').iCheck({
-    checkboxClass: 'icheckbox_square-green',
-    radioClass: 'iradio_square-blue',
-    increaseArea: '50%' // optional
-});
+    $('.supplier_icheck').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '50%' // optional
+    });
 
 
-$("#cart-pay-button").click(function(){
-    
-    var before_advance_amount = $("#before_advance_amount").val();
-    console.log('asasasas',parseFloat(total_amount),parseFloat(before_advance_amount));
-    if (parseFloat(total_amount) < parseFloat(before_advance_amount)) {
+    $("#cart-pay-button").click(function(){
 
-        $("#cash_amount").prop('disabled',true);
-        $("#saveItems").prop('disabled',false);
+        var before_advance_amount = $("#before_advance_amount").val();
+        console.log('asasasas',parseFloat(total_amount),parseFloat(before_advance_amount));
+        if (parseFloat(total_amount) < parseFloat(before_advance_amount)) {
+
+            $("#cash_amount").prop('disabled',true);
+            $("#saveItems").prop('disabled',false);
+        }
+        $("#saveItems").prop('disabled',true);
+        $("#cash_amount").focus();
+    });
+
+    function strPad(input, length, string, code) {
+        string = string || '0';
+        input = input + '';
+        return input.length >= length ? code + input : code + (new Array(length - input.length + 1).join(string)) + input;
     }
-    $("#saveItems").prop('disabled',true);
-    $("#cash_amount").focus();
-});
-
-function strPad(input, length, string, code) {
-    string = string || '0';
-    input = input + '';
-    return input.length >= length ? code + input : code + (new Array(length - input.length + 1).join(string)) + input;
-}
 
     // load grid data
     function loadSalesInvoiceDatatoGrid(resultData) {
@@ -2161,20 +2153,20 @@ function strPad(input, length, string, code) {
             $("#salesorder").val(resultData.si_hed.SalesOrderNo);
             $("#grnDate").val(resultData.si_hed.SalesDate);
             $("#shipping").val(resultData.si_hed.SalesShipping);
-             $("#receiver_name").val(resultData.si_hed.SalesReceiver);
-              $("#receiver_nic").val(resultData.si_hed.SalesRecNic);
-              $("#com_amount").val(resultData.si_hed.SalesCommsion);
-              $("#compayto").val(resultData.si_hed.SalesComCus);
-               $("#remark").val(resultData.si_hed.salesInvRemark);
-               $("#route").val(resultData.si_hed.RouteId);
+            $("#receiver_name").val(resultData.si_hed.SalesReceiver);
+            $("#receiver_nic").val(resultData.si_hed.SalesRecNic);
+            $("#com_amount").val(resultData.si_hed.SalesCommsion);
+            $("#compayto").val(resultData.si_hed.SalesComCus);
+            $("#remark").val(resultData.si_hed.salesInvRemark);
+            $("#route").val(resultData.si_hed.RouteId);
 
             if(resultData.si_hed.SalesShippingLabel==null){
                 $("#shippingLabel").val('Shipping');
             }else{
-                
-                 $("#shippingLabel").val(resultData.si_hed.SalesShippingLabel);
+
+                $("#shippingLabel").val(resultData.si_hed.SalesShippingLabel);
             }
-            
+
             $("#newsalesperson").val(resultData.si_hed.SalesPerson);
             shipping=parseFloat(resultData.si_hed.SalesShipping);
             loadCustomerDatabyId(resultData.si_hed.SalesCustomer);
@@ -2185,7 +2177,7 @@ function strPad(input, length, string, code) {
                 if(resultData.si_dtl[i].SalesProductCode!=customProCode){
                     itemcode.push(resultData.si_dtl[i].SalesProductCode);
                 }
-                
+
                 serialnoarr.push(resultData.si_dtl[i].SalesProductCode);
 
                 $("#tbl_item tbody").append("<tr ri=" + i + " id=" + i + " proCode='" + resultData.si_dtl[i].SalesProductCode + "' uc='" + resultData.si_dtl[i].SalesCaseOrUnit + "' qty='" + resultData.si_dtl[i].SalesQty + "' vatunit_price='" + resultData.si_dtl[i].SalesUnitPrice + "'  org_unit_price='" + resultData.si_dtl[i].SalesUnitPrice + "' unit_price='" + resultData.si_dtl[i].SalesUnitPrice + "' upc='" + resultData.si_dtl[i].SalesUnitPerCase + "' caseCost='" + (resultData.si_dtl[i].SalesCostPrice*resultData.si_dtl[i].SalesQty) + "' isSerial='" + resultData.si_dtl[i].SalesSerialNo + "' serial='" + resultData.si_dtl[i].SalesSerialNo + "' discount_percent='" + resultData.si_dtl[i].SalesDisPercentage + "' cPrice='" + resultData.si_dtl[i].SalesCostPrice + "' pL='" + resultData.si_dtl[i].SalesPriceLevel + "' fQ='" + resultData.si_dtl[i].SalesFreeQty + "' nonDisTotalNet='" + resultData.si_dtl[i].SalesTotalAmount + "' netAmount='" + resultData.si_dtl[i].SalesInvNetAmount + "' proDiscount='" + resultData.si_dtl[i].SalesDisValue + "' proName='" + resultData.si_dtl[i].SalesProductName  + "'   isvat='"+resultData.si_dtl[i].SalesIsVat+"' isnbt='"+resultData.si_dtl[i].SalesIsNbt+"' nbtRatio='"+resultData.si_dtl[i].SalesNbtRatio+"' proVat='"+resultData.si_dtl[i].SalesVatAmount+"' proNbt='"+resultData.si_dtl[i].SalesNbtAmount+"'  salesPerson='"+resultData.si_dtl[i].SalesPerson+"' warranty='"+resultData.si_dtl[i].WarrantyMonthNew+"'>" +
@@ -2204,7 +2196,7 @@ function strPad(input, length, string, code) {
                     "<td><i class='glyphicon glyphicon-edit edit btn btn-info btn-xs'></i></td><td class='rem" + i + "'><a href='#' class='remove btn btn-xs btn-danger'><i class='fa fa-remove'></i></a></td></tr>");
                 totalProWiseDiscount += parseFloat(resultData.si_dtl[i].SalesDisValue);
             }
-        
+
             // $("#totalprodiscount").html(accounting.formatMoney(totalProWiseDiscount));
             $("#regNo").val((resultData.si_hed.SalesVehicle));
             $("#netgrnamount").html(accounting.formatMoney(resultData.si_hed.SalesNetAmount));
@@ -2239,8 +2231,8 @@ function strPad(input, length, string, code) {
         $("#lblPoNo").html(resultData.si_hed.SalesInvNo);
 
         if(resultData.si_hed.SalesInvType==1){
-           $("#taxHead").hide();
-           $("#invHead").show();
+            $("#taxHead").hide();
+            $("#invHead").show();
             $("#lblInvType").html('Invoice');
             $("#vatno").hide();
         }else if(resultData.si_hed.SalesInvType==2){
@@ -2294,29 +2286,29 @@ function strPad(input, length, string, code) {
             $("#rowCheque").hide();
         }
 
-         if(resultData.si_hed.SalesDisAmount>0){
+        if(resultData.si_hed.SalesDisAmount>0){
             $("#rowDiscount").show();
-         }else{
+        }else{
             $("#rowDiscount").hide();
-         }
+        }
 
-         if(resultData.si_hed.SalesVatAmount>0){
+        if(resultData.si_hed.SalesVatAmount>0){
             $("#rowVat").show();
-         }else{
+        }else{
             $("#rowVat").hide();
-         }
+        }
 
-         if(resultData.si_hed.SalesNbtAmount>0){
+        if(resultData.si_hed.SalesNbtAmount>0){
             $("#rowNbt").show();
-         }else{
+        }else{
             $("#rowNbt").hide();
-         }
+        }
 
-         if(resultData.si_hed.SalesDisAmount>0 || resultData.si_hed.SalesNbtAmount>0 || resultData.si_hed.SalesVatAmount>0){
+        if(resultData.si_hed.SalesDisAmount>0 || resultData.si_hed.SalesNbtAmount>0 || resultData.si_hed.SalesVatAmount>0){
             $("#rowNet").show();
-         }else{
+        }else{
             $("#rowNet").hide();
-         }
+        }
 
         $("#tbl_po_data tbody").html('');
         if(resultData.si_dtl){
@@ -2336,10 +2328,10 @@ function strPad(input, length, string, code) {
 // }
         }
 
-         if(resultData.si_dtl_arr){
+        if(resultData.si_dtl_arr){
 
             $.each(resultData.si_dtl_arr, function(key, value) {
-                //general invoice 
+                //general invoice
 
                 if(resultData.si_hed.SalesInvType==1){
                     var i=0;
@@ -2357,7 +2349,7 @@ function strPad(input, length, string, code) {
                             //noramal product
                             $("#tbl_po_data tbody").append("<tr><td style='padding: 3px;'>" + value[i].SalesQty + "</td><td style='padding: 3px;'>" + value[i].SalesProductName + "<br>"+value[i].SalesSerialNo+"</td><td style='text-align:right;padding: 3px;'>" + value[i].WarrantyMonth+ "  Month(s) </td><td style='text-align:right;padding: 3px;'>" + accounting.formatMoney(value[i].SalesUnitPrice) + "</td><td style='text-align:right;padding: 3px;'>" + accounting.formatMoney(value[i].SalesInvNetAmount) + "</td></tr>");
                             i++;
-                        }      
+                        }
                     }
 
                     $("#rowNbt").hide();
@@ -2379,14 +2371,14 @@ function strPad(input, length, string, code) {
                             }
 
                             $("#tbl_po_data tbody").append("<tr><td style='padding: 3px;'>" +value[0].SalesQty*value.length + "</td><td style='padding: 3px;'>" + value[0].SalesProductName + "<br>"+serial_no+"</td><td style='text-align:right;padding: 3px;'>" + value[0].WarrantyMonth+ "  Month(s) </td><td style='text-align:right;padding: 3px;'>" + value[0].SalesUnitPrice+ "</td><td style='text-align:right;padding: 3px;'>" + accounting.formatMoney(parseFloat(value[0].SalesTotalAmount)*value.length) + "</td></tr>");
-                        i+=value.length;
+                            i+=value.length;
 
                         }else{
 
                             //noramal product
                             $("#tbl_po_data tbody").append("<tr><td style='padding: 3px;'>" + value[i].SalesQty + "</td><td style='padding: 3px;'>" + value[i].SalesProductName + "<br>"+value[i].SalesSerialNo+"</td><td style='text-align:right;padding: 3px;'>" + value[i].WarrantyMonth+ " Month(s) </td><td style='text-align:right;padding: 3px;'>" + value[i].SalesUnitPrice+ "</td><td style='text-align:right;padding: 3px;'>" + accounting.formatMoney(value[i].SalesTotalAmount) + "</td></tr>");
                             i++;
-                       }      
+                        }
                     }
                 }
             });
@@ -2397,14 +2389,14 @@ function strPad(input, length, string, code) {
     }
 
     // print invoice
-     $("#btnPrint").click(function() {
+    $("#btnPrint").click(function() {
         // $('#printArea').focus().print();
         // var divContents = $("#printArea").html();
         var link = $(this).attr('link');
         window.location=link;
     });
 
-     function setGridandLabelData(data) {
+    function setGridandLabelData(data) {
         if (data.cus_data) {
             cusCode = data.cus_data.CusCode;
             outstanding = data.cus_data.CusOustandingAmount;
@@ -2436,13 +2428,13 @@ function strPad(input, length, string, code) {
         }
     }
 
-var cusCode=0;
-cusCode =$("#customer").val();
+    var cusCode=0;
+    cusCode =$("#customer").val();
 
-if(cusCode!=''){
-    loadCustomerDatabyId(cusCode);
-    getVehiclesByCustomer(cusCode);
-}
+    if(cusCode!=''){
+        loadCustomerDatabyId(cusCode);
+        getVehiclesByCustomer(cusCode);
+    }
 
 //customer autoload
 //     $("#customer").autocomplete({
@@ -2488,7 +2480,7 @@ if(cusCode!=''){
                 },
                 success: function(data) {
                     $.each(data,function(k,v) {
-                       $('#regNo').append('<option value="'+v.id+'">'+v.text+'</option>');
+                        $('#regNo').append('<option value="'+v.id+'">'+v.text+'</option>');
                     });
                 }
             });
@@ -2518,36 +2510,36 @@ if(cusCode!=''){
         minimumInputLength: 0
     });
 
-$('#regNo').on('select2:select', function (e) {
-     regNo = $(this).val();
-  // Do something
-    $.ajax({
-        type: "POST",
-        url: "../Job/getVehicleDetailsById",
-        data: { id: regNo },
-        success: function(data) {
-            var resultData = JSON.parse(data);
-            if (resultData) {
-                $("#contactName").html(resultData.contactName);
-                $("#registerNo").html(resultData.RegNo);
-                $("#make").html(resultData.make);
-                $("#modelno").html(resultData.model);
-                $("#fuel").html(resultData.fuel_type);
-                $("#vinno").html(resultData.ChassisNo);
-                $("#engNo").html(resultData.EngineNo);
-                $("#yom").html(resultData.ManufactureYear);
-                $("#color").html(resultData.body_color);
+    $('#regNo').on('select2:select', function (e) {
+        regNo = $(this).val();
+        // Do something
+        $.ajax({
+            type: "POST",
+            url: "../Job/getVehicleDetailsById",
+            data: { id: regNo },
+            success: function(data) {
+                var resultData = JSON.parse(data);
+                if (resultData) {
+                    $("#contactName").html(resultData.contactName);
+                    $("#registerNo").html(resultData.RegNo);
+                    $("#make").html(resultData.make);
+                    $("#modelno").html(resultData.model);
+                    $("#fuel").html(resultData.fuel_type);
+                    $("#vinno").html(resultData.ChassisNo);
+                    $("#engNo").html(resultData.EngineNo);
+                    $("#yom").html(resultData.ManufactureYear);
+                    $("#color").html(resultData.body_color);
 
-                loadCustomerDatabyId(resultData.CusCode);
+                    loadCustomerDatabyId(resultData.CusCode);
+                }
             }
-        }
+        });
     });
-});
 
-var compayto='';
+    var compayto='';
 
 //commsionpayto
-$("#compayto").autocomplete({
+    $("#compayto").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: '../job/loadcustomersjson',
@@ -2576,7 +2568,7 @@ $("#compayto").autocomplete({
     });
 
     // $("#regNo").select2();
- var regNo ='';
+    var regNo ='';
     //vehicle autoload
     // $("#regNo").autocomplete({
     //     source: function(request, response) {
@@ -2602,7 +2594,7 @@ $("#compayto").autocomplete({
     //     minLength: 0,
     //     select: function(event, ui) {
     //          regNo = ui.item.value;
-            
+
     //         $.ajax({
     //             type: "POST",
     //             url: "../Job/getVehicleDetailsById",
@@ -2656,7 +2648,7 @@ $("#compayto").autocomplete({
         });
     }
 
-     function clearCustomerData() {
+    function clearCustomerData() {
         $("#cusName1").html('');
         $("#cusAddress").html('');
         $("#cusAddress2").html('');
@@ -2681,7 +2673,7 @@ $("#compayto").autocomplete({
                         return {
                             label: item.label,
                             value: item.value,
-                           data: item
+                            data: item
                         }
                     }));
                 }
@@ -2700,46 +2692,46 @@ $("#compayto").autocomplete({
 // $('#chequeReciveDate,#chequeDate,#chequeReciveDate2,#chequeDate2').datepicker({ format: 'yyyy-mm-dd'});
 // $('#appoDate').datepicker().datepicker("setDate", new Date());
 
-var creditAmount = 0;
-var cashAmount = 0;
- chequeAmount = 0;
-var cardAmount =0;
-var companyAmount =0;
-var toPay=totalNetAmount;
-var dueAmount=0;
-var cusPayment=0;
-var cusType=0;
+    var creditAmount = 0;
+    var cashAmount = 0;
+    chequeAmount = 0;
+    var cardAmount =0;
+    var companyAmount =0;
+    var toPay=totalNetAmount;
+    var dueAmount=0;
+    var cusPayment=0;
+    var cusType=0;
 
-$("#saveItems").attr('disabled', true);
-$("#chequeData").hide();
+    $("#saveItems").attr('disabled', true);
+    $("#chequeData").hide();
 
 
-function addPayment(pcash, pcredit, pcard,pcheque,pcusType,padvance,pbank,preturn) {
+    function addPayment(pcash, pcredit, pcard,pcheque,pcusType,padvance,pbank,preturn) {
 
-    dueAmount = totalNetAmount - parseFloat(pcash + pcard+pcheque+pcredit+padvance+pbank+preturn);
+        dueAmount = totalNetAmount - parseFloat(pcash + pcard+pcheque+pcredit+padvance+pbank+preturn);
 
-           if (dueAmount > 0 && pcusType==2) {
-                $("#credit_amount").val((pcredit));
-                $("#changeLable").html('Due');
-                $("#changeLable").css({"color": "red", "font-size": "100%"});
-                $("#mchange").css({"color": "red", "font-size": "150%"});
-                $("input[name='allowThirdPay']").prop('disabled',false);
-            }else if (dueAmount > 0 && pcusType!=2) {
-                $("#credit_amount").val((0));
-                $("#changeLable").html('Due');
-                $("#changeLable").css({"color": "red", "font-size": "100%"});
-                $("#mchange").css({"color": "red", "font-size": "150%"});
-                $("input[name='allowThirdPay']").prop('disabled',false);
-            } else {
-                dueAmount = Math.abs(dueAmount);
-                $("#changeLable").html('Change/Refund');
-                $("#changeLable").css({"color": "green", "font-size": "100%"});
-                $("#mchange").css({"color": "green", "font-size": "150%"});
-                $("input[name='allowThirdPay']").prop('disabled',true);
-            }
+        if (dueAmount > 0 && pcusType==2) {
+            $("#credit_amount").val((pcredit));
+            $("#changeLable").html('Due');
+            $("#changeLable").css({"color": "red", "font-size": "100%"});
+            $("#mchange").css({"color": "red", "font-size": "150%"});
+            $("input[name='allowThirdPay']").prop('disabled',false);
+        }else if (dueAmount > 0 && pcusType!=2) {
+            $("#credit_amount").val((0));
+            $("#changeLable").html('Due');
+            $("#changeLable").css({"color": "red", "font-size": "100%"});
+            $("#mchange").css({"color": "red", "font-size": "150%"});
+            $("input[name='allowThirdPay']").prop('disabled',false);
+        } else {
+            dueAmount = Math.abs(dueAmount);
+            $("#changeLable").html('Change/Refund');
+            $("#changeLable").css({"color": "green", "font-size": "100%"});
+            $("#mchange").css({"color": "green", "font-size": "150%"});
+            $("input[name='allowThirdPay']").prop('disabled',true);
+        }
 
         cusTotal=parseFloat(pcash + pcard+pcheque+pcredit+padvance+pbank+preturn);
-        
+
         $("#mcash").html(accounting.formatMoney(pcash));
         $("#mcard").html(accounting.formatMoney(pcard));
         $("#madvance").html(accounting.formatMoney(padvance));
@@ -2752,8 +2744,8 @@ function addPayment(pcash, pcredit, pcard,pcheque,pcusType,padvance,pbank,pretur
         $("#mchange1").val(dueAmount);
         var bankacc =$("#bank_acc option:selected").val();
         if(bank_amount>0 && bankacc==''){
-             $.notify("Please select a bank account.", "warning");
-             return false;
+            $.notify("Please select a bank account.", "warning");
+            return false;
         }
 
         if((cusTotal)>=toPay){
@@ -2763,7 +2755,7 @@ function addPayment(pcash, pcredit, pcard,pcheque,pcusType,padvance,pbank,pretur
         }
     }
 
-var ccard = [];
+    var ccard = [];
 
     $("#addCard").click(function() {
 
@@ -2789,7 +2781,7 @@ var ccard = [];
                 $("#tblCard tbody").append("<tr ctype='" + ctype + "'  cref='" + cref + "'  camount='" + camount + "' cname='" + cname + "' ><td>" + cname + "</td><td>" + cref + "</td><td class='text-right'>" + accounting.formatMoney(camount) + "</td><td><a href='#' class='btn btn-danger removeCard' ><i class='fa fa-close'></i></a></td></tr>");
                 ccard.push(ctype);
                 cardAmount += camount;
-               addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
+                addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
                 $("#card_amount").val((cardAmount));
                 $("#card_ref").val('');
                 $("#card_type").val(0);
@@ -2805,7 +2797,7 @@ var ccard = [];
 
 
     $("#addCredit").click(function() {
-     addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
+        addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
 
         if (dueAmount > 0) {
             creditAmount+=dueAmount;
@@ -2815,8 +2807,8 @@ var ccard = [];
             $("#credit_amount2").val((creditAmount));
         }
 
-     addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
-       return false;
+        addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
+        return false;
     });
 
 
@@ -2843,7 +2835,7 @@ var ccard = [];
         bank_amount = parseFloat($("#bank_amount").val());
         return_amount = parseFloat($("#return_amount").val());
         creditAmount=0;
-       $("#credit_amount").val(0);
+        $("#credit_amount").val(0);
         addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
 
         if(chequeAmount>0){
@@ -2862,7 +2854,7 @@ var ccard = [];
         chequeAmount = parseFloat($("#cheque_amount").val());
         return_amount = parseFloat($("#return_amount").val());
         creditAmount=0;
-       $("#credit_amount").val(0);
+        $("#credit_amount").val(0);
         addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
 
         if(bank_amount>0){
@@ -2881,8 +2873,8 @@ var ccard = [];
         bank_amount = parseFloat($("#bank_amount").val());
         return_amount = parseFloat($("#return_amount").val());
 
-       creditAmount=0;
-       $("#credit_amount").val(0);
+        creditAmount=0;
+        $("#credit_amount").val(0);
         addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
     });
 
@@ -2908,7 +2900,7 @@ var ccard = [];
         return_amount = parseFloat($("#return_amount").val());
 
         creditAmount=0;
-       $("#credit_amount").val(0);
+        $("#credit_amount").val(0);
         addPayment(cashAmount, creditAmount, cardAmount,chequeAmount,cusType,advance_amount,bank_amount,return_amount);
     });
 
@@ -2989,7 +2981,7 @@ var ccard = [];
         $("#totalVat").html(accounting.formatNumber(0));
         $("#totalNbt").html(accounting.formatNumber(0));
 
-         loadCustomerDatabyId(resultData.so_hed.SalesCustomer);
+        loadCustomerDatabyId(resultData.so_hed.SalesCustomer);
         return false;
         // if(resultData.so_hed.IsCusNet==1){
         //         $("#isCustomTotal").iCheck('check');
@@ -2998,10 +2990,10 @@ var ccard = [];
         //     }
 
         // if(resultData.so_hed.IsEdit==1){
-            $("#saveItems").prop('disabled',true);
+        $("#saveItems").prop('disabled',true);
         // }else{
         //     $("#saveItems").prop('disabled',false);
-        // } 
+        // }
         // $("#tbl_job tbody").html('');
         if (resultData.so_dtl!=null || resultData.so_dtl!=''){
 
@@ -3036,10 +3028,10 @@ var ccard = [];
                 }
 
                 // if (resultData.so_dtl[i].EstIsInsurance == 1) {} else {
-                    totalProVAT += parseFloat(resultData.so_dtl[i].SalesVatAmount);
-                    totalProNBT += parseFloat(resultData.so_dtl[i].SalesNbtAmount);
-                    product_discount=parseFloat(resultData.so_dtl[i].SalesDiscount);
-                    totalProWiseDiscount += product_discount;
+                totalProVAT += parseFloat(resultData.so_dtl[i].SalesVatAmount);
+                totalProNBT += parseFloat(resultData.so_dtl[i].SalesNbtAmount);
+                product_discount=parseFloat(resultData.so_dtl[i].SalesDiscount);
+                totalProWiseDiscount += product_discount;
                 // }
                 $("#tbl_job tbody").append("<tr est_price='0' discount_type='"+resultData.so_dtl[i].SalesDiscountType+"'  proDiscount='"+resultData.so_dtl[i].SalesDisValue+"' disPrecent='"+resultData.so_dtl[i].SalesDisPercentage+"'  totalPrice='"+resultData.so_dtl[i].SalesTotalAmount+"' isvat='"+resultData.so_dtl[i].SalesIsVat+"' isnbt='"+resultData.so_dtl[i].SalesIsNbt+"' nbtRatio='"+resultData.so_dtl[i].SalesNbtRatio+"' proVat='"+resultData.so_dtl[i].SalesVatAmount+"' proNbt='"+resultData.so_dtl[i].SalesNbtAmount+"'  job='" + resultData.so_dtl[i].SalesDescription + "' jobid='" + resultData.so_dtl[i].ProType + "' qty='" + resultData.so_dtl[i].SalesQty + "' jobOrder='" + resultData.so_dtl[i].SalesOrder + "' netprice='" + resultData.so_dtl[i].SalesNetAmount + "'  sellprice='" + resultData.so_dtl[i].SalesPrice + "'  isIns='" + resultData.so_dtl[i].SalesIsShow + "' insurance='" + resultData.so_dtl[i].SalesPrice + "' work_id='" + resultData.so_dtl[i].ProCode + "'  timestamp='" + resultData.so_dtl[i].SalesOrderTimestamp + "'><td>" + (i + 1) + "</td><td work_id='" + resultData.so_dtl[i].ProCode + "'>" + resultData.so_dtl[i].jobtype_name + "</td><td class='text-right'>" + resultData.so_dtl[i].SalesDescription + "</td><td class='text-right'>" + accounting.formatNumber(resultData.so_dtl[i].SalesQty) + "</td><td class='text-right'>" + accounting.formatNumber(resultData.so_dtl[i].SalesPrice) + "</td><td class='text-right'>" + accounting.formatNumber(resultData.so_dtl[i].SalesDisPercentage) + "</td><td class='text-right'>" + accounting.formatNumber(0) + "</td><td class='text-right'>" + accounting.formatNumber(resultData.so_dtl[i].SalesNetAmount) + "</td><td>&nbsp;&nbsp;<i class='glyphicon glyphicon-edit edit btn btn-info btn-xs'></i>&nbsp;<i class='remove btn btn-danger btn-xs glyphicon glyphicon-remove-circle'></i></td></tr>");
             }
@@ -3065,7 +3057,7 @@ var ccard = [];
             soNo = resultData.so_hed.SalesOrderNo;
 
             // invoiceNo = resultData.so_hed.JobInvNo;
-           // loadInvoiceData(resultData.so_hed.SalesOrderNo);
+            // loadInvoiceData(resultData.so_hed.SalesOrderNo);
             // $("#estimateNo").val(resultData.so_hed.JobEstimateNo);
             $("#soNo").val(resultData.so_hed.SalesOrderNo);
             $("#btnSave").html('Update');
@@ -3079,7 +3071,7 @@ var ccard = [];
             $("#btnSave").html('Save');
             $("#action").val(1);
             estimateNo = 0;
-        }   
+        }
     }
 
 
@@ -3092,16 +3084,16 @@ var ccard = [];
                 customerOderNo:customerOderNo
             },
             success:function(data){
-                
-      
+
+
                 var customerCode = data.orderHed.CusCode;
                 if (customerCode) {
                     loadCustomerDatabyId(customerCode);
                     // setGridandLabelData(data);
                     setGridTableData(data);
-                    
+
                 }
-                
+
             }
         });
     }
@@ -3120,7 +3112,7 @@ var ccard = [];
         }
 
         //cal_total(total_amount2, total_discount, totalExtraChrages, downPayment, total_dwn_interest, total_qur_interest, totalIterest, totalExtraAmount);
-    
+
         $.each(orderDetails, function(index, item) {
             total_amount2 += parseFloat(item.totalAmount);
             var row = `<tr serial_batch='0' ri="${index + 1}" id="${index + 1}" proCode="${item.productCode}" uc="${item.unitOrCase}" proname = "${item.productName}"
@@ -3149,134 +3141,134 @@ var ccard = [];
         return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
     }
 
-     var Base64 = {
-                _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-                encode: function(input) {
-                    var output = "";
-                    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-                    var i = 0;
+    var Base64 = {
+        _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+        encode: function(input) {
+            var output = "";
+            var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+            var i = 0;
 
-                    input = Base64._utf8_encode(input);
+            input = Base64._utf8_encode(input);
 
-                    while (i < input.length) {
+            while (i < input.length) {
 
-                        chr1 = input.charCodeAt(i++);
-                        chr2 = input.charCodeAt(i++);
-                        chr3 = input.charCodeAt(i++);
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
 
-                        enc1 = chr1 >> 2;
-                        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-                        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-                        enc4 = chr3 & 63;
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
 
-                        if (isNaN(chr2)) {
-                            enc3 = enc4 = 64;
-                        } else if (isNaN(chr3)) {
-                            enc4 = 64;
-                        }
-
-                        output = output +
-                                this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
-                                this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
-
-                    }
-
-                    return output;
-                },
-               
-                decode: function(input) {
-                    var output = "";
-                    var chr1, chr2, chr3;
-                    var enc1, enc2, enc3, enc4;
-                    var i = 0;
-
-                    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-
-                    while (i < input.length) {
-
-                        enc1 = this._keyStr.indexOf(input.charAt(i++));
-                        enc2 = this._keyStr.indexOf(input.charAt(i++));
-                        enc3 = this._keyStr.indexOf(input.charAt(i++));
-                        enc4 = this._keyStr.indexOf(input.charAt(i++));
-
-                        chr1 = (enc1 << 2) | (enc2 >> 4);
-                        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-                        chr3 = ((enc3 & 3) << 6) | enc4;
-
-                        output = output + String.fromCharCode(chr1);
-
-                        if (enc3 != 64) {
-                            output = output + String.fromCharCode(chr2);
-                        }
-                        if (enc4 != 64) {
-                            output = output + String.fromCharCode(chr3);
-                        }
-
-                    }
-
-                    output = Base64._utf8_decode(output);
-
-                    return output;
-
-                },
-
-                _utf8_encode: function(string) {
-                    string = string.replace(/\r\n/g, "\n");
-                    var utftext = "";
-
-                    for (var n = 0; n < string.length; n++) {
-
-                        var c = string.charCodeAt(n);
-
-                        if (c < 128) {
-                            utftext += String.fromCharCode(c);
-                        }
-                        else if ((c > 127) && (c < 2048)) {
-                            utftext += String.fromCharCode((c >> 6) | 192);
-                            utftext += String.fromCharCode((c & 63) | 128);
-                        }
-                        else {
-                            utftext += String.fromCharCode((c >> 12) | 224);
-                            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-                            utftext += String.fromCharCode((c & 63) | 128);
-                        }
-
-                    }
-
-                    return utftext;
-                },
-    
-                _utf8_decode: function(utftext) {
-                    var string = "";
-                    var i = 0;
-                    var c = c1 = c2 = 0;
-
-                    while (i < utftext.length) {
-
-                        c = utftext.charCodeAt(i);
-
-                        if (c < 128) {
-                            string += String.fromCharCode(c);
-                            i++;
-                        }
-                        else if ((c > 191) && (c < 224)) {
-                            c2 = utftext.charCodeAt(i + 1);
-                            string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-                            i += 2;
-                        }
-                        else {
-                            c2 = utftext.charCodeAt(i + 1);
-                            c3 = utftext.charCodeAt(i + 2);
-                            string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-                            i += 3;
-                        }
-
-                    }
-
-                    return string;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                } else if (isNaN(chr3)) {
+                    enc4 = 64;
                 }
 
-            };
+                output = output +
+                    this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+                    this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+
+            }
+
+            return output;
+        },
+
+        decode: function(input) {
+            var output = "";
+            var chr1, chr2, chr3;
+            var enc1, enc2, enc3, enc4;
+            var i = 0;
+
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+            while (i < input.length) {
+
+                enc1 = this._keyStr.indexOf(input.charAt(i++));
+                enc2 = this._keyStr.indexOf(input.charAt(i++));
+                enc3 = this._keyStr.indexOf(input.charAt(i++));
+                enc4 = this._keyStr.indexOf(input.charAt(i++));
+
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+
+                output = output + String.fromCharCode(chr1);
+
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+
+            }
+
+            output = Base64._utf8_decode(output);
+
+            return output;
+
+        },
+
+        _utf8_encode: function(string) {
+            string = string.replace(/\r\n/g, "\n");
+            var utftext = "";
+
+            for (var n = 0; n < string.length; n++) {
+
+                var c = string.charCodeAt(n);
+
+                if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                }
+                else if ((c > 127) && (c < 2048)) {
+                    utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+                else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+
+            }
+
+            return utftext;
+        },
+
+        _utf8_decode: function(utftext) {
+            var string = "";
+            var i = 0;
+            var c = c1 = c2 = 0;
+
+            while (i < utftext.length) {
+
+                c = utftext.charCodeAt(i);
+
+                if (c < 128) {
+                    string += String.fromCharCode(c);
+                    i++;
+                }
+                else if ((c > 191) && (c < 224)) {
+                    c2 = utftext.charCodeAt(i + 1);
+                    string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                    i += 2;
+                }
+                else {
+                    c2 = utftext.charCodeAt(i + 1);
+                    c3 = utftext.charCodeAt(i + 2);
+                    string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+
+            }
+
+            return string;
+        }
+
+    };
 });
 
 

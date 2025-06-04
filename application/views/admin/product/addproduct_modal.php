@@ -93,7 +93,7 @@
                     <div class="form-group">
                         <label for="sub_category" class="control-label">Sub Department <span class="required">*</span></label>
                         <div class="input-group">
-                            <select  class="form-control" name="sub_department"  required="required" id="sub_department">
+                            <select  class="form-control" name="sub_department"   id="sub_department">
                             <option value="0">-Select a sub department-</option>
                         </select>
                         <div class="input-group-btn">

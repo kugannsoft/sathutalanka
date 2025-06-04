@@ -108,7 +108,7 @@
         });
     });
 
-//for mobile no
+
         const mobileInput = document.getElementById('mobile');
 
         mobileInput.addEventListener('input', function () {
@@ -121,7 +121,7 @@
         this.value = '+94' + digitsOnly.substring(0, 9);
     }
     });
-//for office no
+
     const officeInput = document.getElementById('office');
 
     officeInput.addEventListener('input', function () {
@@ -134,7 +134,7 @@
             this.value = '+94' + digitsOnly.substring(0, 9);
         }
     });
-//for fax
+
     const faxInput = document.getElementById('fax');
 
     faxInput.addEventListener('input', function () {

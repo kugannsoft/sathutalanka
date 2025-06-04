@@ -141,9 +141,9 @@
                         <div class="form-group">
                             <label for="phoneNo">Customer Phone </label>
                             <input type="text" class="form-control" name="phoneNo" id="phoneNo" placeholder="Enter customer phone" maxlength="12"
-                                   value="+94" >
+                                   value="+94"  >
 
-                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -151,8 +151,9 @@
                         <div class="form-group">
                             <label for="mobileNo">Work Phone</label>
                             <div class="input-group">
-                                <input type="text"  class="form-control" name="workPhone" id="workPhone" placeholder="Enter Work Phone " maxlength="12"
-                                value="+94"  >
+
+                                <input type="text" class="form-control" name="workPhone" id="workPhone" placeholder="Enter Work Phone" maxlength="12"
+                                       value="+94"  >
 
                             </div>
                         </div>
@@ -184,7 +185,6 @@
                             <div class="input-group">
                                <input type="text" class="form-control" name="contactPhone" id="contactPhone" placeholder="Enter Work Phone" maxlength="12"
                                        value="+94" >
-
 
                             </div>
                         </div>
@@ -986,7 +986,7 @@ $('#salesperson').on('change', function() {
             $('#route').append('<option value="0">-Select-</option>');
         }
 });
-//Mobile No
+
     const mobileNoInput = document.getElementById('mobileNo');
 
     mobileNoInput.addEventListener('input', function () {
@@ -999,4 +999,43 @@ $('#salesperson').on('change', function() {
             this.value = '+94' + digitsOnly.substring(0, 9);
         }
     });
+    const phoneNoInput = document.getElementById('phoneNo');
+
+    phoneNoInput.addEventListener('input', function () {
+
+        if (!this.value.startsWith('+94')) {
+            this.value = '+94';
+        } else {
+
+            let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+            this.value = '+94' + digitsOnly.substring(0, 9);
+        }
+    });
+
+    const workPhoneInput = document.getElementById('workPhone');
+
+    workPhoneInput.addEventListener('input', function () {
+
+        if (!this.value.startsWith('+94')) {
+            this.value = '+94';
+        } else {
+
+            let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+            this.value = '+94' + digitsOnly.substring(0, 9);
+        }
+    });
+
+    const contactPhoneInput = document.getElementById('contactPhone');
+
+    contactPhoneInput.addEventListener('input', function () {
+
+        if (!this.value.startsWith('+94')) {
+            this.value = '+94';
+        } else {
+
+            let digitsOnly = this.value.substring(3).replace(/\D/g, '');
+            this.value = '+94' + digitsOnly.substring(0, 9);
+        }
+    });
+
 </script>
