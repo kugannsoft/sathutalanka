@@ -128,8 +128,10 @@
             data: $(this).serializeArray(),
             success: function (data) {
                 if (data == 1) {
+                    $.notify("Employee Added Successfully..!", "success");
                     $('#suppliermodal').modal('hide');
-                    location.relaod();
+                }else{
+                    $.notify("Error..!", "warning");
                 }
             }
         });

@@ -976,24 +976,12 @@ class Payment extends Admin_Controller {
                         ->get()->row();
         $arr['credit_data'] =$this->db->select('*')->from('creditgrndetails')
                         ->where('creditgrndetails.SupCode', $supCode)
-                        ->where('creditgrndetails.IsCloseGRN', 0)->get()->result();
+                        ->where('creditgrndetails.IsCancel', 0)->get()->result();
         echo json_encode($arr);
         die;
     }
 
-//    public function getSuppliersDataById() {
-//        $supCode = $_POST['supCode'];
-//        $arr['sup_data'] = $this->db->select('supplier.*,supplieroustanding.*')->from('supplier')
-//            ->where('supplier.SupCode', $supCode)
-//            ->join('supplieroustanding', 'supplier.SupCode = supplieroustanding.SupCode')
-//            ->get()->row();
-//        $arr['credit_data'] =$this->db->select('creditgrndetails.*,goodsreceivenotehed.*')->from('goodsreceivenotehed')
-//            ->where('goodsreceivenotehed.GRN_SupCode', $supCode)
-//            ->where('goodsreceivenotehed.GRN_IsCancel', 0)
-//            ->join('creditgrndetails','goodsreceivenotehed.GRN_No = creditgrndetails.GRNNo ')->get()->result();
-//        echo json_encode($arr);
-//        die;
-//    }
+
 
     public function getActiveSupPayment() {
 

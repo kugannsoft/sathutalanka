@@ -137,7 +137,10 @@
             data: $(this).serializeArray(),
             success: function (data) {
                 if (data == 1) {
+                    $.notify("Employee Edited Successfully..!", "success");
                     $('#suppliermodal').modal('hide');
+                }else{
+                    $.notify("Error..!", "warning");
                 }
             }
         });
